@@ -2,12 +2,12 @@
 Responsible for obfuscating most of the most low-level OpenGL calls.
 """
 
-from OpenGL import GL as GLC
+from OpenGL import GL
 from PyQt6.QtOpenGLWidgets import QOpenGLWidget
+from PyQt6.QtGui import QOpenGLContext
 from PyQt6.QtWidgets import QApplication
-from PyQt6.QtOpenGL import QOpenGLFunctions_4_1_Core, QOpenGLFramebufferObject
+from PyQt6.QtOpenGL import QOpenGLFunctions_4_1_Core as GLF, QOpenGLFramebufferObject
 
-GL = QOpenGLFunctions_4_1_Core()
 
 class Renderable:
     # The Renderable class represents any object that may be rendered under a OpenGL context,
@@ -72,3 +72,13 @@ class RenderingContext:
             obj.draw(self.transformations['x'], self.transformations['y'], self.transformations['scale'],
                      self.transformations['rotation'], sim_time)
             obj.post_render_logic()
+
+
+def setupGL():
+    GL.glInitGl41VERSION()
+    GL.glEnable(GL.GL_DEPTH_TEST)
+    GL.glEnable(GL.GL_BLEND)
+    GL.glDisable(GL.GL_CULL_FACE)
+    GL.glDepthFunc(GL.GL_LESS)
+    GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA)
+    GL.glEnable(GL.GL_DEPTH_TEST)
