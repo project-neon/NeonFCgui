@@ -4,15 +4,28 @@ Responsible for obfuscating most of the most low-level OpenGL calls.
 
 from OpenGL import GL
 from PyQt6.QtOpenGL import QOpenGLFramebufferObject, QOpenGLShaderProgram, QOpenGLBuffer, QOpenGLShader
-import numpy as np
 from numpy.core import multiarray
 
 
 def compileShaderProgram(vertex_shader: str, fragment_shader: str) -> QOpenGLShaderProgram:
     program = QOpenGLShaderProgram()
-    program.addShaderFromSourceCode(QOpenGLShader.ShaderTypeBit.Vertex, vertex_shader)
-    program.addShaderFromSourceCode(QOpenGLShader.ShaderTypeBit.Fragment, fragment_shader)
-    program.link()
+    vertex = QOpenGLShader(QOpenGLShader.ShaderTypeBit.Vertex)
+    fragment = QOpenGLShader(QOpenGLShader.ShaderTypeBit.Fragment)
+    if not vertex.compileSourceCode(vertex_shader):
+        print("WARNING: FAILED TO COMPILE VERTEX SHADER")
+        print("OpenGL version is " + str(GL.glGetString(GL.GL_VERSION)))
+        print(vertex.log())
+    if not fragment.compileSourceCode(fragment_shader):
+        print("WARNING: FAILED TO COMPILE FRAGMENT SHADER")
+        print("OpenGL version is " + str(GL.glGetString(GL.GL_VERSION)))
+        print(fragment.log())
+
+    program.addShader(vertex)
+    program.addShader(fragment)
+    if not program.link():
+        print("WARNING: FAILED TO BIND SHADER PROGRAM")
+        print("OpenGL version is " + str(GL.glGetString(GL.GL_VERSION)))
+        print(program.log())
     return program
 
 
@@ -46,25 +59,25 @@ class Renderable:
         self.colors = colors
         self.shaderProgram = shaderProgram
         self.update_shader_uniform_locations()
-        self.triangles = int(len(vertices) / 3)
-        self.vertexVBO = QOpenGLBuffer();
+        self.triangles = int(len(vertices) / 9)
+        self.vertexVBO = QOpenGLBuffer()
         self.vertexVBO.create()
-        self.colorVBO = QOpenGLBuffer();
+        self.colorVBO = QOpenGLBuffer()
         self.colorVBO.create()
         self.update_vertex_attributes()
 
     def update_vertex_attributes(self):
         self.vertexVBO.allocate(self.vertices, len(self.vertices) * 3)
-        self.colorVBO.allocate(self.colors, len(self.colorVBO) * 3)
+        self.colorVBO.allocate(self.colors, len(self.colors) * 3)
 
     def update_shader_uniform_locations(self):
-        self.shader_uniform_locations['g_coordinate_vector_loc'] = self.shaderProgram.uniformLocation('globalTranslation')
+        self.shader_uniform_locations['g_coordinate_vector_loc'] = self.shaderProgram.uniformLocation(
+            'globalTranslation')
         self.shader_uniform_locations['g_rotation_float_loc'] = self.shaderProgram.uniformLocation('globalRotation')
         self.shader_uniform_locations['g_scale_float_loc'] = self.shaderProgram.uniformLocation('globalScale')
         self.shader_uniform_locations['coordinate_vector_loc'] = self.shaderProgram.uniformLocation('coord')
         self.shader_uniform_locations['rotation_float_loc'] = self.shaderProgram.uniformLocation('angle')
         self.shader_uniform_locations['aspect_ratio_float_loc'] = self.shaderProgram.uniformLocation('aspectRatio')
-
 
     def pre_render_logic(self):
         GL.glEnableVertexAttribArray(0)
@@ -97,15 +110,17 @@ class Renderable:
 
 class RenderingContext:
     objects = []
-    transformations = {'x': 0, 'y': 0, 'scale': 1, 'rotation': 0, 'aspect_ratio': 1}
+    transformations = {'x': 0, 'y': 0, 'z': 0, 'scale': 1, 'rotation': 0, 'aspect_ratio': 1}
     framebuffer = None
 
-    def __init__(self, framebuffer: QOpenGLFramebufferObject | None = None):
+    def __init__(self, framebuffer: QOpenGLFramebufferObject | None | int = None):
         self.framebuffer = framebuffer
 
-    def set_transformations(self, x=0, y=0, scale=0, rotation=0):
+    def set_transformations(self, x=0, y=0, z=0, scale=0, rotation=0):
         self.transformations['x'] = x
         self.transformations['y'] = y
+        self.transformations['z'] = z
+
         self.transformations['scale'] = scale
         self.transformations['rotation'] = rotation
 
@@ -113,10 +128,9 @@ class RenderingContext:
         self.transformations['aspect_ratio'] = aspect_ratio
 
     def draw(self, sim_time):
-        if self.framebuffer is not None: self.framebuffer.bind()
-        GL.glClear(GL.GL_DEPTH_BUFFER_BIT | GL.GL_COLOR_BUFFER_BIT)
         for obj in self.objects:
-            obj.draw(self.transformations['x'], self.transformations['y'], self.transformations['scale'],
+            obj.draw(self.transformations['x'], self.transformations['y'], self.transformations['z'],
+                     self.transformations['scale'],
                      self.transformations['rotation'], self.transformations['aspect_ratio'], sim_time)
 
 
