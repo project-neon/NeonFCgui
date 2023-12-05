@@ -37,6 +37,7 @@ class Renderable:
         'rotation_float_loc': -1,
         'g_coordinate_vector_loc': -1,
         'g_rotation_float_loc': -1,
+        'g_scale_float_loc': -1,
         'aspect_ratio_float_loc': -1
     }
 
@@ -57,12 +58,13 @@ class Renderable:
         self.colorVBO.allocate(self.colors, len(self.colorVBO) * 3)
 
     def update_shader_uniform_locations(self):
-        self.shader_uniform_locations['g_coordinate_vector_loc'] = self.shaderProgram.uniformLocation(
-            'globalTranslation')
+        self.shader_uniform_locations['g_coordinate_vector_loc'] = self.shaderProgram.uniformLocation('globalTranslation')
         self.shader_uniform_locations['g_rotation_float_loc'] = self.shaderProgram.uniformLocation('globalRotation')
+        self.shader_uniform_locations['g_scale_float_loc'] = self.shaderProgram.uniformLocation('globalScale')
         self.shader_uniform_locations['coordinate_vector_loc'] = self.shaderProgram.uniformLocation('coord')
         self.shader_uniform_locations['rotation_float_loc'] = self.shaderProgram.uniformLocation('angle')
         self.shader_uniform_locations['aspect_ratio_float_loc'] = self.shaderProgram.uniformLocation('aspectRatio')
+
 
     def pre_render_logic(self):
         GL.glEnableVertexAttribArray(0)
