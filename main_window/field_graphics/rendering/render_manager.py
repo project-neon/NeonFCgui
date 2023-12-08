@@ -1,11 +1,11 @@
 """
 Responsible for obfuscating most of the most low-level OpenGL calls.
 """
+import sys
 
 from OpenGL import GL
-from PyQt6.QtOpenGL import QOpenGLFramebufferObject, QOpenGLShaderProgram, QOpenGLBuffer, QOpenGLShader
+from PyQt6.QtOpenGL import QOpenGLFramebufferObject, QOpenGLShaderProgram, QOpenGLBuffer, QOpenGLShader, QOpenGLVertexArrayObject
 from numpy.core import multiarray
-
 
 def compileShaderProgram(vertex_shader: str, fragment_shader: str) -> QOpenGLShaderProgram:
     program = QOpenGLShaderProgram()
@@ -39,6 +39,7 @@ class Renderable:
     """
     vertexVBO: QOpenGLBuffer = None
     colorVBO: QOpenGLBuffer = None
+    VAO: QOpenGLVertexArrayObject = None
     vertices: multiarray = None
     colors: multiarray = None
     shaderProgram: QOpenGLShaderProgram = None
@@ -55,6 +56,7 @@ class Renderable:
     }
 
     def __init__(self, vertices: multiarray, colors: multiarray, shaderProgram: QOpenGLShaderProgram):
+        print("DEC")
         self.vertices = vertices
         self.colors = colors
         self.shaderProgram = shaderProgram
@@ -67,8 +69,10 @@ class Renderable:
         self.update_vertex_attributes()
 
     def update_vertex_attributes(self):
-        self.vertexVBO.allocate(self.vertices, len(self.vertices) * 3)
-        self.colorVBO.allocate(self.colors, len(self.colors) * 3)
+        GL.glBindBuffer(GL.GL_ARRAY_BUFFER, self.vertexVBO.bufferId())
+        GL.glBufferData(GL.GL_ARRAY_BUFFER, self.vertices, GL.GL_STATIC_DRAW)
+        GL.glBindBuffer(GL.GL_ARRAY_BUFFER, self.colorVBO.bufferId())
+        GL.glBufferData(GL.GL_ARRAY_BUFFER, self.colors, GL.GL_STATIC_DRAW)
 
     def update_shader_uniform_locations(self):
         self.shader_uniform_locations['g_coordinate_vector_loc'] = self.shaderProgram.uniformLocation(
@@ -79,33 +83,27 @@ class Renderable:
         self.shader_uniform_locations['rotation_float_loc'] = self.shaderProgram.uniformLocation('angle')
         self.shader_uniform_locations['aspect_ratio_float_loc'] = self.shaderProgram.uniformLocation('aspectRatio')
 
-    def pre_render_logic(self):
-        GL.glEnableVertexAttribArray(0)
-        GL.glEnableVertexAttribArray(1)
-        pass
-
-    def post_render_logic(self):
-        GL.glDisableVertexAttribArray(0)
-        GL.glDisableVertexAttribArray(1)
-        pass
-
     def draw(self, tx, ty, depth, scale, rotation, aspect_ratio, sim_time):
         """
         Draws the object at the currently bound OpenGL Framebuffer object.
         Note that all transformations are meant to be GLOBAL transformations,
         local object transformations may be handled internally.
         """
-        self.pre_render_logic()
-        self.shaderProgram.setUniformValue(self.shader_uniform_locations['g_coordinate_vector_loc'], tx, ty, depth,
-                                           scale)
-        self.shaderProgram.setUniformValue(self.shader_uniform_locations['g_rotation_float_loc'], rotation)
-        self.shaderProgram.setUniformValue(self.shader_uniform_locations['aspect_ratio_float_loc'], aspect_ratio)
-        self.colorVBO.bind()
-        self.shaderProgram.setAttributeBuffer(1, GL.GL_FLOAT, 0, 3)
-        self.vertexVBO.bind()
-        self.shaderProgram.setAttributeBuffer(0, GL.GL_FLOAT, 0, 3)
-        GL.glDrawArrays(GL.GL_TRIANGLES, 0, 3 * self.triangles)
-        self.post_render_logic()
+        self.shaderProgram.bind()
+        GL.glUniform3f(self.shader_uniform_locations['g_coordinate_vector_loc'], tx, ty, 0)
+        GL.glUniform1f(self.shader_uniform_locations['g_rotation_float_loc'], rotation)
+        GL.glUniform1f(self.shader_uniform_locations['aspect_ratio_float_loc'], aspect_ratio)
+
+        GL.glEnableVertexAttribArray(0)
+        # GL.glEnableVertexAttribArray(1)
+        self.shaderProgram.setAttributeBuffer(0, GL.GL_FLOAT, 0, 3, 0)
+
+        # self.shaderProgram.setAttributeBuffer(1, GL.GL_FLOAT, 0, 3)
+
+        GL.glBindBuffer(GL.GL_ARRAY_BUFFER, self.vertexVBO.bufferId())
+        GL.glDrawArrays(GL.GL_TRIANGLES, 0, 3)
+        GL.glDisableVertexAttribArray(0)
+        # GL.glDisableVertexAttribArray(1)
 
 
 class RenderingContext:
