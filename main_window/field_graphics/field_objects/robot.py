@@ -1,3 +1,5 @@
+from array import array
+
 import numpy as np
 from PyQt6.QtOpenGL import QOpenGLShaderProgram
 
@@ -11,7 +13,7 @@ def shaderProgram() -> QOpenGLShaderProgram:
 
 
 class Robot(Renderable):
-    def __init__(self, robotColor, stampColor1, stampColor2):
-        vert = np.asarray([-1, -1, 0, 1, -1, 0, -1, 1, 0], dtype=np.float32)
-        col = np.asarray([0, 0, 1, 0, 1, 0, 1, 0, 0], dtype=np.float32)
+    def __init__(self, robotColor: array, stampColor1: array, stampColor2: array):
+        vert = np.asarray([-1,-1,0, 1,-1,0, -1,1,0, 1,1,0 , -1,1,0 , 1,-1,0], dtype=np.float32)
+        col = np.asarray([0, 0, 0, 0, 0, 0, 0, 0, 0,], dtype=np.float32)
         super().__init__(vert, col, shaderProgram())

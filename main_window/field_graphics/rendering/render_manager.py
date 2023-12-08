@@ -4,10 +4,13 @@ Responsible for obfuscating most of the most low-level OpenGL calls.
 import sys
 
 from OpenGL import GL
-from PyQt6.QtOpenGL import QOpenGLFramebufferObject, QOpenGLShaderProgram, QOpenGLBuffer, QOpenGLShader, QOpenGLVertexArrayObject
+from PyQt6.QtOpenGL import QOpenGLFramebufferObject, QOpenGLShaderProgram, QOpenGLBuffer, QOpenGLShader, \
+    QOpenGLVertexArrayObject
 from numpy.core import multiarray
 
+
 def compileShaderProgram(vertex_shader: str, fragment_shader: str) -> QOpenGLShaderProgram:
+    """Tries to compile the shader program which the argument strings contain."""
     program = QOpenGLShaderProgram()
     vertex = QOpenGLShader(QOpenGLShader.ShaderTypeBit.Vertex)
     fragment = QOpenGLShader(QOpenGLShader.ShaderTypeBit.Fragment)
@@ -15,10 +18,12 @@ def compileShaderProgram(vertex_shader: str, fragment_shader: str) -> QOpenGLSha
         print("WARNING: FAILED TO COMPILE VERTEX SHADER")
         print("OpenGL version is " + str(GL.glGetString(GL.GL_VERSION)))
         print(vertex.log())
+        print()
     if not fragment.compileSourceCode(fragment_shader):
         print("WARNING: FAILED TO COMPILE FRAGMENT SHADER")
         print("OpenGL version is " + str(GL.glGetString(GL.GL_VERSION)))
         print(fragment.log())
+        print()
 
     program.addShader(vertex)
     program.addShader(fragment)
@@ -37,9 +42,8 @@ class Renderable:
     implemented by the class, however additional vertex attributes and uniforms
     may need to be implemented by subclasses.
     """
-    vertexVBO: QOpenGLBuffer = None
-    colorVBO: QOpenGLBuffer = None
-    VAO: QOpenGLVertexArrayObject = None
+    vertexVBO: int = -1
+    colorVBO: int = -1
     vertices: multiarray = None
     colors: multiarray = None
     shaderProgram: QOpenGLShaderProgram = None
@@ -56,27 +60,23 @@ class Renderable:
     }
 
     def __init__(self, vertices: multiarray, colors: multiarray, shaderProgram: QOpenGLShaderProgram):
-        print("DEC")
         self.vertices = vertices
         self.colors = colors
         self.shaderProgram = shaderProgram
         self.update_shader_uniform_locations()
         self.triangles = int(len(vertices) / 9)
-        self.vertexVBO = QOpenGLBuffer()
-        self.vertexVBO.create()
-        self.colorVBO = QOpenGLBuffer()
-        self.colorVBO.create()
+        self.vertexVBO = GL.glGenBuffers(1)
+        self.colorVBO = GL.glGenBuffers(1)
         self.update_vertex_attributes()
 
     def update_vertex_attributes(self):
-        GL.glBindBuffer(GL.GL_ARRAY_BUFFER, self.vertexVBO.bufferId())
+        GL.glBindBuffer(GL.GL_ARRAY_BUFFER, self.vertexVBO)
         GL.glBufferData(GL.GL_ARRAY_BUFFER, self.vertices, GL.GL_STATIC_DRAW)
-        GL.glBindBuffer(GL.GL_ARRAY_BUFFER, self.colorVBO.bufferId())
+        GL.glBindBuffer(GL.GL_ARRAY_BUFFER, self.colorVBO)
         GL.glBufferData(GL.GL_ARRAY_BUFFER, self.colors, GL.GL_STATIC_DRAW)
 
     def update_shader_uniform_locations(self):
-        self.shader_uniform_locations['g_coordinate_vector_loc'] = self.shaderProgram.uniformLocation(
-            'globalTranslation')
+        self.shader_uniform_locations['g_coordinate_vector_loc'] = self.shaderProgram.uniformLocation('globalTranslation')
         self.shader_uniform_locations['g_rotation_float_loc'] = self.shaderProgram.uniformLocation('globalRotation')
         self.shader_uniform_locations['g_scale_float_loc'] = self.shaderProgram.uniformLocation('globalScale')
         self.shader_uniform_locations['coordinate_vector_loc'] = self.shaderProgram.uniformLocation('coord')
@@ -95,41 +95,41 @@ class Renderable:
         GL.glUniform1f(self.shader_uniform_locations['aspect_ratio_float_loc'], aspect_ratio)
 
         GL.glEnableVertexAttribArray(0)
-        # GL.glEnableVertexAttribArray(1)
-        self.shaderProgram.setAttributeBuffer(0, GL.GL_FLOAT, 0, 3, 0)
+        GL.glEnableVertexAttribArray(1)
 
-        # self.shaderProgram.setAttributeBuffer(1, GL.GL_FLOAT, 0, 3)
-
-        GL.glBindBuffer(GL.GL_ARRAY_BUFFER, self.vertexVBO.bufferId())
-        GL.glDrawArrays(GL.GL_TRIANGLES, 0, 3)
+        GL.glBindBuffer(GL.GL_ARRAY_BUFFER, self.colorVBO)
+        self.shaderProgram.setAttributeBuffer(1, GL.GL_FLOAT, 0, 3)
+        GL.glBindBuffer(GL.GL_ARRAY_BUFFER, self.vertexVBO)
+        self.shaderProgram.setAttributeBuffer(0, GL.GL_FLOAT, 0, 3)
+        GL.glDrawArrays(GL.GL_TRIANGLES, 0, self.triangles * 3)
         GL.glDisableVertexAttribArray(0)
-        # GL.glDisableVertexAttribArray(1)
+        GL.glDisableVertexAttribArray(1)
 
 
 class RenderingContext:
     objects = []
-    transformations = {'x': 0, 'y': 0, 'z': 0, 'scale': 1, 'rotation': 0, 'aspect_ratio': 1}
-    framebuffer = None
+    global_transformations = {'x': 0, 'y': 0, 'z': 0, 'scale': 1, 'rotation': 0, 'aspect_ratio': 1}
+    framebuffer: int | None = None
 
     def __init__(self, framebuffer: QOpenGLFramebufferObject | None | int = None):
         self.framebuffer = framebuffer
 
     def set_transformations(self, x=0, y=0, z=0, scale=0, rotation=0):
-        self.transformations['x'] = x
-        self.transformations['y'] = y
-        self.transformations['z'] = z
-
-        self.transformations['scale'] = scale
-        self.transformations['rotation'] = rotation
+        self.global_transformations['x'] = x
+        self.global_transformations['y'] = y
+        self.global_transformations['z'] = z
+        self.global_transformations['scale'] = scale
+        self.global_transformations['rotation'] = rotation
 
     def set_aspect_ratio(self, aspect_ratio):
-        self.transformations['aspect_ratio'] = aspect_ratio
+        self.global_transformations['aspect_ratio'] = aspect_ratio
 
     def draw(self, sim_time):
         for obj in self.objects:
-            obj.draw(self.transformations['x'], self.transformations['y'], self.transformations['z'],
-                     self.transformations['scale'],
-                     self.transformations['rotation'], self.transformations['aspect_ratio'], sim_time)
+            obj.draw(self.global_transformations['x'], self.global_transformations['y'],
+                     self.global_transformations['z'],
+                     self.global_transformations['scale'],
+                     self.global_transformations['rotation'], self.global_transformations['aspect_ratio'], sim_time)
 
 
 def setupGL():
