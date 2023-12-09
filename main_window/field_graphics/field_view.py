@@ -26,7 +26,8 @@ class FieldView(QOpenGLWidget):
         GL.glInitGl42VERSION()
         setupGL()
         GL.glClearColor(.2, .5, .2, 1)
-        self.context.objects.append(Robot([.15,.15,.15], [0,1,0], [1,0,0]))
+        self.r = Robot([.15, .15, .15], [0, 1, 0], [1, 0, 0])
+        self.context.objects.append(self.r)
 
     def resizeGL(self, w: int, h: int) -> None:
         # A documentação do PYQT fala pra eu chamar o GLViewport aqui, mas me parece que o próprio PyQT já redimensiona
@@ -38,5 +39,6 @@ class FieldView(QOpenGLWidget):
         GL.glBindBuffer(GL.GL_ARRAY_BUFFER, 0)
         self.context.draw(self.sim_time)
         self.sim_time += 1
+        self.r.transformations['r'] = self.sim_time * 0.1
         # TODO: essa função precisa ser chamada a cada frame e pelo que me parece
         # ela só está atualizando quando a dimenção da janela muda

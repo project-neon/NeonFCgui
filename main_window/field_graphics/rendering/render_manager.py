@@ -76,12 +76,12 @@ class Renderable:
         GL.glBufferData(GL.GL_ARRAY_BUFFER, self.colors, GL.GL_STATIC_DRAW)
 
     def update_shader_uniform_locations(self):
+        self.shader_uniform_locations['aspect_ratio_float_loc'] = self.shaderProgram.uniformLocation('aspectRatio')
         self.shader_uniform_locations['g_coordinate_vector_loc'] = self.shaderProgram.uniformLocation('globalTranslation')
         self.shader_uniform_locations['g_rotation_float_loc'] = self.shaderProgram.uniformLocation('globalRotation')
         self.shader_uniform_locations['g_scale_float_loc'] = self.shaderProgram.uniformLocation('globalScale')
         self.shader_uniform_locations['coordinate_vector_loc'] = self.shaderProgram.uniformLocation('coord')
         self.shader_uniform_locations['rotation_float_loc'] = self.shaderProgram.uniformLocation('angle')
-        self.shader_uniform_locations['aspect_ratio_float_loc'] = self.shaderProgram.uniformLocation('aspectRatio')
 
     def draw(self, tx, ty, scale, rotation, aspect_ratio, sim_time):
         """
@@ -94,6 +94,8 @@ class Renderable:
         GL.glUniform1f(self.shader_uniform_locations['g_rotation_float_loc'], rotation)
         GL.glUniform1f(self.shader_uniform_locations['aspect_ratio_float_loc'], aspect_ratio)
         GL.glUniform1f(self.shader_uniform_locations['g_scale_float_loc'], scale)
+        GL.glUniform1f(self.shader_uniform_locations['rotation_float_loc'], self.transformations['r'])
+        GL.glUniform3f(self.shader_uniform_locations['coordinate_vector_loc'], self.transformations['x'],self.transformations['y'],self.transformations['z'])
 
         GL.glEnableVertexAttribArray(0)
         GL.glEnableVertexAttribArray(1)
@@ -109,7 +111,7 @@ class Renderable:
 
 class RenderingContext:
     objects = []
-    global_transformations = {'x': 0, 'y': 0, 'z': 0, 'scale': .05, 'rotation': 0, 'aspect_ratio': 1}
+    global_transformations = {'x': 0, 'y': 0, 'z': 0, 'scale': .15, 'rotation': 0, 'aspect_ratio': 1}
     framebuffer: int | None = None
 
     def __init__(self, framebuffer: QOpenGLFramebufferObject | None | int = None):
