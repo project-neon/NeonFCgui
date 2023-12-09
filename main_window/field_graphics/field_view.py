@@ -26,7 +26,7 @@ class FieldView(QOpenGLWidget):
         GL.glInitGl42VERSION()
         setupGL()
         GL.glClearColor(.2, .5, .2, 1)
-        self.context.objects.append(Robot(None, None, None))
+        self.context.objects.append(Robot([.15,.15,.15], [0,1,0], [1,0,0]))
 
     def resizeGL(self, w: int, h: int) -> None:
         # A documentação do PYQT fala pra eu chamar o GLViewport aqui, mas me parece que o próprio PyQT já redimensiona
