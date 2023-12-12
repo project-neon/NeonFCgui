@@ -77,4 +77,9 @@ model = Renderable(vertices,colors,shader_program)
 
 Colocando esse `model` em um contexto de renderização temos o seguinte resultado:
 
+![Screenshot_1729](https://github.com/project-neon/NeonSoccerGUI/assets/59067466/9f127bdc-6547-46f5-8566-fa46f1a7c9cb)  
+🌈?
+
 Uma curiosidade do OpenGL é que, como nossos vértices têm cores diferentes pro mesmo triângulo, ele automaticamente interpola os valores do VertexShader pro FragmentShader, criando esse degradê.
+
+Isso é só um exemplo, pra evitar código muito verbose você pode (e eu recomendo) colocar todas essas calls numa subclasse de Renderable, é exatamente isso que a classe `Robot` em `field_objects` faz.
