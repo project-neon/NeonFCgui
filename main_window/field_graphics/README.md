@@ -7,9 +7,16 @@ Para a renderização do campo, é empregada a API do OpenGL, que é contraintui
 
 Assim, o módulo `field_graphics` têm como principal função abstrair toda a lógica de alocação de memória e comunicação com a GPU pra um formato mais usável. 
 ***
+## Índice:
+- [Objetos base:](https://github.com/project-neon/NeonSoccerGUI/blob/main/main_window/field_graphics/README.md#objetos-base)
+  - [FieldView](https://github.com/project-neon/NeonSoccerGUI/blob/main/main_window/field_graphics/README.md#fieldview)
+  - [RenderingContext](https://github.com/project-neon/NeonSoccerGUI/blob/main/main_window/field_graphics/README.md#renderingcontext)
+  - [FieldGraphics](https://github.com/project-neon/NeonSoccerGUI/blob/main/main_window/field_graphics/README.md#renderable)
+- [Criando um mesh renderizável](https://github.com/project-neon/NeonSoccerGUI/blob/main/main_window/field_graphics/README.md#criando-um-mesh-renderiz%C3%A1vel)
+***
 ## Objetos base:
 
-Esse framework implementa 3 principais classes: `field_view`, `Renderable` e `RenderingContext`.
+Esse framework implementa 3 principais classes de base: `field_view`, `Renderable` e `RenderingContext`.
 
 ### FieldView:
 Um QWidget em que a cena é renderizada, quando inicializado ele automaticamente cria uma instância da classe `RenderingContext` com o nome `context`. Como a classe FieldView é uma sublasse de `QWidget`, então toda operação que se pode normalmente se fazer com um QWidget se pode fazer com uma instância dessa classe.
