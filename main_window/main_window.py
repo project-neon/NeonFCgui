@@ -4,10 +4,15 @@ Sections: field graphic, menus, change game status, main informations.
 """
 
 from PyQt6.QtWidgets import QMainWindow, QWidget, QVBoxLayout
+from PyQt6.QtCore import QTimer, QCoreApplication
 from main_window.menu import Menu
 from main_window.field_graphics.field_view import FieldView
 
+def teste():
+    print("Oi :)")
+
 class MainWindow(QMainWindow):
+
     def __init__(self):
         # reference to app instance?
 

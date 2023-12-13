@@ -42,6 +42,21 @@ Seta as transformações *locais* do objeto, a localização do objeto na cena f
 
 Note que embora a cena seja isometricamte projetada num campo 2D ainda há uma variável z, que aplica uma transformação z em todos os vértices do objeto, isso vai ser explicado mais adiante.
 ***
+## Tecnicalidades do OpenGL:
+### Shaders e shader programs:
+Shaders são programas que rodam na GPU do computador com instruções de como renderizar a cena, eles são escritos em GLSL que é uma língua de programação com sintaxe similar ao C.  
+Existem muitos tipos de shaders, mas nós só precisamos de dois para renderizar uma cena, o Vertex Shader e o Fragment Shader.  
+**Vertex Shader**
+Sua função mais importante é definir onde o vértice está na cena com base na informação que recebe (traduções, rotação, zoom da câmera etc.), como o nome sugere, esse shader roda uma vez para cada vértice do objeto sendo renderizado.  
+
+**Fragment Shader**
+O Fragment Shader roda depois do Vertex Shader na pipeline, então o Vertex Shader pode passar algumas informações para o Fragment Shader, a principal função do fragment shader é definir a cor, transparência e profundidade do fragmento (píxel). O Fragment Shader roda uma vez por píxel visível do objeto sendo renderizado.  
+Como os robôs precisam ter cores diferentes no mesmo objeto por conta de suas tags, o Vertex Shader passa a cor individual de cada vértice pro Fragment Shader, que usa essa variável pra definir a sua cor final.  
+
+Uma tecnicalidade importante é que, cada triângulo tem 3 vértices (inacreditável eu sei), mas normalmente ele vai ter muito mais fragmentos pra serem renderizados, logo, quando passamos uma variável do Vertex Shader pro Fragment Shader 
+
+
+***
 ## Criando um mesh renderizável:  
 
 Um objeto renderizável na cena é representável por uma instância da classe `Renderable`, essa classe têm alguns componentes que afetam a sua renderização.  

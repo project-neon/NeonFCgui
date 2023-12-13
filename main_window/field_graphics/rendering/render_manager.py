@@ -111,16 +111,14 @@ class Renderable:
 
 class RenderingContext:
     objects = []
-    global_transformations = {'x': 0, 'y': 0, 'z': 0, 'scale': .15, 'rotation': 0, 'aspect_ratio': 1}
-    framebuffer: int | None = None
+    global_transformations = {'x': 0, 'y': 0, 'scale': .15, 'rotation': 0, 'aspect_ratio': 1}
 
-    def __init__(self, framebuffer: QOpenGLFramebufferObject | None | int = None):
-        self.framebuffer = framebuffer
+    def __init__(self):
+        pass
 
-    def set_transformations(self, x=0, y=0, z=0, scale=0, rotation=0):
+    def set_transformations(self, x=0, y=0, scale=0, rotation=0):
         self.global_transformations['x'] = x
         self.global_transformations['y'] = y
-        self.global_transformations['z'] = z
         self.global_transformations['scale'] = scale
         self.global_transformations['rotation'] = rotation
 
