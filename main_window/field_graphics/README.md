@@ -53,7 +53,7 @@ Outra coisa importante é que o OpenGL renderiza _triângulos_, ou seja, são 3 
 
 Por exemplo, você pode definir um quadrado como 2 triângulos, logo uma array que representa um quadrado teria um tamanho de 18.
 
-![Vertices](https://github.com/project-neon/NeonSoccerGUI/assets/59067466/ec221085-f7a5-4b25-b97b-d7f0dbac4555)
+![Vertices](https://github.com/project-neon/NeonSoccerGUI/assets/59067466/9d60527a-3269-4566-a849-f3f8d8af5600)
 
 Como a cor de cada vértices são 3 floats, a array contendo todas as cores terá o mesmo tamanho da array contendo todos os vértices. (Note que as cores são especificadas num range de floats entre 0 e 1, não entre 0 e 255)
 
