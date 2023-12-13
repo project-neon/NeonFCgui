@@ -48,7 +48,8 @@ class Renderable:
     colors: multiarray = None
     shaderProgram: QOpenGLShaderProgram = None
     triangles: int = 0
-    transformations = {'x': 0, 'y': 0, 'z': 0, 'r': 0}
+    x = 0; y = 0; z = 0
+    rotation = 0
     shader_uniform_locations = {
         # It is generally considered good practice to store this to minimize GPU calls
         'coordinate_vector_loc': -1,
@@ -77,7 +78,8 @@ class Renderable:
 
     def update_shader_uniform_locations(self):
         self.shader_uniform_locations['aspect_ratio_float_loc'] = self.shaderProgram.uniformLocation('aspectRatio')
-        self.shader_uniform_locations['g_coordinate_vector_loc'] = self.shaderProgram.uniformLocation('globalTranslation')
+        self.shader_uniform_locations['g_coordinate_vector_loc'] = self.shaderProgram.uniformLocation(
+            'globalTranslation')
         self.shader_uniform_locations['g_rotation_float_loc'] = self.shaderProgram.uniformLocation('globalRotation')
         self.shader_uniform_locations['g_scale_float_loc'] = self.shaderProgram.uniformLocation('globalScale')
         self.shader_uniform_locations['coordinate_vector_loc'] = self.shaderProgram.uniformLocation('coord')
@@ -94,8 +96,9 @@ class Renderable:
         GL.glUniform1f(self.shader_uniform_locations['g_rotation_float_loc'], rotation)
         GL.glUniform1f(self.shader_uniform_locations['aspect_ratio_float_loc'], aspect_ratio)
         GL.glUniform1f(self.shader_uniform_locations['g_scale_float_loc'], scale)
-        GL.glUniform1f(self.shader_uniform_locations['rotation_float_loc'], self.transformations['r'])
-        GL.glUniform3f(self.shader_uniform_locations['coordinate_vector_loc'], self.transformations['x'],self.transformations['y'],self.transformations['z'])
+        GL.glUniform1f(self.shader_uniform_locations['rotation_float_loc'], self.rotation)
+        GL.glUniform3f(self.shader_uniform_locations['coordinate_vector_loc'], self.x,
+                       self.y, self.z)
 
         GL.glEnableVertexAttribArray(0)
         GL.glEnableVertexAttribArray(1)
@@ -110,26 +113,30 @@ class Renderable:
 
 
 class RenderingContext:
-    objects = []
-    global_transformations = {'x': 0, 'y': 0, 'scale': .15, 'rotation': 0, 'aspect_ratio': 1}
+    objects: list[Renderable] = []
+    x: float = 0
+    y: float = 0
+    aspect_ratio: float = 0
+    scale: float = .15
+    rotation: float = 0
 
     def __init__(self):
         pass
 
-    def set_transformations(self, x=0, y=0, scale=0, rotation=0):
-        self.global_transformations['x'] = x
-        self.global_transformations['y'] = y
-        self.global_transformations['scale'] = scale
-        self.global_transformations['rotation'] = rotation
+    def set_transformations(self, x=0, y=0, scale=1, rotation=0):
+        self.x = x
+        self.y = y
+        self.scale = scale
+        self.rotation = rotation
 
     def set_aspect_ratio(self, aspect_ratio):
-        self.global_transformations['aspect_ratio'] = aspect_ratio
+        self.aspect_ratio = aspect_ratio
 
     def draw(self, sim_time):
         for obj in self.objects:
-            obj.draw(self.global_transformations['x'], self.global_transformations['y'],
-                     self.global_transformations['scale'],
-                     self.global_transformations['rotation'], self.global_transformations['aspect_ratio'], sim_time)
+            obj.draw(self.x, self.y,
+                     self.scale,
+                     self.rotation, self.aspect_ratio, sim_time)
 
 
 def setupGL():

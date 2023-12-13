@@ -25,7 +25,7 @@ vec2 rotate(float theta, vec2 point) {
 void main(){
     relativeCoords = vertexPosition_modelspace.xyz;
     gl_Position.xyz = vertexPosition_modelspace.xyz + coord.xyz;
-    gl_Position.xy = rotate(angle,gl_Position.xy) * globalScale;
+    gl_Position.xy = rotate(angle,gl_Position.xy) * max(globalScale,0);
     gl_Position.xyz += globalTranslation.xyz;
     gl_Position.xy = rotate(globalRotation,gl_Position.xy);
     gl_Position.y *= aspectRatio;

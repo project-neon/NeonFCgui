@@ -7,7 +7,7 @@ from main_window.field_graphics.rendering.render_manager import Renderable, comp
 
 def shaderProgram() -> QOpenGLShaderProgram:
     vsh = open("main_window/field_graphics/shaders/VertexShader.vsh").read()
-    fsh = open("main_window/field_graphics/shaders/CircleFragmentShader.fsh").read()
+    fsh = open("main_window/field_graphics/shaders/FragmentShader.fsh").read()
     return compileShaderProgram(vsh, fsh)
 
 DEFAULT_TAG_DEPTH = -.1
