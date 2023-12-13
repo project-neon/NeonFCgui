@@ -3,6 +3,7 @@ Responsible for obfuscating most of the most low-level OpenGL calls.
 """
 import sys
 
+import numpy as np
 from OpenGL import GL
 from PyQt6.QtOpenGL import QOpenGLFramebufferObject, QOpenGLShaderProgram, QOpenGLBuffer, QOpenGLShader, \
     QOpenGLVertexArrayObject
@@ -47,7 +48,7 @@ class Renderable:
     vertices: multiarray = None
     colors: multiarray = None
     shaderProgram: QOpenGLShaderProgram = None
-    triangles: int = 0
+    triangle_count: int = 0
     x = 0; y = 0; z = 0
     rotation = 0
     shader_uniform_locations = {
@@ -65,7 +66,7 @@ class Renderable:
         self.colors = colors
         self.shaderProgram = shaderProgram
         self.update_shader_uniform_locations()
-        self.triangles = int(len(vertices) / 9)
+        self.triangle_count = int(len(vertices) / 9)
         self.vertexVBO = GL.glGenBuffers(1)
         self.colorVBO = GL.glGenBuffers(1)
         self.update_vertex_attributes()
@@ -78,8 +79,7 @@ class Renderable:
 
     def update_shader_uniform_locations(self):
         self.shader_uniform_locations['aspect_ratio_float_loc'] = self.shaderProgram.uniformLocation('aspectRatio')
-        self.shader_uniform_locations['g_coordinate_vector_loc'] = self.shaderProgram.uniformLocation(
-            'globalTranslation')
+        self.shader_uniform_locations['g_coordinate_vector_loc'] = self.shaderProgram.uniformLocation('globalTranslation')
         self.shader_uniform_locations['g_rotation_float_loc'] = self.shaderProgram.uniformLocation('globalRotation')
         self.shader_uniform_locations['g_scale_float_loc'] = self.shaderProgram.uniformLocation('globalScale')
         self.shader_uniform_locations['coordinate_vector_loc'] = self.shaderProgram.uniformLocation('coord')
@@ -97,8 +97,7 @@ class Renderable:
         GL.glUniform1f(self.shader_uniform_locations['aspect_ratio_float_loc'], aspect_ratio)
         GL.glUniform1f(self.shader_uniform_locations['g_scale_float_loc'], scale)
         GL.glUniform1f(self.shader_uniform_locations['rotation_float_loc'], self.rotation)
-        GL.glUniform3f(self.shader_uniform_locations['coordinate_vector_loc'], self.x,
-                       self.y, self.z)
+        GL.glUniform3f(self.shader_uniform_locations['coordinate_vector_loc'], self.x,self.y, self.z)
 
         GL.glEnableVertexAttribArray(0)
         GL.glEnableVertexAttribArray(1)
@@ -107,7 +106,8 @@ class Renderable:
         self.shaderProgram.setAttributeBuffer(1, GL.GL_FLOAT, 0, 3)
         GL.glBindBuffer(GL.GL_ARRAY_BUFFER, self.vertexVBO)
         self.shaderProgram.setAttributeBuffer(0, GL.GL_FLOAT, 0, 3)
-        GL.glDrawArrays(GL.GL_TRIANGLES, 0, self.triangles * 3)
+        GL.glDrawArrays(GL.GL_TRIANGLES, 0, self.triangle_count * 3)
+
         GL.glDisableVertexAttribArray(0)
         GL.glDisableVertexAttribArray(1)
 
