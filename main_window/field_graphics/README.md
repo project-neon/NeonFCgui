@@ -48,10 +48,12 @@ Um objeto renderizável na cena é representável por uma instância da classe `
 
 É importante entender a lógica de renderização de objetos, o OpenGL é um framework 3d o qual estamos usando pra renderizar uma cena 2d, mas o terceiro componente ainda existe. O OpenGL sempre decide quais fragmentos vai desenhar com base nas coordenadas do fragmento, todo fragmento na cena _precisa_ estar contido num cubo com centro na origem, bordas em -1 e 1 respectivamente. A transformação de coordenadas no sistema usado pro sistema do OpenGL é feita no Vertex Shader com base nos parâmetros de tradução local e global que afetam o objeto, por exemplo uma escala de 0,1 vai fazer objetos que estão em x=2 aparecerem na tela.  
 
-A maioria dos atributos são ou globais ou locais para cada forma, mas há um terceiro tipo de atributo que é diferente para cada _vértice_ do objeto, existem dois atributos desse tipo na classe Renderable, o primeiro é o que armazena as coordenadas relativas do vértice para formar o modelo, e o segundo é a cor do vértice. Esse segundo é mais contraintuitivo, mas como o OpenGL aceita atributos ou por forma ou por vértice, para termos mais de uma cor para o mesmo objeto esse é o único jeito.  
+A maioria dos atributos são ou globais ou locais para cada forma, mas há um terceiro tipo de atributo que é diferente para cada _vértice_ do objeto, existem dois atributos desse tipo na classe Renderable, o primeiro é o que armazena as coordenadas relativas do vértice para formar o modelo, e o segundo é a cor do vértice. Esse segundo é mais contraintuitivo, mas como o OpenGL aceita atributos ou por forma ou por vértice, para um objeto ter mais de uma cor esse é o único jeito.  
 Outra coisa importante é que o OpenGL renderiza _triângulos_, ou seja, são 3 coordenadas por vértice e 3 vértices por triângulo, idealmente qualquer modelo deveria ter um tamanho de array de vértices como algum multiplo de 9.
 
 Por exemplo, você pode definir um quadrado como 2 triângulos, logo uma array que representa um quadrado teria um tamanho de 18.
+
+![Vertices](https://github.com/project-neon/NeonSoccerGUI/assets/59067466/ec221085-f7a5-4b25-b97b-d7f0dbac4555)
 
 Como a cor de cada vértices são 3 floats, a array contendo todas as cores terá o mesmo tamanho da array contendo todos os vértices. (Note que as cores são especificadas num range de floats entre 0 e 1, não entre 0 e 255)
 
