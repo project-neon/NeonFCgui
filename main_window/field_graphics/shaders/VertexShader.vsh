@@ -13,6 +13,7 @@ uniform float aspectRatio = 1;
 uniform vec3 globalTranslation;
 
 out vec4 fragColor;
+out vec3 relativeCoords;
 
 vec2 rotate(float theta, vec2 point) {
         float sin = sin(-theta); float cos = cos(-theta);
@@ -22,6 +23,7 @@ vec2 rotate(float theta, vec2 point) {
 }
 
 void main(){
+    relativeCoords = vertexPosition_modelspace.xyz;
     gl_Position.xyz = vertexPosition_modelspace.xyz + coord.xyz;
     gl_Position.xy = rotate(angle,gl_Position.xy) * globalScale;
     gl_Position.xyz += globalTranslation.xyz;
