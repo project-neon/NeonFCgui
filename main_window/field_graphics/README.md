@@ -12,6 +12,7 @@ Assim, o módulo `field_graphics` têm como principal função abstrair toda a l
   - [FieldView](https://github.com/project-neon/NeonSoccerGUI/blob/main/main_window/field_graphics/README.md#fieldview)
   - [RenderingContext](https://github.com/project-neon/NeonSoccerGUI/blob/main/main_window/field_graphics/README.md#renderingcontext)
   - [FieldGraphics](https://github.com/project-neon/NeonSoccerGUI/blob/main/main_window/field_graphics/README.md#renderable)
+- [Tecnicalidades do OpenGL](https://github.com/project-neon/NeonSoccerGUI/tree/main/main_window/field_graphics#tecnicalidades-do-opengl)
 - [Criando um mesh renderizável](https://github.com/project-neon/NeonSoccerGUI/blob/main/main_window/field_graphics/README.md#criando-um-mesh-renderiz%C3%A1vel)
 ***
 ## Objetos base:
@@ -53,8 +54,9 @@ Sua função mais importante é definir onde o vértice está na cena com base n
 O Fragment Shader roda depois do Vertex Shader na pipeline, então o Vertex Shader pode passar algumas informações para o Fragment Shader, a principal função do fragment shader é definir a cor, transparência e profundidade do fragmento (píxel). O Fragment Shader roda uma vez por píxel visível do objeto sendo renderizado.  
 Como os robôs precisam ter cores diferentes no mesmo objeto por conta de suas tags, o Vertex Shader passa a cor individual de cada vértice pro Fragment Shader, que usa essa variável pra definir a sua cor final.  
 
-Uma tecnicalidade importante é que, cada triângulo tem 3 vértices (inacreditável eu sei), mas normalmente ele vai ter muito mais fragmentos pra serem renderizados, logo, quando passamos uma variável do Vertex Shader pro Fragment Shader 
+Uma tecnicalidade importante é que cada triângulo tem 3 vértices mas normalmente ele vai ter muito mais fragmentos pra serem renderizados, um cubo com 6 vértices terá potencialmente centenas de fragmentos, assim, quando passamos uma variável do Vertex Shader para o Fragment Shader, essas variáveis passam por um processo de interpolação, assim o valor final para cada fragmento depende de sua proximidade com cada vértice. Vamos supor por exemplo que eu esteja renderizando um triângulo que passa uma variável de tipo `float` para o Fragment Shader, e que cada vértice passasse uma float diferente (1,2 e 3) respectivamente. A float que cada fragmento receberia seria um resultado interpolado dependendo da sua proximidade com cada vértice:
 
+![Interpolação](https://github.com/project-neon/NeonSoccerGUI/assets/59067466/69b69c93-4505-4266-9d3b-bbe82a1a82f8)
 
 ***
 ## Criando um mesh renderizável:  
