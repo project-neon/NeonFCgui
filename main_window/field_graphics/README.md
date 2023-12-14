@@ -43,20 +43,24 @@ Seta as transformações *locais* do objeto, a localização do objeto na cena f
 
 Note que embora a cena seja isometricamte projetada num campo 2D ainda há uma variável z, que aplica uma transformação z em todos os vértices do objeto, isso vai ser explicado mais adiante.
 ***
-## Tecnicalidades do OpenGL:
+## Tecnicalidades do OpenGL:  
 ### Shaders e shader programs:
 Shaders são programas que rodam na GPU do computador com instruções de como renderizar a cena, eles são escritos em GLSL que é uma língua de programação com sintaxe similar ao C.  
 Existem muitos tipos de shaders, mas nós só precisamos de dois para renderizar uma cena, o Vertex Shader e o Fragment Shader.  
-**Vertex Shader**
+**Vertex Shader**  
 Sua função mais importante é definir onde o vértice está na cena com base na informação que recebe (traduções, rotação, zoom da câmera etc.), como o nome sugere, esse shader roda uma vez para cada vértice do objeto sendo renderizado.  
 
-**Fragment Shader**
+**Fragment Shader**  
 O Fragment Shader roda depois do Vertex Shader na pipeline, então o Vertex Shader pode passar algumas informações para o Fragment Shader, a principal função do fragment shader é definir a cor, transparência e profundidade do fragmento (píxel). O Fragment Shader roda uma vez por píxel visível do objeto sendo renderizado.  
 Como os robôs precisam ter cores diferentes no mesmo objeto por conta de suas tags, o Vertex Shader passa a cor individual de cada vértice pro Fragment Shader, que usa essa variável pra definir a sua cor final.  
 
 Uma tecnicalidade importante é que cada triângulo tem 3 vértices mas normalmente ele vai ter muito mais fragmentos pra serem renderizados, um cubo com 6 vértices terá potencialmente centenas de fragmentos, assim, quando passamos uma variável do Vertex Shader para o Fragment Shader, essas variáveis passam por um processo de interpolação, assim o valor final para cada fragmento depende de sua proximidade com cada vértice. Vamos supor por exemplo que eu esteja renderizando um triângulo que passa uma variável de tipo `float` para o Fragment Shader, e que cada vértice passasse uma float diferente (1,2 e 3) respectivamente. A float que cada fragmento receberia seria um resultado interpolado dependendo da sua proximidade com cada vértice:
 
 ![Interpolação](https://github.com/project-neon/NeonSoccerGUI/assets/59067466/69b69c93-4505-4266-9d3b-bbe82a1a82f8)
+
+### A componente Z:  
+O OpenGL é uma biblioteca de renderização 3D que estamos usando pra fazer uma renderização 2D, mas isso não significa que a componente z não é importante, no nosso caso, podemos nos aproveitar do buffer de profundidade do OpenGL para usar a componente Z como um filtro de prioridade, isso é, a coordenada Z define quais objetos são renderizados por cima e quais são renderizados por baixo.
+O OpenGL renderiza fragmentos que têm suas coordenadas contidas em um cubo com limites em `[-1,-1,-1]` e `[1,1,1]`, tudo fora desse range é descartado, assim, a coordenada da componente Z de cada vértice deve estar entre -1 e 1. Algo importante de notar é que no OpenGL, o Z positivo tende a levar o objeto **pra frente**, ou seja, um vértice em `.-5` será renderizado por cima de um vértice em `.5`, como cada vértice têm sua coordenada Z podemos fazer com que certas partes de um modelo sejam renderizadas por cima de outras partes, isso é importante no caso do robô, que precisa ter suas tags renderizadas por cima do quadrado que compõe seu corpo principal.
 
 ***
 ## Criando um mesh renderizável:  
