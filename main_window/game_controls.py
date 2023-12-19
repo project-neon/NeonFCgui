@@ -1,18 +1,18 @@
 """
 Section of the main window where the
-pop-up menu's buttons will be displayed.
+game's status controls will be displayed.
 """
 
 from PyQt6.QtWidgets import QLabel, QWidget
 from PyQt6.QtGui import QPalette, QColor
 
-class Menu(QWidget):
+class GameControls(QWidget):
     def __init__(self):
-        super(Menu, self).__init__()
+        super(GameControls, self).__init__()
         self.setAutoFillBackground(True)
 
         palette = self.palette()
         palette.setColor(QPalette.ColorRole.Window, QColor('#b3a4d3'))
         self.setPalette(palette)
 
-        QLabel("<h1> Menus! </h1>", parent=self)
+        QLabel("<h1> GameControls! </h1>", parent=self)

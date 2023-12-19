@@ -5,9 +5,7 @@ Starts main window's thread
 
 import threading
 import sys
-
 from PyQt6.QtCore import Qt
-
 from main_window import MainWindow
 from PyQt6.QtWidgets import QApplication
 
@@ -18,11 +16,8 @@ class App(threading.Thread):
         self.app = QApplication(sys.argv)
         self.window = MainWindow()
 
-        # self.main_window = MainWindow(self)
-
     def start(self):
-        # self.main_window.start()
-
         # Show application's GUI
         self.window.show()
+        # self.window.showMaximized()
         self.app.exec()
