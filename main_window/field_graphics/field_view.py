@@ -12,17 +12,23 @@ from PyQt6.QtWidgets import QLabel, QWidget
 
 from main_window.field_graphics.field_objects.robot import Robot
 from main_window.field_graphics.rendering.render_manager import RenderingContext, setupGL
-
+from main_window.field_graphics.rendering.animation_manager import AnimationManager
 
 class FieldView(QOpenGLWidget):
     context: RenderingContext = None
     sim_time: int = 0
-    rotation = x = y = 0
-    scale = .1
+    rotation = AnimationManager()
+    x_translation = AnimationManager(accel_constant=.1,anti_derivative_constant=.2)
+    y_translation = AnimationManager(accel_constant=.1,anti_derivative_constant=.2)
+    scale = AnimationManager(accel_constant=.15,anti_derivative_constant=.2)
+
+    scroll_level: float = 0
+    scroll_wheel_sensibility = 3
+
     def __init__(self):
         super().__init__()
         self.context = RenderingContext()
-
+        self.scroll_level = 3
         self.setFocusPolicy(self.focusPolicy().StrongFocus)
         QLabel("<h1>Campo!</h1>", parent=self)
 
@@ -44,29 +50,37 @@ class FieldView(QOpenGLWidget):
         GL.glBindBuffer(GL.GL_ARRAY_BUFFER, 0)
         self.context.draw(self.sim_time)
 
-    def updateTranslations(self):
-        self.context.scale += (self.scale - self.context.scale)/10
-        self.context.x += (self.x - self.context.x) / 10
-        self.context.y += (self.y - self.context.y) / 10
+    def update_translations(self, time: float):
+        self.scale.dest = math.pow(2,-self.scroll_level)
+        self.context.x = self.x_translation.current
+        self.context.y = self.y_translation.current
+        self.context.scale = self.scale.current
+        self.x_translation.update(time)
+        self.y_translation.update(time)
+        self.scale.update(time)
+
 
     def timerEvent(self, event: typing.Optional['QTimerEvent']) -> None:
         self.sim_time += 1
         self.r.rotation = self.sim_time / 350  # <-- TODO remover isso, essa rotação é só pra testes
         self.makeCurrent()
-        self.updateTranslations()
+        self.update_translations(1)
         self.update()
 
+
     def keyPressEvent(self, event: typing.Optional[QtGui.QKeyEvent]) -> None:
-        key = event.key()
-        print(key)
+        self.updateKey(event.key())
+        # print("DEST: " + str(self.x_translation.dest) + "," + str(self.y_translation.dest))
+
+    def updateKey(self,key):
         if key == 16777235:
-            self.y -= .2
+            self.y_translation.dest -= .2
         elif key == 16777234:
-            self.x += .2
+            self.x_translation.dest += .2
         elif key == 16777237:
-            self.y += .2
+            self.y_translation.dest += .2
         elif key == 16777236:
-            self.x -= .2
+            self.x_translation.dest -= .2
 
     def mouseMoveEvent(self, event: typing.Optional[QtGui.QMouseEvent]) -> None:
         super().mouseMoveEvent(event)
@@ -74,4 +88,4 @@ class FieldView(QOpenGLWidget):
 
     def wheelEvent(self, event: typing.Optional[QtGui.QWheelEvent]) -> None:
         super().wheelEvent(event)
-        self.scale += event.angleDelta().y() / 2400
+        self.scroll_level -= event.angleDelta().y()/(120 * self.scroll_wheel_sensibility)
