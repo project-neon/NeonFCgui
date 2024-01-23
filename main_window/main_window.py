@@ -6,6 +6,7 @@ game informations and robots informations.
 """
 
 from PyQt6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout
+from PyQt6.QtGui import QFont
 from main_window.menu import Menu
 from main_window.game_controls import GameControls
 from main_window.game_settings import GameSettings
@@ -28,6 +29,7 @@ class MainWindow(QMainWindow):
         self.window_width = 1200
         self.window_height = 800
         self.setGeometry(100, 100, self.window_width, self.window_height)
+        self.setFont(QFont('Arial', 15))
 
         # Organizing the layout
         # Vertical layout divided into top section
@@ -80,7 +82,8 @@ class MainWindow(QMainWindow):
         bottom_h_layout.addWidget(info_widget)
 
         # Adding robots informations widgets
-        # Change to list of robots later?
+        # TODO Change to list of robots later?
+        # TODO Make it easy to add more robots in the future
         robot1 = RobotInfo()
         robot1.setMaximumHeight(h)
         robot1.resize(w, h)
