@@ -2,8 +2,9 @@
 Responsible for obfuscating most of the most low-level OpenGL calls.
 """
 import sys
-
+import json
 import numpy as np
+
 from OpenGL import GL
 from PyQt6.QtOpenGL import QOpenGLFramebufferObject, QOpenGLShaderProgram, QOpenGLBuffer, QOpenGLShader, \
     QOpenGLVertexArrayObject
@@ -49,7 +50,9 @@ class Renderable:
     colors: multiarray = None
     shaderProgram: QOpenGLShaderProgram = None
     triangle_count: int = 0
-    x = 0; y = 0; z = 0
+    x = 0;
+    y = 0;
+    z = 0
     rotation = 0
     shader_uniform_locations = {
         # It is generally considered good practice to store this to minimize GPU calls
@@ -61,10 +64,10 @@ class Renderable:
         'aspect_ratio_float_loc': -1
     }
 
-    def __init__(self, vertices: multiarray, colors: multiarray, shaderProgram: QOpenGLShaderProgram):
+    def __init__(self, vertices: multiarray, colors: multiarray, shader_program: QOpenGLShaderProgram):
         self.vertices = vertices
         self.colors = colors
-        self.shaderProgram = shaderProgram
+        self.shaderProgram = shader_program
         self.update_shader_uniform_locations()
         self.triangle_count = int(len(vertices) / 9)
         self.vertexVBO = GL.glGenBuffers(1)
@@ -79,7 +82,8 @@ class Renderable:
 
     def update_shader_uniform_locations(self):
         self.shader_uniform_locations['aspect_ratio_float_loc'] = self.shaderProgram.uniformLocation('aspectRatio')
-        self.shader_uniform_locations['g_coordinate_vector_loc'] = self.shaderProgram.uniformLocation('globalTranslation')
+        self.shader_uniform_locations['g_coordinate_vector_loc'] = self.shaderProgram.uniformLocation(
+            'globalTranslation')
         self.shader_uniform_locations['g_rotation_float_loc'] = self.shaderProgram.uniformLocation('globalRotation')
         self.shader_uniform_locations['g_scale_float_loc'] = self.shaderProgram.uniformLocation('globalScale')
         self.shader_uniform_locations['coordinate_vector_loc'] = self.shaderProgram.uniformLocation('coord')
@@ -97,7 +101,7 @@ class Renderable:
         GL.glUniform1f(self.shader_uniform_locations['aspect_ratio_float_loc'], aspect_ratio)
         GL.glUniform1f(self.shader_uniform_locations['g_scale_float_loc'], scale)
         GL.glUniform1f(self.shader_uniform_locations['rotation_float_loc'], self.rotation)
-        GL.glUniform3f(self.shader_uniform_locations['coordinate_vector_loc'], self.x,self.y, self.z)
+        GL.glUniform3f(self.shader_uniform_locations['coordinate_vector_loc'], self.x, self.y, self.z)
 
         GL.glEnableVertexAttribArray(0)
         GL.glEnableVertexAttribArray(1)
@@ -110,6 +114,30 @@ class Renderable:
 
         GL.glDisableVertexAttribArray(0)
         GL.glDisableVertexAttribArray(1)
+
+
+def modelFromJSON(data: str):
+    jsonobj = json.loads(data)
+    objects = jsonobj["objects"]
+    models = []
+
+    for obj in objects:
+        vertices = obj["vertices"]
+        shader = obj["shader"]
+
+        vert_data = []
+        color_data = []
+        for vertex in vertices:
+            vert_data.append(vertex["x"]), vert_data.append(vertex["y"]), vert_data.append(vertex["z"])
+            color_data.append(vertex["r"]), color_data.append(vertex["g"]), color_data.append(vertex["b"])
+        vertex_sh = open(shader["vertex"]).read()
+        fragment_sh = open(shader["fragment"]).read()
+
+        program = compileShaderProgram(vertex_sh, fragment_sh)
+        models.append(
+            Renderable(np.asarray(vert_data,dtype=np.float32), np.asarray(color_data,dtype=np.float32), program)
+        )
+    return models
 
 
 class RenderingContext:
