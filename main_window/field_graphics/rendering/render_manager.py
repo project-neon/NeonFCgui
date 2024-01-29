@@ -124,7 +124,6 @@ def modelFromJSON(data: str):
     for obj in objects:
         vertices = obj["vertices"]
         shader = obj["shader"]
-
         vert_data = []
         color_data = []
         for vertex in vertices:
@@ -135,7 +134,7 @@ def modelFromJSON(data: str):
 
         program = compileShaderProgram(vertex_sh, fragment_sh)
         models.append(
-            Renderable(np.asarray(vert_data,dtype=np.float32), np.asarray(color_data,dtype=np.float32), program)
+            Renderable(np.asarray(vert_data, dtype=np.float32), np.asarray(color_data, dtype=np.float32), program)
         )
     return models
 
