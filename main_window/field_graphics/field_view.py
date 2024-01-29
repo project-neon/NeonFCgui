@@ -34,6 +34,7 @@ class FieldView(QOpenGLWidget):
         QLabel("<h1>Campo!</h1>", parent=self)
 
     def initializeGL(self):
+        # Aqui tem muita coisa de teste, TODO: remover isso eventualmente
         GL.glInitGl42VERSION()
         setupGL()
         GL.glClearColor(.2, .5, .2, 1)
