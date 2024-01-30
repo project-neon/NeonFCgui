@@ -40,7 +40,7 @@ class FieldView(QOpenGLWidget):
         GL.glClearColor(.2, .5, .2, 1)
         self.r = Robot([.15, .15, .15], [0, 1, 0], [1, 0, 0])
         #self.context.objects.append(self.r)
-        teste = modelFromJSON(open("main_window/field_graphics/assets/models/teste.json").read())
+        teste = modelFromJSON(open("main_window/field_graphics/assets/models/ball.json").read())
         self.context.objects.append(teste[0])
         self.startTimer(math.ceil(100 / 6))
 

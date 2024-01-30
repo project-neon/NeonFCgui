@@ -3,7 +3,8 @@
     {
       "shader": {
         "vertex": "main_window/field_graphics/assets/shaders/VertexShader.vsh",
-        "fragment": "main_window/field_graphics/assets/shaders/FragmentShader.fsh"
+        "fragment": "main_window/field_graphics/assets/shaders/FragmentShader.fsh",
+        "uniforms": []
       },
       "vertices": [
         {"x": -0.5,"y": 0,"z": 0,"r": 1,"g": 0,"b": 0},

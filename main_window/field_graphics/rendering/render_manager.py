@@ -126,13 +126,25 @@ def modelFromJSON(data: str):
         shader = obj["shader"]
         vert_data = []
         color_data = []
+        uniforms = shader["uniforms"]
+
         for vertex in vertices:
             vert_data.append(vertex["x"]), vert_data.append(vertex["y"]), vert_data.append(vertex["z"])
             color_data.append(vertex["r"]), color_data.append(vertex["g"]), color_data.append(vertex["b"])
         vertex_sh = open(shader["vertex"]).read()
         fragment_sh = open(shader["fragment"]).read()
-
         program = compileShaderProgram(vertex_sh, fragment_sh)
+
+        GL.glUseProgram(program.programId())
+        for uniform in uniforms:
+            uniform_type = uniform["type"]
+            loc = GL.glGetUniformLocation(program.programId(), uniform["name"])
+            if uniform_type == "int": GL.glUniform1i(loc, int(uniform["v0"]))
+            elif uniform_type == "float": GL.glUniform1f(loc, float(uniform["v0"]))
+            elif uniform_type == "vec2": GL.glUniform2f(loc, float(uniform["v0"]), float(uniform["v1"]))
+            elif uniform_type == "vec3": GL.glUniform3f(loc, float(uniform["v0"]), float(uniform["v1"]), float(uniform["v2"]))
+            elif uniform_type == "vec4": GL.glUniform4f(loc, float(uniform["v0"]), float(uniform["v1"]), float(uniform["v2"]), float(uniform["v3"]))
+
         models.append(
             Renderable(np.asarray(vert_data, dtype=np.float32), np.asarray(color_data, dtype=np.float32), program)
         )
