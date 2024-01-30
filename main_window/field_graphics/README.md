@@ -11,7 +11,7 @@ Assim, o módulo `field_graphics` têm como principal função abstrair toda a l
 - [Objetos base:](https://github.com/project-neon/NeonSoccerGUI/blob/main/main_window/field_graphics/README.md#objetos-base)
   - [FieldView](https://github.com/project-neon/NeonSoccerGUI/blob/main/main_window/field_graphics/README.md#fieldview)
   - [RenderingContext](https://github.com/project-neon/NeonSoccerGUI/blob/main/main_window/field_graphics/README.md#renderingcontext)
-  - [FieldGraphics](https://github.com/project-neon/NeonSoccerGUI/blob/main/main_window/field_graphics/README.md#renderable)
+  - [Renderable](https://github.com/project-neon/NeonSoccerGUI/blob/main/main_window/field_graphics/README.md#renderable)
 - [Tecnicalidades do OpenGL](https://github.com/project-neon/NeonSoccerGUI/tree/main/main_window/field_graphics#tecnicalidades-do-opengl)
 - [Criando um mesh renderizável](https://github.com/project-neon/NeonSoccerGUI/blob/main/main_window/field_graphics/README.md#criando-um-mesh-renderiz%C3%A1vel)
 ***
@@ -33,10 +33,22 @@ Chama o método draw de cada objeto no contexto, renderizando a cena como um tod
 
 ### Renderable:
 Representa um objeto renderizável na cena, isso pode ser qualquer coisa, um robô, um obstáculo, as faixas no campo etc. Cada objeto `Renderable` lida com sua própria lógica de renderização.  
+Um modelo no OpenGL é, por natureza, um conjunto de triângulos, cada triângulo com 3 vértices e cada vértice com 3 coordenadas (x,y,z), assim o inicializador do objeto considera cada 9 floats como um triângulo.  
+Os 3 argumentos necessários para inicializar um Renderable são `vertices` que são as coordenadas já mencionadas, `colors` que são as cores de cada _vértice_, isso pode ser meio confuso, mas cada vértice em cada triângulo têm sua própria cor, assim cada triângulo têm 3 variáveis de cor, para que um triângulo seja monocromático é necessário dar a mesma cor para seus 3 vértices, eu sei que isso parece não fazer nenhum sentido mas existe um motivo por eu ter feito o shader aceitar as coisas desse jeito e isso vai ser discutido mais adiante, como são 3 variáveis por cor e 3 cores por triângulo, a array `colors` deve ter o mesmo tamanho que a array `vertices`.
+O ultimo argumento é o `shader_program`, que são os shaders compilados que o objeto vai usar, existem shaders pré feitos que é só puxar pra usar, isso também será discutido adiante.
+Uma nota é importante é que, sabe lá deus o motivo, o PyOpenGL não aceita arrays padrão do python, assim é necessário converter para uma array do numpy com dtype setado para o binder aceitar.
+Para fazer um triângulo verde:
+```python
+vertices = [-1,0,0 , 1,0,0 , 0,1,0]
+colors = [0,1,0 , 0,1,0 , 0,1,0]
+vertices = np.asarray(vertices, dtype=np.float32)
+colors = np.asarray(colors, dtype=np.float32)
+model = Renderable(vertices, colors, pre_compiled_shader_program)
+```
 
 `Renderable.draw(self, tx, ty, scale, rotation, aspect_ratio, sim_time)`:  
 Renderiza o objeto no Framebuffer que está atualmente bindado à thread, para bindar o framebuffer de um determinado widget use a função `make_current` do widget.
-As variáveis tx e ty representam o deslocamento da câmera, scale representa o zoom da câmera e rotation representa o ângulo da câmera, essas variáveis são traduções de escopo _global_ que são passadas pelo `RenderingContext` o qual esse objeto faz parte.  
+As variáveis tx e ty representam o deslocamento da câmera, scale representa o zoom da câmera e rotation representa o ângulo da câmera, essas variáveis são traduções de escopo _global_ que são passadas pelo `RenderingContext` o qual esse objeto faz parte. Variáveis de rotação e tradução local são comunicadas ao shader pelos seus respectivos objetos.
 
 `Renderable.set_transformations(self, x=0, y=0, z=0, scale=0, rotation=0)`:  
 Seta as transformações *locais* do objeto, a localização do objeto na cena final também depende da posição da câmera.
