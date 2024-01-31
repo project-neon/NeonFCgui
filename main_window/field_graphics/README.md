@@ -75,6 +75,76 @@ O OpenGL é uma biblioteca de renderização 3D que estamos usando pra fazer uma
 O OpenGL renderiza fragmentos que têm suas coordenadas contidas em um cubo com limites em `[-1,-1,-1]` e `[1,1,1]`, tudo fora desse range é descartado, assim, a coordenada da componente Z de cada vértice deve estar entre -1 e 1. Algo importante de notar é que no OpenGL, o Z positivo tende a levar o objeto **pra frente**, ou seja, um vértice em `.-5` será renderizado por cima de um vértice em `.5`, como cada vértice têm sua coordenada Z podemos fazer com que certas partes de um modelo sejam renderizadas por cima de outras partes, isso é importante no caso do robô, que precisa ter suas tags renderizadas por cima do quadrado que compõe seu corpo principal.
 
 ***
+## Fazendo um modelo .json
+### Como converter
+Modelos .json são convertidos para objetos `Renderable` com a função `modelFromJSON` em `render_manager`. Essa função só têm um argumento, que é a string do .json a ser interpretado.   
+Importante mencionar que essa função retorna um _array_ de modelos, ou seja, cada .json pode ter mais de um objeto Renderable representado.   
+
+### Hierarquia do modelo json
+O arquivo .json deve ser estruturado da seguinte forma:
+```json
+{
+  "objects": [
+    {
+      "shader": {
+        "vertex": "vertex_shader_path",
+        "fragment": "fragment_shader_path",
+        "uniforms": []
+      },
+      "vertices": [
+        {"x": -0.5,"y": 0,"z": 0,"r": 1,"g": 0,"b": 0},
+        {"x": 0,"y": 1,"z": 0,"r": 0,"g": 1,"b": 0},
+        {"x": 0.5,"y": 0,"z": 0,"r": 0,"g": 0,"b": 1}
+      ]
+    }
+  ]
+}
+```
+Basicamente, dentro do objeto json principal há uma array `objects`, cada elemento dessa array vai representar um `Renderable`, dentro de cada elemento dessa array têm 2 elementos:   
+- `shader`: Representa dados sobe o shader que o objeto vai usar, `vertex` e `fragment` são as paths dentro do repositório do vertex e fragment shader do objeto, enquanto `uniforms` representa os uniforms que devem ser setados assim que o shader for carregado, essa parte será explicada no final do módulo.   
+- `vertices`: Representa os vértices do objeto, cada vértice tem 6 componentes, `x`,`y`,`z` são suas coordenadas e `r`,`g`,`b` suas cores respectivas. Podem ser colocados quantos vértices forem necessários no modelo, só é necessário lembrar que cada sequência de 3 vértices será considerada 1 triângulo.
+
+## Setando uniforms
+Para pré setar um uniform de um shader é necessário se saber as seguintes informações:
+- O nome do uniform no shader
+- O tipo de uniform (atualmente o interpretador só aceita tipos `int`,`float`,`vec2`,`vec3`,`vec4`. Espero eu que ninguém precise mandar matrízes pro shader).  
+Os valores que você quer setar para o Uniform.
+Cada um desses elementos são representados com os respectivos valores em cada elemento do array: `type`, `name`, `v0, v1, v2, v3`. O valor type é uma string contendo um dos valores acima, será sempre o mesmo tipo que está no shader, o valor `name` é uma string que é o nome da variável dentro do shader. Os valores `v0, v1, ...` são os valores que o uniform será setado, você pode não precisar usar todos dependendo do tipo de variável que está sendo definida, por exemplo se você está dando um valor para uma `float`, então só é necessário definir o `v0`, agora se você está usando um `vec3`, serão necessários definir o `v0`,`v1` e `v2`.   
+Importante notar que os vetores aceitam floats como argumentos.
+
+Atualmente só existe um exemplo notável desse sistema, que é o modelo `ball.json`, onde há um uniform definido o raio do círculo:
+```json
+"uniforms": [
+          {
+            "type": "float",
+            "name": "radius",
+            "v0": 0.5
+          }
+        ]
+```
+A variável têm nome radius pois, no shader em que ela está sendo usada (`CircleFragmentShader`), esse é o nome do uniform. 
+```GLSL
+#version 410 core
+
+in vec4 fragColor;
+in vec3 relativeCoords;
+
+uniform float radius = 1; // <- Variável que representa o raio da circunferência
+
+out vec4 color;
+
+void main(){
+    color = fragColor;
+    if(length(relativeCoords) > radius){
+        color.a = 0;
+        // Compara o valor radius com o vetor que representa a distância do fragmento da origem do objeto
+        // se esse valor for maior que o raio, o alpha do fragmento é setado para 0, fazendo com que um
+        // círculo praticamente perfeito seja renderizado
+    }
+}
+```
+
+***
 ## Criando um mesh renderizável:  
 
 Um objeto renderizável na cena é representável por uma instância da classe `Renderable`, essa classe têm alguns componentes que afetam a sua renderização.  
