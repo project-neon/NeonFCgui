@@ -29,7 +29,7 @@ class FieldView(QOpenGLWidget):
     def __init__(self):
         super().__init__()
         self.context = RenderingContext()
-        self.scroll_level = 3
+        self.scroll_level = 7
         self.setFocusPolicy(self.focusPolicy().StrongFocus)
         QLabel("<h1>Campo!</h1>", parent=self)
 
@@ -38,8 +38,8 @@ class FieldView(QOpenGLWidget):
         GL.glInitGl42VERSION()
         setupGL()
         GL.glClearColor(.2, .5, .2, 1)
-        self.r = Robot([.15, .15, .15], [0, 1, 0], [1, 0, 0])
-        #self.context.objects.append(self.r)
+        self.r = Robot([.15, .15, .15], [0, 1, 0], [1, 0, 0], [0, 0, 1])
+        self.context.objects.append(self.r)
         teste = modelFromJSON(open("main_window/field_graphics/assets/models/field_vsss.json").read())
         for obj in teste:
             self.context.objects.append(obj)
