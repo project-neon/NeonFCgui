@@ -40,8 +40,9 @@ class FieldView(QOpenGLWidget):
         GL.glClearColor(.2, .5, .2, 1)
         self.r = Robot([.15, .15, .15], [0, 1, 0], [1, 0, 0])
         #self.context.objects.append(self.r)
-        teste = modelFromJSON(open("main_window/field_graphics/assets/models/ball.json").read())
-        self.context.objects.append(teste[0])
+        teste = modelFromJSON(open("main_window/field_graphics/assets/models/field_vsss.json").read())
+        for obj in teste:
+            self.context.objects.append(obj)
         self.startTimer(math.ceil(100 / 6))
 
     def resizeGL(self, w: int, h: int) -> None:
