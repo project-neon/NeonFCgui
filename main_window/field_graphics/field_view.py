@@ -77,13 +77,13 @@ class FieldView(QOpenGLWidget):
 
     def updateKey(self, key):
         if key == 16777235:
-            self.y_translation.dest -= .2
+            self.y_translation.dest -= .2 / self.scale.dest
         elif key == 16777234:
-            self.x_translation.dest += .2
+            self.x_translation.dest += .2 / self.scale.dest
         elif key == 16777237:
-            self.y_translation.dest += .2
+            self.y_translation.dest += .2 / self.scale.dest
         elif key == 16777236:
-            self.x_translation.dest -= .2
+            self.x_translation.dest -= .2 / self.scale.dest
 
     def mouseMoveEvent(self, event: typing.Optional[QtGui.QMouseEvent]) -> None:
         super().mouseMoveEvent(event)
