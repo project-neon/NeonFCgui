@@ -13,6 +13,7 @@ from main_window.game_settings import GameSettings
 from main_window.field_graphics.field_view import FieldView
 from main_window.informations import Info
 from main_window.robot_info import RobotInfo
+from main_window.fouls import Fouls
 # from PyQt6.QtCore import QTimer, QCoreApplication
 
 def teste():
@@ -35,7 +36,7 @@ class MainWindow(QMainWindow):
         # Vertical layout divided into top section
         # for controls, the field visualization in
         # the middle and a bottom section for informations.
-        layout = QVBoxLayout()
+        window_layout = QVBoxLayout()
 
         # Width and height of each widget
         w = int(self.window_width/2)
@@ -66,39 +67,36 @@ class MainWindow(QMainWindow):
         game_settings_widget.setMaximumHeight(h)
         game_settings_widget.resize(w, h)
         top_h_layout.addWidget(game_settings_widget)
-        layout.addLayout(top_h_layout)
+        window_layout.addLayout(top_h_layout)
 
-        # Middle section with field visualization
-        layout.addWidget(FieldView())
-
-        # Bottom section with informations
+        # Lower section with field visualization,
+        # robot informations, game informations and fouls
         bottom_h_layout = QHBoxLayout()
-        w = int(self.window_width/4)
+        bottom_h_layout.addWidget(FieldView())
 
-        # Adding game informations widget
+        # Fouls and informations sections
+        right_v_layout = QVBoxLayout()
+        
+        # Fouls and robot informations
+        right_h_layout = QHBoxLayout()
+        foul_widget = Fouls()
+        foul_widget.setMaximumWidth(int(self.window_width/6))
+        right_h_layout.addWidget(foul_widget)
+        robots_widget = RobotInfo()
+        robots_widget.setMaximumWidth(int(self.window_width/3))
+        right_h_layout.addWidget(robots_widget)
+
+        right_v_layout.addLayout(right_h_layout)
         info_widget = Info()
         info_widget.setMaximumHeight(h)
-        info_widget.resize(w, h)
-        bottom_h_layout.addWidget(info_widget)
+        info_widget.setMaximumWidth(int(self.window_width/2))
+        # info_widget.resize(w, h)
+        right_v_layout.addWidget(info_widget)
 
-        # Adding robots informations widgets
-        # TODO Change to list of robots later?
-        # TODO Make it easy to add more robots in the future
-        robot1 = RobotInfo()
-        robot1.setMaximumHeight(h)
-        robot1.resize(w, h)
-        robot2 = RobotInfo()
-        robot2.setMaximumHeight(h)
-        robot2.resize(w, h)
-        robot3 = RobotInfo()
-        robot3.setMaximumHeight(h)
-        robot3.resize(w, h)
-        bottom_h_layout.addWidget(robot1)
-        bottom_h_layout.addWidget(robot2)
-        bottom_h_layout.addWidget(robot3)
+        bottom_h_layout.addLayout(right_v_layout)
 
-        layout.addLayout(bottom_h_layout)
+        window_layout.addLayout(bottom_h_layout)
 
         widget = QWidget()
-        widget.setLayout(layout)
+        widget.setLayout(window_layout)
         self.setCentralWidget(widget)

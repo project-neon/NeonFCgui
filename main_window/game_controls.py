@@ -4,7 +4,7 @@ game's status controls will be displayed.
 """
 
 import os
-from PyQt6.QtWidgets import QLabel, QWidget, QPushButton, QHBoxLayout
+from PyQt6.QtWidgets import QWidget, QPushButton, QHBoxLayout
 from PyQt6.QtGui import QPalette, QColor, QFont, QIcon
 from PyQt6.QtCore import QSize
 
@@ -37,11 +37,9 @@ class GameControls(QWidget):
         btn_reset.setFont(QFont('Arial', 15))
         btn_reset.setFixedSize(160, 60)
 
-        # Adding bunttons to layout
+        # Adding buttons to layout
         layout = QHBoxLayout()
         layout.addWidget(btn_start)
         layout.addWidget(btn_halt)
         layout.addWidget(btn_reset)
         self.setLayout(layout)
-
-        # QLabel("<h1> GameControls! </h1>", parent=self)

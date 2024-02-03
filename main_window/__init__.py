@@ -4,3 +4,4 @@ from main_window.game_controls import GameControls
 from main_window.game_settings import GameSettings
 from main_window.informations import Info
 from main_window.robot_info import RobotInfo
+from main_window.fouls import Fouls
