@@ -46,6 +46,10 @@ def compileShaderProgram(vertex_shader: str, fragment_shader: str) -> QOpenGLSha
 
 
 def loadTexture(path: str) -> int:
+    # FIXME Acess violation aleatoriamente pra + de 2 canais na call glTexImage2D
+    # Completamente inconsistente, RGBA nunca roda e RGB roda quando ele tá afim de rodar
+    # Pra renderização de fontes dá pra dar um turnaround no shader mas isso não era
+    # pra estar acontecendo, also eu não consigo usar uint128 do numpy
     texture = img.imread(path)
     w = texture.shape[0]; h = texture.shape[1]
     data = []
@@ -60,13 +64,20 @@ def loadTexture(path: str) -> int:
             j += 1
         i += 1
 
-    data = numpy.asarray(data, dtype=numpy.int32)
+    data = numpy.asarray(data, dtype=numpy.uint64)
+    # print(data)
+    # print(data.__len__())
+    # for n in data:
+    #     if n != 0: print(n)
+    # print(data.dtype)
     texture_VBO: int = GL.glGenTextures(1)
     GL.glBindTexture(GL.GL_TEXTURE_2D, texture_VBO)
+    # GL.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 1)
     GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST)
     GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST)
-    GL.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, w, h, 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, data)
-    print('g')
+    # print('f')
+    GL.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RG, w, h, 0, GL.GL_RG, GL.GL_UNSIGNED_BYTE, data)
+    # print('g')
     GL.glBindTexture(GL.GL_TEXTURE_2D, 0)
     return texture_VBO
 
@@ -129,6 +140,9 @@ class Renderable:
         local object transformations may be handled internally.
         """
         self.shaderProgram.bind()
+        GL.glUseProgram(self.shaderProgram.programId())
+        print(self.shader_uniform_locations['g_coordinate_vector_loc'])
+        print("{},{}".format(tx, ty))
         GL.glUniform3f(self.shader_uniform_locations['g_coordinate_vector_loc'], tx, ty, 0)
         GL.glUniform1f(self.shader_uniform_locations['g_rotation_float_loc'], rotation)
         GL.glUniform1f(self.shader_uniform_locations['aspect_ratio_float_loc'], aspect_ratio)

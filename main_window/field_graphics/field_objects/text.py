@@ -1,6 +1,6 @@
 import math
 
-import imageio.v3 as img
+from PIL import Image
 import numpy
 import numpy as np
 
@@ -60,6 +60,8 @@ class Text(Renderable):
         self.texture_VBO = loadTexture("main_window/field_graphics/assets/bitmaps/Impact.bmp")
         self.texture_coordinates_VBO = GL.glGenBuffers(1)
 
+        print(self.texture_coordinates_array)
+
         vertices = np.asarray(vertices, dtype=np.float32)
         colors = np.asarray(colors, dtype=np.float32)
 
@@ -68,15 +70,17 @@ class Text(Renderable):
         fsh = "main_window/field_graphics/assets/shaders/TextFragmentShader.fsh"
         fsh = open(fsh).read()
         shader = compileShaderProgram(vsh, fsh)
-        super().__init__(vertices, colors, robot.shaderProgram())
+        super().__init__(vertices, colors, shader)
 
     def draw(self, tx, ty, scale, rotation, aspect_ratio, sim_time):
-        GL.glBindTexture(GL.GL_TEXTURE_2D, self.texture)
         GL.glEnable(GL.GL_TEXTURE_2D)
+        GL.glBindTexture(GL.GL_TEXTURE_2D, self.texture)
         GL.glActiveTexture(GL.GL_TEXTURE0)
+        GL.glBindBuffer(GL.GL_ARRAY_BUFFER,self.texture_coordinates_VBO)
         GL.glVertexAttribPointer(2, 2, GL.GL_FLOAT, False, 0, 0)
         super().draw(tx, ty, scale, rotation, aspect_ratio, sim_time)
         GL.glBindTexture(GL.GL_TEXTURE_2D, 0)
+        GL.glDisable(GL.GL_TEXTURE_2D)
 
     def update_vertex_attributes(self):
         super().update_vertex_attributes()
