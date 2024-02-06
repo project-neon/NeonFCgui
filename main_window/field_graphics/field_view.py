@@ -11,6 +11,7 @@ from PyQt6.QtOpenGLWidgets import QOpenGLWidget
 from PyQt6.QtWidgets import QLabel, QWidget
 
 from main_window.field_graphics.field_objects.robot import Robot
+from main_window.field_graphics.field_objects.text import Text
 from main_window.field_graphics.rendering.render_manager import RenderingContext, setupGL, modelFromJSON
 from main_window.field_graphics.rendering.animation_manager import AnimationManager
 
@@ -34,13 +35,14 @@ class FieldView(QOpenGLWidget):
         QLabel("<h1>Campo!</h1>", parent=self)
 
     def initializeGL(self):
-        # Aqui tem muita coisa de teste, TODO: remover isso eventualmente
+        # Aqui tem muita coisa de teste, TODO: remover isso... eventualmente...
         GL.glInitGl42VERSION()
         setupGL()
         GL.glClearColor(.2, .5, .2, 1)
-        self.r = Robot([.15, .15, .15], [0, 1, 0], [1, 0, 0], [0, 0, 1])
+        self.r = Robot([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
         self.context.objects.append(self.r)
         teste = modelFromJSON(open("main_window/field_graphics/assets/models/field_vsss.json").read())
+        self.context.objects.append(Text("ALÉM DE CAVALOS E DE SOMBRAS, COISAS", "hh"))
         for obj in teste:
             self.context.objects.append(obj)
         self.startTimer(math.ceil(100 / 6))
@@ -66,7 +68,7 @@ class FieldView(QOpenGLWidget):
 
     def timerEvent(self, event: typing.Optional['QTimerEvent']) -> None:
         self.sim_time += 1
-        self.r.rotation = self.sim_time / 350  # <-- TODO remover isso, essa rotação é só pra testes
+        #self.r.rotation = self.sim_time / 350  # <-- TODO remover isso, essa rotação é só pra testes
         self.makeCurrent()
         self.update_translations(1)
         self.update()

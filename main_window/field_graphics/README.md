@@ -104,7 +104,7 @@ Basicamente, dentro do objeto json principal há uma array `objects`, cada eleme
 - `shader`: Representa dados sobe o shader que o objeto vai usar, `vertex` e `fragment` são as paths dentro do repositório do vertex e fragment shader do objeto, enquanto `uniforms` representa os uniforms que devem ser setados assim que o shader for carregado, essa parte será explicada no final do módulo.   
 - `vertices`: Representa os vértices do objeto, cada vértice tem 6 componentes, `x`,`y`,`z` são suas coordenadas e `r`,`g`,`b` suas cores respectivas. Podem ser colocados quantos vértices forem necessários no modelo, só é necessário lembrar que cada sequência de 3 vértices será considerada 1 triângulo.
 
-## Setando uniforms
+### Setando uniforms
 Para pré setar um uniform de um shader é necessário se saber as seguintes informações:
 - O nome do uniform no shader
 - O tipo de uniform (atualmente o interpretador só aceita tipos `int`,`float`,`vec2`,`vec3`,`vec4`. Espero eu que ninguém precise mandar matrízes pro shader).  

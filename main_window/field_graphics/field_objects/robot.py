@@ -1,4 +1,4 @@
-
+import numpy
 import numpy as np
 from PyQt6.QtOpenGL import QOpenGLShaderProgram
 
@@ -17,11 +17,13 @@ class Robot(Renderable):
         sr2 = left_tag_color[0]; sg2 = left_tag_color[1]; sb2 = left_tag_color[2]
         sr3 = right_tag_color[0]; sg3 = right_tag_color[1]; sb3 = right_tag_color[2]
         template: Renderable = modelFromJSON(open("main_window/field_graphics/assets/models/robot.json").read())[0]
+
         colors = np.asarray([
             r,g,b, r,g,b, r,g,b, r,g,b, r,g,b, r,g,b,
             sr,sg,sb, sr,sg,sb, sr,sg,sb, sr,sg,sb, sr,sg,sb, sr,sg,sb,
             sr2,sg2,sb2, sr2,sg2,sb2, sr2,sg2,sb2, sr2,sg2,sb2, sr2,sg2,sb2, sr2,sg2,sb2,
             sr3,sg3,sb3, sr3,sg3,sb3, sr3,sg3,sb3, sr3,sg3,sb3, sr3,sg3,sb3, sr3,sg3,sb3,
         ], dtype=np.float32)
+
         super().__init__(template.vertices, colors, template.shaderProgram)
 

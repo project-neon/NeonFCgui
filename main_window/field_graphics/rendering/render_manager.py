@@ -54,9 +54,7 @@ def loadTexture(path: str) -> int:
         j = 0
         while j < h:
             act = texture[i][j]  # TODO: CANAL ALPHA
-            r = act[0];
-            g = act[1];
-            b = act[2]
+            r = act[0]; g = act[1]; b = act[2]
             comp: int = int(r) | int(g << 8) | int(b << 16)
             data.append(comp)
             j += 1
@@ -68,6 +66,8 @@ def loadTexture(path: str) -> int:
     GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST)
     GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST)
     GL.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, w, h, 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, data)
+    print('g')
+    GL.glBindTexture(GL.GL_TEXTURE_2D, 0)
     return texture_VBO
 
 
@@ -116,8 +116,7 @@ class Renderable:
 
     def update_shader_uniform_locations(self):
         self.shader_uniform_locations['aspect_ratio_float_loc'] = self.shaderProgram.uniformLocation('aspectRatio')
-        self.shader_uniform_locations['g_coordinate_vector_loc'] = self.shaderProgram.uniformLocation(
-            'globalTranslation')
+        self.shader_uniform_locations['g_coordinate_vector_loc'] = self.shaderProgram.uniformLocation('globalTranslation')
         self.shader_uniform_locations['g_rotation_float_loc'] = self.shaderProgram.uniformLocation('globalRotation')
         self.shader_uniform_locations['g_scale_float_loc'] = self.shaderProgram.uniformLocation('globalScale')
         self.shader_uniform_locations['coordinate_vector_loc'] = self.shaderProgram.uniformLocation('coord')
