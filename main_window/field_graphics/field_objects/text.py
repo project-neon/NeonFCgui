@@ -76,7 +76,7 @@ class Text(Renderable):
         GL.glEnable(GL.GL_TEXTURE_2D)
         GL.glBindTexture(GL.GL_TEXTURE_2D, self.texture)
         GL.glActiveTexture(GL.GL_TEXTURE0)
-        GL.glBindBuffer(GL.GL_ARRAY_BUFFER,self.texture_coordinates_VBO)
+        GL.glBindBuffer(GL.GL_ARRAY_BUFFER, self.texture_coordinates_VBO)
         GL.glVertexAttribPointer(2, 2, GL.GL_FLOAT, False, 0, 0)
         super().draw(tx, ty, scale, rotation, aspect_ratio, sim_time)
         GL.glBindTexture(GL.GL_TEXTURE_2D, 0)
