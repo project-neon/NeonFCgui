@@ -3,7 +3,10 @@ Responsible for obfuscating most of the most low-level OpenGL calls.
 """
 import sys
 import json
+
+import numpy
 import numpy as np
+import imageio.v3 as img
 
 from OpenGL import GL
 from PyQt6.QtOpenGL import QOpenGLFramebufferObject, QOpenGLShaderProgram, QOpenGLBuffer, QOpenGLShader, \
@@ -11,7 +14,7 @@ from PyQt6.QtOpenGL import QOpenGLFramebufferObject, QOpenGLShaderProgram, QOpen
 from numpy.core import multiarray
 
 
-def compileShaderProgram(vertex_shader: str, fragment_shader: str) -> QOpenGLShaderProgram:
+def compileShaderProgram(vertex_shader: str, fragment_shader: str) -> QOpenGLShaderProgram | None:
     """Tries to compile the shader program which the argument strings contain."""
     program = QOpenGLShaderProgram()
     vertex = QOpenGLShader(QOpenGLShader.ShaderTypeBit.Vertex)
@@ -21,11 +24,14 @@ def compileShaderProgram(vertex_shader: str, fragment_shader: str) -> QOpenGLSha
         print("OpenGL version is " + str(GL.glGetString(GL.GL_VERSION)))
         print(vertex.log())
         print()
+        return None
+
     if not fragment.compileSourceCode(fragment_shader):
         print("WARNING: FAILED TO COMPILE FRAGMENT SHADER")
         print("OpenGL version is " + str(GL.glGetString(GL.GL_VERSION)))
         print(fragment.log())
         print()
+        return None
 
     program.addShader(vertex)
     program.addShader(fragment)
@@ -33,7 +39,37 @@ def compileShaderProgram(vertex_shader: str, fragment_shader: str) -> QOpenGLSha
         print("WARNING: FAILED TO BIND SHADER PROGRAM")
         print("OpenGL version is " + str(GL.glGetString(GL.GL_VERSION)))
         print(program.log())
+        print()
+        return None
+
     return program
+
+
+def loadTexture(path: str) -> int:
+    texture = img.imread(path)
+    w = texture.shape[0]; h = texture.shape[1]
+    data = []
+    i = 0
+    while i < w:
+        j = 0
+        while j < h:
+            act = texture[i][j]  # TODO: CANAL ALPHA
+            r = act[0];
+            g = act[1];
+            b = act[2]
+            comp: int = int(r) | int(g << 8) | int(b << 16)
+            data.append(comp)
+            j += 1
+        i += 1
+
+    data = numpy.asarray(data, dtype=numpy.int32)
+    texture_VBO: int = GL.glGenTextures(1)
+    GL.glBindTexture(GL.GL_TEXTURE_2D, texture_VBO)
+    GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST)
+    GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST)
+    GL.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, w, h, 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, data)
+    return texture_VBO
+
 
 
 class Renderable:
@@ -42,7 +78,7 @@ class Renderable:
     As a OOP quirk, it must handle its own rendering calls, memory allocation
     and external data, such as spatial translations, those features are already
     implemented by the class, however additional vertex attributes and uniforms
-    may need to be implemented by subclasses.
+    may need to be implemented by subclasses as needed.
     """
     vertexVBO: int = -1
     colorVBO: int = -1
@@ -50,9 +86,7 @@ class Renderable:
     colors: multiarray = None
     shaderProgram: QOpenGLShaderProgram = None
     triangle_count: int = 0
-    x = 0;
-    y = 0;
-    z = 0
+    x = 0; y = 0; z = 0
     rotation = 0
     shader_uniform_locations = {
         # It is generally considered good practice to store this to minimize GPU calls
