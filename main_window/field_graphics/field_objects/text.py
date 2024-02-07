@@ -27,6 +27,7 @@ class Text(Renderable):
         colors = []
 
         i = 0.0
+
         for act in display:
             pos: int = ord(act) - 32
             bmp_x: int = pos % 16;
@@ -42,13 +43,26 @@ class Text(Renderable):
             vertices.append(wspc_c + .5); vertices.append(-.5); vertices.append(-.8)  # +-
             vertices.append(wspc_c + .5); vertices.append(.5);  vertices.append(-.8)  # ++
 
-            txs_x = bmp_x / 16; txs_y = bmp_y / 16
+            txs_x_b = bmp_x / 16;       txs_y_e = 1 - (bmp_y / 16)
+            txs_x_e = txs_x_b + 1 / 32; txs_y_b = txs_y_e - 1 / 16
 
-            self.texture_coordinates_array.append(txs_x)
-            self.texture_coordinates_array.append(txs_y)
+            self.texture_coordinates_array.append(txs_x_b)
+            self.texture_coordinates_array.append(txs_y_b)
 
-            self.texture_coordinates_array.append(txs_x + 1 / 32)
-            self.texture_coordinates_array.append(txs_y + 1 / 16)
+            self.texture_coordinates_array.append(txs_x_e)
+            self.texture_coordinates_array.append(txs_y_b)
+
+            self.texture_coordinates_array.append(txs_x_b)
+            self.texture_coordinates_array.append(txs_y_e)
+
+            self.texture_coordinates_array.append(txs_x_b)
+            self.texture_coordinates_array.append(txs_y_e)
+
+            self.texture_coordinates_array.append(txs_x_e)
+            self.texture_coordinates_array.append(txs_y_b)
+
+            self.texture_coordinates_array.append(txs_x_e)
+            self.texture_coordinates_array.append(txs_y_e)
 
             i += 1
 
@@ -57,7 +71,7 @@ class Text(Renderable):
         for _ in vertices:
             colors.append(0)
 
-        self.texture_id = loadTexture("main_window/field_graphics/assets/bitmaps/teste.png")
+        self.texture_id = loadTexture("main_window/field_graphics/assets/bitmaps/Impact.bmp")
         self.texture_coordinates_VBO = GL.glGenBuffers(1)
 
         print(self.texture_coordinates_array)
@@ -79,11 +93,13 @@ class Text(Renderable):
         GL.glBindTexture(GL.GL_TEXTURE_2D, self.texture_id)
         GL.glActiveTexture(GL.GL_TEXTURE0)
         GL.glBindBuffer(GL.GL_ARRAY_BUFFER, self.texture_coordinates_VBO)
-        self.shaderProgram.setAttributeBuffer(2, GL.GL_FLOAT, 0, 3)
+        self.shaderProgram.setAttributeBuffer(2, GL.GL_FLOAT, 0, 2)
         # GL.glVertexAttribPointer(2, 2, GL.GL_FLOAT, False, 0, 0)
         super().draw(tx, ty, scale, rotation, aspect_ratio, sim_time)
         GL.glDisableVertexAttribArray(2)
         GL.glBindTexture(GL.GL_TEXTURE_2D, 0)
+        GL.glDisable(GL.GL_TEXTURE_2D)
+
 
     def update_vertex_attributes(self):
         super().update_vertex_attributes()

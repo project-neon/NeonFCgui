@@ -40,28 +40,28 @@ def compileShaderProgram(vertex_shader: str, fragment_shader: str) -> QOpenGLSha
 
 def loadTexture(path: str) -> int:
     img = Image.open(path)
-    data = numpy.fromstring(str(img), numpy.uint8)
+    # data = numpy.fromstring(str(img), numpy.uint8)
     w, h = img.size
-    # data = [] infelizmente essa compressão não funciona em Python :'(
+    by = img.tobytes("raw", "RGBA", 0, -1)
+
+    # infelizmente essa compressão não funciona em Python :'(
+    # data = []
     # i = 0
     # while i < w:
     #     j = 0
     #     while j < h:
-    #         act = texture[i][j]
-    #         r = act[0]; g = act[1]; b = act[2]
-    #         comp: int = int(r) | int(g << 8) | int(b << 16)
+    #         act = img.getpixel(xy=(i, j))
+    #         r = act[0]; g = act[1]; b = act[2]; a = act[3]
+    #         comp: int = int(r) | int(g << 8) | int(b << 16) | int(a << 24)
     #         data.append(comp)
     #         j += 1
     #     i += 1
-    #
-    # data = numpy.asarray(data, dtype=numpy.uint8)
 
     texture_id = GL.glGenTextures(1)
     GL.glBindTexture(GL.GL_TEXTURE_2D, texture_id)
-    GL.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 1)
     GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST)
     GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST)
-    GL.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, w, h, 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, data)
+    GL.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, w, h, 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, by)
     GL.glBindTexture(GL.GL_TEXTURE_2D, 0)
     return texture_id
 
