@@ -10,7 +10,7 @@ from OpenGL import GL
 
 
 class Text(Renderable):
-    texture = -1
+    texture_id = -1
     texture_coordinates_VBO = -1
     texture_coordinates_array = []
 
@@ -57,7 +57,7 @@ class Text(Renderable):
         for _ in vertices:
             colors.append(0)
 
-        self.texture_VBO = loadTexture("main_window/field_graphics/assets/bitmaps/Impact.bmp")
+        self.texture_id = loadTexture("main_window/field_graphics/assets/bitmaps/teste.png")
         self.texture_coordinates_VBO = GL.glGenBuffers(1)
 
         print(self.texture_coordinates_array)
@@ -73,15 +73,17 @@ class Text(Renderable):
         super().__init__(vertices, colors, shader)
 
     def draw(self, tx, ty, scale, rotation, aspect_ratio, sim_time):
+        self.shaderProgram.bind()
         GL.glEnable(GL.GL_TEXTURE_2D)
-        GL.glBindTexture(GL.GL_TEXTURE_2D, self.texture)
+        GL.glEnableVertexAttribArray(2)
+        GL.glBindTexture(GL.GL_TEXTURE_2D, self.texture_id)
         GL.glActiveTexture(GL.GL_TEXTURE0)
         GL.glBindBuffer(GL.GL_ARRAY_BUFFER, self.texture_coordinates_VBO)
         self.shaderProgram.setAttributeBuffer(2, GL.GL_FLOAT, 0, 3)
         # GL.glVertexAttribPointer(2, 2, GL.GL_FLOAT, False, 0, 0)
         super().draw(tx, ty, scale, rotation, aspect_ratio, sim_time)
+        GL.glDisableVertexAttribArray(2)
         GL.glBindTexture(GL.GL_TEXTURE_2D, 0)
-        GL.glDisable(GL.GL_TEXTURE_2D)
 
     def update_vertex_attributes(self):
         super().update_vertex_attributes()

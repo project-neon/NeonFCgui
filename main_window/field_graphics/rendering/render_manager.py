@@ -39,7 +39,6 @@ def compileShaderProgram(vertex_shader: str, fragment_shader: str) -> QOpenGLSha
     return program
 
 def loadTexture(path: str) -> int:
-
     img = Image.open(path)
     data = numpy.fromstring(str(img), numpy.uint8)
     w, h = img.size
@@ -57,19 +56,12 @@ def loadTexture(path: str) -> int:
     #
     # data = numpy.asarray(data, dtype=numpy.uint8)
 
-    print(data)
-    print(data.__len__())
-    # for n in data:
-    #     if n != 0: print(n)
-    print(data.dtype)
     texture_id = GL.glGenTextures(1)
     GL.glBindTexture(GL.GL_TEXTURE_2D, texture_id)
     GL.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 1)
     GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST)
     GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST)
-    print('LOADING TEXTURE :D :):):):)')
     GL.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, w, h, 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, data)
-    # print('g')
     GL.glBindTexture(GL.GL_TEXTURE_2D, 0)
     return texture_id
 
