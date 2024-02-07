@@ -1,18 +1,14 @@
 """
 Responsible for obfuscating most of the most low-level OpenGL calls.
 """
-import sys
 import json
 
 import numpy
 import numpy as np
-import imageio.v3 as img
-
 from OpenGL import GL
-from PyQt6.QtOpenGL import QOpenGLFramebufferObject, QOpenGLShaderProgram, QOpenGLBuffer, QOpenGLShader, \
-    QOpenGLVertexArrayObject
+from PyQt6.QtOpenGL import QOpenGLShaderProgram, QOpenGLShader
 from numpy.core import multiarray
-
+from PIL import Image
 
 def compileShaderProgram(vertex_shader: str, fragment_shader: str) -> QOpenGLShaderProgram | None:
     """Tries to compile the shader program which the argument strings contain."""
@@ -24,14 +20,12 @@ def compileShaderProgram(vertex_shader: str, fragment_shader: str) -> QOpenGLSha
         print("OpenGL version is " + str(GL.glGetString(GL.GL_VERSION)))
         print(vertex.log())
         print()
-        return None
 
     if not fragment.compileSourceCode(fragment_shader):
         print("WARNING: FAILED TO COMPILE FRAGMENT SHADER")
         print("OpenGL version is " + str(GL.glGetString(GL.GL_VERSION)))
         print(fragment.log())
         print()
-        return None
 
     program.addShader(vertex)
     program.addShader(fragment)
@@ -44,43 +38,40 @@ def compileShaderProgram(vertex_shader: str, fragment_shader: str) -> QOpenGLSha
 
     return program
 
-
 def loadTexture(path: str) -> int:
-    # FIXME Acess violation aleatoriamente pra + de 2 canais na call glTexImage2D
-    # Completamente inconsistente, RGBA nunca roda e RGB roda quando ele tá afim de rodar
-    # Pra renderização de fontes dá pra dar um turnaround no shader mas isso não era
-    # pra estar acontecendo, also eu não consigo usar uint128 do numpy
-    texture = img.imread(path)
-    w = texture.shape[0]; h = texture.shape[1]
-    data = []
-    i = 0
-    while i < w:
-        j = 0
-        while j < h:
-            act = texture[i][j]  # TODO: CANAL ALPHA
-            r = act[0]; g = act[1]; b = act[2]
-            comp: int = int(r) | int(g << 8) | int(b << 16)
-            data.append(comp)
-            j += 1
-        i += 1
 
-    data = numpy.asarray(data, dtype=numpy.uint64)
-    # print(data)
-    # print(data.__len__())
+    img = Image.open(path)
+    data = numpy.fromstring(str(img), numpy.uint8)
+    w, h = img.size
+    # data = [] infelizmente essa compressão não funciona em Python :'(
+    # i = 0
+    # while i < w:
+    #     j = 0
+    #     while j < h:
+    #         act = texture[i][j]
+    #         r = act[0]; g = act[1]; b = act[2]
+    #         comp: int = int(r) | int(g << 8) | int(b << 16)
+    #         data.append(comp)
+    #         j += 1
+    #     i += 1
+    #
+    # data = numpy.asarray(data, dtype=numpy.uint8)
+
+    print(data)
+    print(data.__len__())
     # for n in data:
     #     if n != 0: print(n)
-    # print(data.dtype)
-    texture_VBO: int = GL.glGenTextures(1)
-    GL.glBindTexture(GL.GL_TEXTURE_2D, texture_VBO)
-    # GL.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 1)
+    print(data.dtype)
+    texture_id = GL.glGenTextures(1)
+    GL.glBindTexture(GL.GL_TEXTURE_2D, texture_id)
+    GL.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 1)
     GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST)
     GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST)
-    # print('f')
-    GL.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RG, w, h, 0, GL.GL_RG, GL.GL_UNSIGNED_BYTE, data)
+    print('LOADING TEXTURE :D :):):):)')
+    GL.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, w, h, 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, data)
     # print('g')
     GL.glBindTexture(GL.GL_TEXTURE_2D, 0)
-    return texture_VBO
-
+    return texture_id
 
 
 class Renderable:
@@ -141,8 +132,6 @@ class Renderable:
         """
         self.shaderProgram.bind()
         GL.glUseProgram(self.shaderProgram.programId())
-        print(self.shader_uniform_locations['g_coordinate_vector_loc'])
-        print("{},{}".format(tx, ty))
         GL.glUniform3f(self.shader_uniform_locations['g_coordinate_vector_loc'], tx, ty, 0)
         GL.glUniform1f(self.shader_uniform_locations['g_rotation_float_loc'], rotation)
         GL.glUniform1f(self.shader_uniform_locations['aspect_ratio_float_loc'], aspect_ratio)
