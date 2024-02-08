@@ -212,4 +212,3 @@ def setupGL():
     GL.glDisable(GL.GL_CULL_FACE)
     GL.glDepthFunc(GL.GL_LESS)
     GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA)
-    GL.glEnable(GL.GL_DEPTH_TEST)
