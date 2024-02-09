@@ -45,7 +45,7 @@ class FieldView(QOpenGLWidget):
         for obj in field:
             self.context.objects.append(obj)
 
-        text = Text("#01", "main_window/field_graphics/assets/bitmaps/Bahnschrift SemiBold_1024.bmp", size=6, tracking=self.r, anchor=(10, 0))
+        text = Text("#01", "main_window/field_graphics/assets/bitmaps/Arial Bold_1024.bmp", size=6, tracking=self.r, anchor=(10, 0))
         self.context.objects.append(text)
 
         self.startTimer(math.ceil(100 / 6))

@@ -103,7 +103,6 @@ class Text(Renderable):
         GL.glBindTexture(GL.GL_TEXTURE_2D, 0)
         GL.glDisable(GL.GL_TEXTURE_2D)
 
-
     def update_vertex_attributes(self):
         super().update_vertex_attributes()
         GL.glBindBuffer(GL.GL_ARRAY_BUFFER, self.texture_coordinates_VBO)
