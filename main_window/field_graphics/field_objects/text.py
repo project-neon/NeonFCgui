@@ -14,10 +14,11 @@ class Text(Renderable):
     texture_coordinates_VBO = -1
     texture_coors = []
 
-    def __init__(self, display: str, texture_directory: str, color=None, size=1, fixed_rotation=False, tracking: Renderable | None = None, anchor: tuple = (0, 0)):
+    def __init__(self, display: str, texture_directory: str, color=None, size=1, fixed_rotation=True, tracking: Renderable | None = None, anchor: tuple = (0, 0)):
 
         if color is None:
             color = [1, 1, 1, 1]
+
         self.display = display
         self.texture_directory = texture_directory
         self.color = color
@@ -66,7 +67,7 @@ class Text(Renderable):
 
         for i in range(int(vertices.__len__()/3)):
             vertices[i*3] *= size; vertices[i*3+1] *= size
-            colors.append(0); colors.append(0); colors.append(0)
+            colors.append(self.color[0]); colors.append(self.color[1]); colors.append(self.color[2])
 
         self.texture_id = loadTexture(texture_directory)
         self.texture_coordinates_VBO = GL.glGenBuffers(1)

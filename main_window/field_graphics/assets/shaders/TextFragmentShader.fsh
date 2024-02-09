@@ -9,6 +9,7 @@ out vec4 color;
 
 void main(){
     color = texture(txt,textureCoords);
-    color.b += fragColor.b;
+    color.rgb = fragColor.rgb;
+    color.a *= fragColor.a;
     color = clamp(color,0,1);
 }
