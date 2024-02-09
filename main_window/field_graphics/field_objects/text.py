@@ -47,6 +47,8 @@ class Text(Renderable):
 
             # Sampla os as coordenadas da textura com base no sistema de coordenadas do OpenGL
             # Assumindo que o bitmap seja de 16 * 16 caracteres, o que já é suficiente pro alfabeto ASCII
+            # da lingua portuguesa
+            
             txs_x_b = bmp_x / 16;       txs_y_e = 1 - (bmp_y / 16)
             txs_x_e = txs_x_b + 1 / 32; txs_y_b = txs_y_e - 1 / 16
 
