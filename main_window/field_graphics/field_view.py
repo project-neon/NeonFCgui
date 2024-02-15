@@ -41,7 +41,7 @@ class FieldView(QOpenGLWidget):
         GL.glClearColor(.2, .5, .2, 1)
         self.r = Robot([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
         self.context.objects.append(self.r)
-        field = modelFromJSON(open("main_window/field_graphics/assets/models/field_vsss.json").read())
+        field = modelFromJSON(open("main_window/field_graphics/assets/models/field_ssl.json").read())
         for obj in field:
             self.context.objects.append(obj)
 
