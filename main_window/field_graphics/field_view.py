@@ -8,12 +8,12 @@ from OpenGL import GL
 from PyQt6 import QtGui
 from PyQt6.QtCore import QTimerEvent
 from PyQt6.QtOpenGLWidgets import QOpenGLWidget
-from PyQt6.QtWidgets import QLabel, QWidget
+from PyQt6.QtWidgets import QLabel
 
 from main_window.field_graphics.field_objects.robot import Robot
 from main_window.field_graphics.field_objects.text import Text
-from main_window.field_graphics.rendering.render_manager import RenderingContext, setupGL, modelFromJSON
 from main_window.field_graphics.rendering.animation_manager import AnimationManager
+from main_window.field_graphics.rendering.render_manager import RenderingContext, setupGL, modelFromJSON
 
 
 class FieldView(QOpenGLWidget):
@@ -72,6 +72,8 @@ class FieldView(QOpenGLWidget):
     def timerEvent(self, event: typing.Optional['QTimerEvent']) -> None:
         self.sim_time += 1
         #self.r.rotation = self.sim_time / 350  # <-- TODO remover isso, essa rotação é só pra testes
+        # enquanto a gente não recebe nada da API é o jeito de verificar se o robô
+        # tá se adaptando às transformações corretamente
         self.r.x = math.sin(self.sim_time/200) * 80
         self.r.y = math.cos(self.sim_time/200) * 40
 

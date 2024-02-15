@@ -3,12 +3,12 @@ Responsible for obfuscating most of the most low-level OpenGL calls.
 """
 import json
 
-import numpy
 import numpy as np
 from OpenGL import GL
+from PIL import Image
 from PyQt6.QtOpenGL import QOpenGLShaderProgram, QOpenGLShader
 from numpy.core import multiarray
-from PIL import Image
+
 
 def compileShaderProgram(vertex_shader: str, fragment_shader: str) -> QOpenGLShaderProgram | None:
     """Tries to compile the shader program which the argument strings contain."""
@@ -38,24 +38,12 @@ def compileShaderProgram(vertex_shader: str, fragment_shader: str) -> QOpenGLSha
 
     return program
 
+
 def loadTexture(path: str) -> int:
     img = Image.open(path)
     # data = numpy.fromstring(str(img), numpy.uint8)
     w, h = img.size
     by = img.tobytes("raw", "RGBA", 0, -1)
-
-    # infelizmente essa compressão não funciona em Python :'(
-    # data = []
-    # i = 0
-    # while i < w:
-    #     j = 0
-    #     while j < h:
-    #         act = img.getpixel(xy=(i, j))
-    #         r = act[0]; g = act[1]; b = act[2]; a = act[3]
-    #         comp: int = int(r) | int(g << 8) | int(b << 16) | int(a << 24)
-    #         data.append(comp)
-    #         j += 1
-    #     i += 1
 
     texture_id = GL.glGenTextures(1)
     GL.glBindTexture(GL.GL_TEXTURE_2D, texture_id)
@@ -207,6 +195,7 @@ class RenderingContext:
 
 
 def setupGL():
+    """"Sets up the OpenGL default environment properties"""
     GL.glEnable(GL.GL_DEPTH_TEST)
     GL.glEnable(GL.GL_BLEND)
     GL.glDisable(GL.GL_CULL_FACE)

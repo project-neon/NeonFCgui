@@ -1,4 +1,3 @@
-import numpy
 import numpy as np
 from PyQt6.QtOpenGL import QOpenGLShaderProgram
 
@@ -9,6 +8,7 @@ def shaderProgram() -> QOpenGLShaderProgram:
     vsh = open("main_window/field_graphics/assets/shaders/VertexShader.vsh").read()
     fsh = open("main_window/field_graphics/assets/shaders/FragmentShader.fsh").read()
     return compileShaderProgram(vsh, fsh)
+
 
 class Robot(Renderable):
     def __init__(self, robot_color: list, back_tag_color: list, left_tag_color: list, right_tag_color: list):
@@ -26,4 +26,3 @@ class Robot(Renderable):
         ], dtype=np.float32)
 
         super().__init__(template.vertices, colors, template.shaderProgram)
-

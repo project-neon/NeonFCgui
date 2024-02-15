@@ -1,4 +1,5 @@
 class AnimationManager:
+    """PD Based animation manager to make smoother camera animations"""
     dest: float = 0
     current: float = 0
     vel: float = 0

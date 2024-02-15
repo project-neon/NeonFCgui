@@ -1,12 +1,10 @@
 import math
 
-from PIL import Image
 import numpy
 import numpy as np
-
-from main_window.field_graphics.field_objects import robot
-from main_window.field_graphics.rendering.render_manager import Renderable, loadTexture, compileShaderProgram
 from OpenGL import GL
+
+from main_window.field_graphics.rendering.render_manager import Renderable, loadTexture, compileShaderProgram
 
 
 class Text(Renderable):
