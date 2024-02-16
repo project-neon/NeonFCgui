@@ -1,17 +1,16 @@
 """
 Responsible for obfuscating most of the most low-level OpenGL calls.
 """
-import sys
 import json
-import numpy as np
 
+import numpy as np
 from OpenGL import GL
-from PyQt6.QtOpenGL import QOpenGLFramebufferObject, QOpenGLShaderProgram, QOpenGLBuffer, QOpenGLShader, \
-    QOpenGLVertexArrayObject
+from PIL import Image
+from PyQt6.QtOpenGL import QOpenGLShaderProgram, QOpenGLShader
 from numpy.core import multiarray
 
 
-def compileShaderProgram(vertex_shader: str, fragment_shader: str) -> QOpenGLShaderProgram:
+def compileShaderProgram(vertex_shader: str, fragment_shader: str) -> QOpenGLShaderProgram | None:
     """Tries to compile the shader program which the argument strings contain."""
     program = QOpenGLShaderProgram()
     vertex = QOpenGLShader(QOpenGLShader.ShaderTypeBit.Vertex)
@@ -21,6 +20,7 @@ def compileShaderProgram(vertex_shader: str, fragment_shader: str) -> QOpenGLSha
         print("OpenGL version is " + str(GL.glGetString(GL.GL_VERSION)))
         print(vertex.log())
         print()
+
     if not fragment.compileSourceCode(fragment_shader):
         print("WARNING: FAILED TO COMPILE FRAGMENT SHADER")
         print("OpenGL version is " + str(GL.glGetString(GL.GL_VERSION)))
@@ -33,7 +33,25 @@ def compileShaderProgram(vertex_shader: str, fragment_shader: str) -> QOpenGLSha
         print("WARNING: FAILED TO BIND SHADER PROGRAM")
         print("OpenGL version is " + str(GL.glGetString(GL.GL_VERSION)))
         print(program.log())
+        print()
+        return None
+
     return program
+
+
+def loadTexture(path: str) -> int:
+    img = Image.open(path)
+    # data = numpy.fromstring(str(img), numpy.uint8)
+    w, h = img.size
+    by = img.tobytes("raw", "RGBA", 0, -1)
+
+    texture_id = GL.glGenTextures(1)
+    GL.glBindTexture(GL.GL_TEXTURE_2D, texture_id)
+    GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST)
+    GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST)
+    GL.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, w, h, 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, by)
+    GL.glBindTexture(GL.GL_TEXTURE_2D, 0)
+    return texture_id
 
 
 class Renderable:
@@ -42,7 +60,7 @@ class Renderable:
     As a OOP quirk, it must handle its own rendering calls, memory allocation
     and external data, such as spatial translations, those features are already
     implemented by the class, however additional vertex attributes and uniforms
-    may need to be implemented by subclasses.
+    may need to be implemented by subclasses as needed.
     """
     vertexVBO: int = -1
     colorVBO: int = -1
@@ -50,9 +68,7 @@ class Renderable:
     colors: multiarray = None
     shaderProgram: QOpenGLShaderProgram = None
     triangle_count: int = 0
-    x = 0;
-    y = 0;
-    z = 0
+    x = 0; y = 0; z = 0
     rotation = 0
     shader_uniform_locations = {
         # It is generally considered good practice to store this to minimize GPU calls
@@ -82,8 +98,7 @@ class Renderable:
 
     def update_shader_uniform_locations(self):
         self.shader_uniform_locations['aspect_ratio_float_loc'] = self.shaderProgram.uniformLocation('aspectRatio')
-        self.shader_uniform_locations['g_coordinate_vector_loc'] = self.shaderProgram.uniformLocation(
-            'globalTranslation')
+        self.shader_uniform_locations['g_coordinate_vector_loc'] = self.shaderProgram.uniformLocation('globalTranslation')
         self.shader_uniform_locations['g_rotation_float_loc'] = self.shaderProgram.uniformLocation('globalRotation')
         self.shader_uniform_locations['g_scale_float_loc'] = self.shaderProgram.uniformLocation('globalScale')
         self.shader_uniform_locations['coordinate_vector_loc'] = self.shaderProgram.uniformLocation('coord')
@@ -96,6 +111,7 @@ class Renderable:
         local object transformations may be handled internally.
         """
         self.shaderProgram.bind()
+        GL.glUseProgram(self.shaderProgram.programId())
         GL.glUniform3f(self.shader_uniform_locations['g_coordinate_vector_loc'], tx, ty, 0)
         GL.glUniform1f(self.shader_uniform_locations['g_rotation_float_loc'], rotation)
         GL.glUniform1f(self.shader_uniform_locations['aspect_ratio_float_loc'], aspect_ratio)
@@ -179,9 +195,9 @@ class RenderingContext:
 
 
 def setupGL():
+    """"Sets up the OpenGL default environment properties"""
     GL.glEnable(GL.GL_DEPTH_TEST)
     GL.glEnable(GL.GL_BLEND)
     GL.glDisable(GL.GL_CULL_FACE)
     GL.glDepthFunc(GL.GL_LESS)
     GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA)
-    GL.glEnable(GL.GL_DEPTH_TEST)
