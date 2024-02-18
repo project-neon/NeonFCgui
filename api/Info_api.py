@@ -1,9 +1,10 @@
 
 class Info_Api():
-    def __init__(self, match, robots, ball, coach = None):
+    def __init__(self, match, robots, opposites, ball, coach = None):
         
         self.match = match
         self.robots = robots
+        self.opposites = opposites
         self.coach = coach
         self.ball = ball
 
@@ -27,7 +28,8 @@ class Info_Api():
 
         self.match.update(**info_recv)
         self.ball.update(**info_recv)
-        self.robot.update(**info_recv)
+        self.robots.update(**info_recv)
+        self.opposites.update(**info_recv)
 
         self.save_data(info_recv)
 

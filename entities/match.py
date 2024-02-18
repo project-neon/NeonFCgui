@@ -1,27 +1,25 @@
 import os
 from api import Api
-from entities import ball,robot
+import entities
 
 CATEGORIES = {
     '3v3': 3, '5v5': 5
 }
 
 class Match():
-    def __init__(self, interface, team_side = "left", team_color = "blue", coach_name = None, category="3v3"):
-        super().__init__()
-        self.interface = interface # Interface instance
+    def __init__(self, team_side = "left", team_color = "blue", coach_name = None, category="3v3"):
         
-        self.coach_name = os.environ.get('COACH_NAME', coach_name) 
-        self.team_side = os.environ.get('TEAM_SIDE', team_side) 
-        self.team_color = os.environ.get('TEAM_COLOR', team_color)
-        self.category = os.environ.get('CATEGORY', category)
+        self.coach_name = coach_name
+        self.team_side =  team_side
+        self.team_color = team_color
+        self.category = category
         self.n_robots = CATEGORIES.get(self.category)
 
         self.opposite_team_color = 'yellow' if self.team_color == 'blue' else 'blue'
 
         self.game_status = 'STOP'
 
-        self.ball = ball()
+        self.ball = entities.Ball()
         self.robots = []
         self.opposites = []
 
@@ -32,11 +30,11 @@ class Match():
         
     def start(self):
         self.opposites = [
-            robot(i, (0,0,0), False) for i in self.opposites_ids
+            entities.Robot(i, (0,0,0), False) for i in self.opposites_ids
         ]
 
         self.robots = [
-            robot(i, (0,0,0)) for i in self.robots_ids
+            entities.Robot(i, (0,0,0)) for i in self.robots_ids
         ]
 
 
