@@ -25,15 +25,18 @@ class Match():
         self.robots = []
         self.opposites = []
 
-        # self.start()
-    
+        self.robots_ids = [5, 7, 8]
+        self.opposites_ids = [0, 1, 2]
+
+        self.start()
+        
     def start(self):
         self.opposites = [
-            robot(i, 0, 0, 0, self.opposite_team_color) for i in range(self.n_robots)
+            robot(i, (0,0,0), False) for i in self.opposites_ids
         ]
 
         self.robots = [
-            robot(i, 0, 0, 0, self.team_color) for i in range(self.n_robots)
+            robot(i, (0,0,0)) for i in self.robots_ids
         ]
 
 
