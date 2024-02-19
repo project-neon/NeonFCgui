@@ -70,7 +70,7 @@ class Text(Renderable):
         self.texture_id = loadTexture(texture_directory)
         self.texture_coordinates_VBO = GL.glGenBuffers(1)
 
-        print(self.texture_coors)
+        # print(self.texture_coors)
 
         vertices = np.asarray(vertices, dtype=np.float32)
         colors = np.asarray(colors, dtype=np.float32)
