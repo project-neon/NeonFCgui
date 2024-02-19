@@ -1,5 +1,5 @@
 """
-Responsible for obfuscating most of the most low-level OpenGL calls.
+Responsible for obfuscating most of the most lower-level OpenGL calls.
 """
 import json
 
@@ -40,6 +40,7 @@ def compileShaderProgram(vertex_shader: str, fragment_shader: str) -> QOpenGLSha
 
 
 def loadTexture(path: str) -> int:
+    """Loads a texture object from an image file in the specified path and returns its OpenGL qualified name"""
     img = Image.open(path)
     # data = numpy.fromstring(str(img), numpy.uint8)
     w, h = img.size

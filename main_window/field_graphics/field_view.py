@@ -41,7 +41,7 @@ class FieldView(QOpenGLWidget):
         GL.glClearColor(.2, .5, .2, 1)
         self.r = Robot([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
         self.context.objects.append(self.r)
-        field = modelFromJSON(open("main_window/field_graphics/assets/models/field_ssl.json").read())
+        field = modelFromJSON(open("main_window/field_graphics/assets/models/field_VSSS.json").read())
         for obj in field:
             self.context.objects.append(obj)
 
@@ -76,8 +76,11 @@ class FieldView(QOpenGLWidget):
         # tá se adaptando às transformações corretamente
         self.r.x = math.sin(self.sim_time/200) * 80
         self.r.y = math.cos(self.sim_time/200) * 40
-
         self.r.rotation = self.sim_time/25
+
+        s,s2,c,c2 = (math.sin(self.sim_time / 40) * .5 + .5, math.sin(3.5+self.sim_time/56) * .5 + .5,
+                     math.cos(2+self.sim_time / 67) * .5 + .5, math.cos(self.sim_time/71) * .5 + .5)
+        self.r.update_color([s,c,s2], [s2,c,s], [s2,s,c2], [c,c2,s])
 
         self.makeCurrent()
         self.update_translations(1)
