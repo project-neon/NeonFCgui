@@ -29,8 +29,25 @@ class Control_Params(QWidget):
         palette.setColor(QPalette.ColorRole.Window, QColor('#b3a4d3'))
         self.setPalette(palette)
 
-        # param_list = [kp, ki, kd, unicontroller]
-        self.parameters = param_list
+        # param_list = [KP, KI, KD, K_W, R_M]
+        # TODO get parm_list once when comunication with NeonFC is stablished?
+        if param_list:
+            self.parameters = param_list
+        else:
+            # Default parameters:
+            # TODO button to change default?
+            kp = 1
+            ki = 0
+            kd = 0
+            kw = 3.5
+            rm = 0.44
+            self.parameters = [kp, ki, kd, kw, rm]
+            print(
+                "Parâmetros padrão: KP = " + str(kp) + "; KI = " + str(ki) + "; KD = " + str(kd) +
+                "; KW = " + str(kw) + "; RM = " + str(rm)
+            )
+            # TODO show this message on log
+            # TODO send info to Info_Api
 
         # Creating QLineEdits for each parameter
         self.kp_line = QLineEdit()
@@ -45,9 +62,13 @@ class Control_Params(QWidget):
         self.kd_line.setText(str(self.parameters[2]))
         self.kd_line.setFixedWidth(60)
 
-        self.unicontroller_line = QLineEdit()
-        self.unicontroller_line.setText(str(self.parameters[3]))
-        self.unicontroller_line.setFixedWidth(120)
+        self.kw_line = QLineEdit()
+        self.kw_line.setText(str(self.parameters[3]))
+        self.kw_line.setFixedWidth(60)
+
+        self.rm_line = QLineEdit()
+        self.rm_line.setText(str(self.parameters[4]))
+        self.rm_line.setFixedWidth(60)
 
         v_layout = QVBoxLayout()
         v_layout.addWidget(QLabel("<h3> Parâmetros do controle dos robôs </h3>", parent=self), alignment=Qt.AlignmentFlag.AlignHCenter)
@@ -55,23 +76,19 @@ class Control_Params(QWidget):
         # Display parameters in a table?
         self.params_table = QGridLayout()
 
-        if self.parameters:
-            # Table labels
-            self.params_table.addWidget(QLabel("Kp", parent=self), 0, 0, alignment=Qt.AlignmentFlag.AlignHCenter)
-            self.params_table.addWidget(QLabel("Ki", parent=self), 0, 1, alignment=Qt.AlignmentFlag.AlignHCenter)
-            self.params_table.addWidget(QLabel("Kd", parent=self), 0, 2, alignment=Qt.AlignmentFlag.AlignHCenter)
-            self.params_table.addWidget(QLabel("Unicontroller", parent=self), 0, 3, alignment=Qt.AlignmentFlag.AlignHCenter)
+        # Table labels
+        self.params_table.addWidget(QLabel("KP", parent=self), 0, 0, alignment=Qt.AlignmentFlag.AlignHCenter)
+        self.params_table.addWidget(QLabel("KI", parent=self), 0, 1, alignment=Qt.AlignmentFlag.AlignHCenter)
+        self.params_table.addWidget(QLabel("KD", parent=self), 0, 2, alignment=Qt.AlignmentFlag.AlignHCenter)
+        self.params_table.addWidget(QLabel("KW", parent=self), 0, 3, alignment=Qt.AlignmentFlag.AlignHCenter)
+        self.params_table.addWidget(QLabel("RM", parent=self), 0, 4, alignment=Qt.AlignmentFlag.AlignHCenter)
 
-            # Table values
-            self.params_table.addWidget(self.kp_line, 1, 0, alignment=Qt.AlignmentFlag.AlignHCenter)
-            self.params_table.addWidget(self.ki_line, 1, 1, alignment=Qt.AlignmentFlag.AlignHCenter)
-            self.params_table.addWidget(self.kd_line, 1, 2, alignment=Qt.AlignmentFlag.AlignHCenter)
-            self.params_table.addWidget(self.unicontroller_line, 1, 3, alignment=Qt.AlignmentFlag.AlignHCenter)
-        else:
-            print("No robot's control parameters found.")
-            # TODO show this message on log
-            msg = QLabel("No robot's control parameters found.", parent=self)
-            self.params_table.addWidget(msg, 0, 0)
+        # Table values
+        self.params_table.addWidget(self.kp_line, 1, 0, alignment=Qt.AlignmentFlag.AlignHCenter)
+        self.params_table.addWidget(self.ki_line, 1, 1, alignment=Qt.AlignmentFlag.AlignHCenter)
+        self.params_table.addWidget(self.kd_line, 1, 2, alignment=Qt.AlignmentFlag.AlignHCenter)
+        self.params_table.addWidget(self.kw_line, 1, 3, alignment=Qt.AlignmentFlag.AlignHCenter)
+        self.params_table.addWidget(self.rm_line, 1, 4, alignment=Qt.AlignmentFlag.AlignHCenter)
 
         v_layout.addLayout(self.params_table)
 
@@ -85,13 +102,17 @@ class Control_Params(QWidget):
         self.setLayout(v_layout)
     
     def changeParams(self):
-        print("Parâmetros alterados: ")
         kp = self.kp_line.text()
         ki = self.ki_line.text()
         kd = self.kd_line.text()
-        uni = self.unicontroller_line.text()
-        print("Kp: " + kp + ";  Ki: " + ki + ";  Kd: " + kd + ";  Unicontroller: " + uni + ".")
+        kw = self.kw_line.text()
+        rm = self.rm_line.text()
+        print(
+            "Parâmetros atuais: KP = " + str(kp) + "; KI = " + str(ki) + "; KD = " + str(kd) +
+            "; KW = " + str(kw) + "; RM = " + str(rm)
+        )
         # TODO show this message on log
+        # TODO send info to Info_Api
 
 class GameControls(QWidget):
     def __init__(self):
@@ -171,7 +192,7 @@ class GameControls(QWidget):
         param_list = [kp, ki, kd, unicontroller]
         """
         params=[] # TODO receive params or get this from info object?
-        params = [5, 10, "///", "aaa"]
+        # params = [5, 10, "///", "aaa"]
         # self.params_window = Control_Params(
         #     [[0, 8, 8, 8, "aaa"], [1, 7, 7, 7, None], [5, 10, 10, 10, 99]]
         # )
