@@ -20,6 +20,9 @@ class Robot(Renderable):
 
         super().__init__(template.vertices, colors, template.shaderProgram)
 
+    def color_accordingly_to_id(self, robot_id: int):
+        pass
+
     def gen_color_array(self, robot_color: list,back_tag_color: list, left_tag_color: list, right_tag_color: list):
         r = robot_color[0]; g = robot_color[1]; b = robot_color[2]
         sr = back_tag_color[0]; sg = back_tag_color[1]; sb = back_tag_color[2]

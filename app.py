@@ -14,7 +14,7 @@ class App(threading.Thread):
         QApplication.setAttribute(Qt.ApplicationAttribute.AA_UseDesktopOpenGL)  # <- TODO é ok eu colocar isso aqui? precisa fazer isso antes do objeto ser criado - Júlio
         self.gui = gui
         self.app = QApplication(sys.argv)
-        self.window = MainWindow()
+        self.window = MainWindow(gui.match)
 
     def start(self):
         # Show application's GUI

@@ -46,3 +46,9 @@ class Match():
     
     def set_game_status(self, status):
         self.game_status = status
+
+    def fetch_robot_by_id(self, robot_id: int):
+        # FIXME: can't put explicit return type due to circular import
+        for robot in self.robots:
+            if robot.robot_id == robot_id: return robot
+        return None
