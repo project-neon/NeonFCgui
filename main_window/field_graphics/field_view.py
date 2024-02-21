@@ -29,6 +29,7 @@ class FieldView(QOpenGLWidget):
 
     def __init__(self):
         super().__init__()
+        self.r1 = self.r2 = self.r3 = None
         self.context = RenderingContext()
         self.scroll_level = 7
         self.setFocusPolicy(self.focusPolicy().StrongFocus)
@@ -39,14 +40,34 @@ class FieldView(QOpenGLWidget):
         GL.glInitGl42VERSION()
         setupGL()
         GL.glClearColor(.2, .5, .2, 1)
-        self.r = Robot([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
-        self.context.objects.append(self.r)
+        self.r1: Robot = Robot([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
+        self.r2: Robot = Robot([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
+        self.r3: Robot = Robot([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
+
+        self.r1.rotation = math.pi/2
+        self.r2.rotation = -math.pi/6
+        self.r3.rotation = math.pi * (9.5/3)
+
+        self.r1.color_accordingly_to_id(5)
+        self.r2.color_accordingly_to_id(7)
+        self.r3.color_accordingly_to_id(8)
+
+        self.context.objects.append(self.r1)
+        self.context.objects.append(self.r2)
+        self.context.objects.append(self.r3)
+
         field = modelFromJSON(open("main_window/field_graphics/assets/models/field_vsss.json").read())
         for obj in field:
             self.context.objects.append(obj)
 
-        text = Text("#01", "main_window/field_graphics/assets/bitmaps/Arial Bold_1024.bmp", size=6, tracking=self.r, anchor=(10, 0))
-        self.context.objects.append(text)
+        #Text("Socorro","main_window/field_graphics/assets/bitmaps/Arial Bold_1024.bmp")
+        robot_text_1 = Text("#05", "main_window/field_graphics/assets/bitmaps/Arial Bold_1024.bmp", size=6, tracking=self.r1, anchor=(10, 0))
+        robot_text_2 = Text("#07", "main_window/field_graphics/assets/bitmaps/Arial Bold_1024.bmp", size=6, tracking=self.r2, anchor=(10, 0))
+        robot_text_3 = Text("#08", "main_window/field_graphics/assets/bitmaps/Arial Bold_1024.bmp", size=6, tracking=self.r3, anchor=(10, 0))
+
+        self.context.objects.append(robot_text_1)
+        self.context.objects.append(robot_text_2)
+        self.context.objects.append(robot_text_3)
 
         self.startTimer(math.ceil(100 / 6))
 
@@ -70,18 +91,21 @@ class FieldView(QOpenGLWidget):
         self.scale.update(time)
 
     def timerEvent(self, event: typing.Optional['QTimerEvent']) -> None:
+        # TODO: remover
+        self.r1.x = math.sin(self.sim_time/100) * 20
+        self.r1.y = math.cos(self.sim_time/100) * 20
+
+        self.r2.x = math.sin(self.sim_time/100 + math.pi * 4/3) * 20
+        self.r2.y = math.cos(self.sim_time/100 + math.pi * 4/3) * 20
+
+        self.r3.x = math.sin(self.sim_time/100 + math.pi * 2/3) * 20
+        self.r3.y = math.cos(self.sim_time/100 + math.pi * 2/3) * 20
+
+        self.r1.rotation += (1/100)
+        self.r2.rotation += (1/100)
+        self.r3.rotation += (1/100)
+
         self.sim_time += 1
-        #self.r.rotation = self.sim_time / 350  # <-- TODO remover isso, essa rotação é só pra testes
-        # enquanto a gente não recebe nada da API é o jeito de verificar se o robô
-        # tá se adaptando às transformações corretamente
-        self.r.x = math.sin(self.sim_time/200) * 80
-        self.r.y = math.cos(self.sim_time/200) * 40
-        self.r.rotation = self.sim_time/25
-
-        s,s2,c,c2 = (math.sin(self.sim_time / 40) * .5 + .5, math.sin(3.5+self.sim_time/56) * .5 + .5,
-                     math.cos(2+self.sim_time / 67) * .5 + .5, math.cos(self.sim_time/71) * .5 + .5)
-        self.r.update_color([s,c,s2], [s2,c,s], [s2,s,c2], [c,c2,s])
-
         self.makeCurrent()
         self.update_translations(1)
         self.update()

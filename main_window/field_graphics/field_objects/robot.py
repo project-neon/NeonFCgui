@@ -20,8 +20,17 @@ class Robot(Renderable):
 
         super().__init__(template.vertices, colors, template.shaderProgram)
 
-    def color_accordingly_to_id(self, robot_id: int):
-        pass
+    def color_accordingly_to_id(self, robot_id: int, team_color=None):
+        if team_color is None:
+            team_color = [.8, .8, .1]
+
+        if robot_id == 5:
+            self.update_color([.1, .1, .1], team_color, [.2, .2, 1.], [.1, .7, .1])
+        elif robot_id == 7:
+            self.update_color([.1, .1, .1], team_color, [.1, .7, .1], [.9, .5, .6])
+        elif robot_id == 8:
+            self.update_color([.1, .1, .1], team_color, [.2, .2, 1.], [.9, .5, .8])
+
 
     def gen_color_array(self, robot_color: list,back_tag_color: list, left_tag_color: list, right_tag_color: list):
         r = robot_color[0]; g = robot_color[1]; b = robot_color[2]
