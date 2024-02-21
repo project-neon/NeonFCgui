@@ -22,7 +22,7 @@ class Robot(Renderable):
 
     def color_accordingly_to_id(self, robot_id: int, team_color=None):
         if team_color is None:
-            team_color = [.8, .8, .1]
+            team_color = [.95, .95, .1]
 
         if robot_id == 5:
             self.update_color([.1, .1, .1], team_color, [.2, .2, 1.], [.1, .7, .1])
