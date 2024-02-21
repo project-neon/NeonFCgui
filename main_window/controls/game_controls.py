@@ -10,6 +10,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtGui import QPalette, QColor, QFont, QIcon
 from PyQt6.QtCore import QSize, Qt
+from entities.match import Match
 
 class Control_Params(QWidget):
     """
@@ -115,12 +116,14 @@ class Control_Params(QWidget):
         # TODO send info to Info_Api
 
 class GameControls(QWidget):
-    def __init__(self):
+    def __init__(self, context: Match):
         super(GameControls, self).__init__()
         self.setAutoFillBackground(True)
         palette = self.palette()
         palette.setColor(QPalette.ColorRole.Window, QColor('#b3a4d3'))
         self.setPalette(palette)
+
+        self.context = context
 
         # Creating the PLAY, HALT and RESET buttons
         # To add icon to the button we will use the QIcon object, which
@@ -131,19 +134,19 @@ class GameControls(QWidget):
         self.btn_start.setIconSize(QSize(40, 40))
         self.btn_start.setFont(QFont('Arial', 15))
         self.btn_start.setFixedSize(170, 60)
-        # TODO connect button to function 'gameRun'?
+        self.btn_start.clicked.connect(self.gameStatus)
 
         self.btn_halt = QPushButton(icon=QIcon(self.path_to_icons+"halt.svg"), text=" HALT", parent=self)
         self.btn_halt.setIconSize(QSize(40, 40))
         self.btn_halt.setFont(QFont('Arial', 15))
         self.btn_halt.setFixedSize(170, 60)
-        # TODO connect button to function 'gameRun'?
+        self.btn_halt.clicked.connect(self.gameStatus)
         
         self.btn_reset = QPushButton(icon=QIcon(self.path_to_icons+"Reset_1.svg"), text=" RESET", parent=self)
         self.btn_reset.setIconSize(QSize(40, 40))
         self.btn_reset.setFont(QFont('Arial', 15))
         self.btn_reset.setFixedSize(170, 60)
-        # TODO connect button to function 'gameRun'?
+        self.btn_reset.clicked.connect(self.gameStatus)
 
         # Creating buttons to change color and side
         self.current_color = 'blue'
@@ -189,13 +192,9 @@ class GameControls(QWidget):
 
         """
         Adding parameters' window
-        param_list = [kp, ki, kd, unicontroller]
+        param_list = [kp, ki, kd, kw, rm]
         """
         params=[] # TODO receive params or get this from info object?
-        # params = [5, 10, "///", "aaa"]
-        # self.params_window = Control_Params(
-        #     [[0, 8, 8, 8, "aaa"], [1, 7, 7, 7, None], [5, 10, 10, 10, 99]]
-        # )
         self.params_window = Control_Params(params)
 
         # Button to open parameter settings' window
@@ -227,20 +226,28 @@ class GameControls(QWidget):
             if self.current_color == 'blue':
                 sender.setIcon(QIcon(self.path_to_icons+"yellow.svg"))
                 self.current_color = 'yellow'
-                # TODO change this info on the info object so it can send the change to NeonFC?
             else:
                 sender.setIcon(QIcon(self.path_to_icons+"blue.svg"))
                 self.current_color = 'blue'
-                # TODO change this info on the info object so it can send the change to NeonFC?
+            self.context.set_team_color(self.current_color)
         elif sender is self.btn_change_side:
             if self.current_side == 'left':
                 sender.setIcon(QIcon(self.path_to_icons+"right.svg"))
                 self.current_side = 'right'
-                # TODO change this info on the info object so it can send the change to NeonFC?
             else:
                 sender.setIcon(QIcon(self.path_to_icons+"left.svg"))
                 self.current_side = 'left'
-                # TODO change this info on the info object so it can send the change to NeonFC?
+            self.context.set_team_side(self.current_side)
+    
+    def gameStatus(self):
+        sender = self.sender()
+
+        if sender is self.btn_start:
+            self.context.set_game_status("GAME_ON")
+        elif sender is self.btn_halt:
+            self.context.set_game_status("HALT")
+        elif sender is self.btn_reset:
+            self.context.set_game_status("STOP")
 
     def select_coach(self):
         coach_name = self.btn_coach.currentText()

@@ -32,6 +32,8 @@ class GUI(object):
 
     
     def start(self):
+        # self.api.start()
+        # self.api_recv.start()
         self.app.start()
 
 gui = GUI()

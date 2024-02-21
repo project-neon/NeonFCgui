@@ -47,6 +47,13 @@ class Match():
     def set_game_status(self, status):
         self.game_status = status
 
+    def set_team_color(self, color):
+        self.team_color = color
+        self.opposite_team_color = 'yellow' if self.team_color == 'blue' else 'blue'
+    
+    def set_team_side(self, side):
+        self.team_side = side
+    
     def fetch_robot_by_id(self, robot_id: int):
         # FIXME: can't put explicit return type due to circular import
         for robot in self.robots:

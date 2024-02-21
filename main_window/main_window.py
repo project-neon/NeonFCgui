@@ -99,7 +99,7 @@ class MainWindow(QMainWindow):
         top_h_layout = QHBoxLayout()
         
         # Adding game status controls widget
-        game_controls_widget = GameControls()
+        game_controls_widget = GameControls(self.context)
         h = int(self.window_height/10)
         game_controls_widget.setFixedHeight(int(h*2.5))
         top_h_layout.addWidget(game_controls_widget)
