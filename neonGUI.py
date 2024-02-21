@@ -17,8 +17,8 @@ def get_config(config_file = None):
 
 class GUI(object):
     def __init__(self, config_file = None):
-        self.app = App(self)
         self.match = Match()
+        self.app = App(self)
 
         self.config = get_config(config_file)
 

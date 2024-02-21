@@ -4,21 +4,23 @@ Sections: field graphics, game controls and settings,
 game informations and robots informations,
 log and game mode selection.
 """
+import math
+import typing
 
 from PyQt6.QtWidgets import (
     QMainWindow, QWidget, QRadioButton, QLabel,
     QVBoxLayout, QHBoxLayout, QGridLayout
 )
 from PyQt6.QtGui import QFont, QPalette, QColor
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QTimerEvent
+
+from entities import Match
 from main_window.field_graphics.field_view import FieldView
 from main_window.controls import *
 from main_window.informations import *
 
-def teste():
-    print("Oi :)")
-
 class GameMode(QWidget):
+
     def __init__(self):
         super(GameMode, self).__init__()
         self.setAutoFillBackground(True)
@@ -26,7 +28,7 @@ class GameMode(QWidget):
         palette.setColor(QPalette.ColorRole.Window, QColor('#b3a4d3'))
         self.setPalette(palette)
 
-        self.mode = 'trainning'
+        self.mode = 'training'
 
         # Creating game mode 'checkboxes' (radio buttons)
         self.btn_trainning = QRadioButton(text="Modo de treino", parent=self)
@@ -69,7 +71,15 @@ class GameMode(QWidget):
             # TODO display this message on log?
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+
+    #TODO this is a bandaid solution and must be removed ASAP
+    context: Match = None
+    updatable_components = []
+
+    def __init__(self, context: Match):
+        # Puts the given match as context for interface display sync
+        self.context = context
+
         # Create application's GUI
         super(MainWindow, self).__init__()
         self.setWindowTitle("Neon Soccer")
@@ -118,6 +128,7 @@ class MainWindow(QMainWindow):
         # NeonFC's informations
         game_info_widget = GameInfo()
         grid.addWidget(game_info_widget, 1, 3, 4, 3)
+        self.updatable_components.append(game_info_widget)
 
         # Log displaying errors and warning messages
         log_widget = Log()
@@ -127,6 +138,7 @@ class MainWindow(QMainWindow):
         # TODO adjust for 6 robots when category == SSL
         robots_widget = RobotsInfo()
         grid.addWidget(robots_widget, 0, 0, 10, 3)
+        self.updatable_components.append(robots_widget)
 
         # Adding grid on a widget for better control of its alignment
         grid_widget = QWidget()
@@ -138,3 +150,10 @@ class MainWindow(QMainWindow):
         widget = QWidget()
         widget.setLayout(window_layout)
         self.setCentralWidget(widget)
+
+        # Creates the timer that refreshes interface components periodically
+        self.startTimer(math.ceil(100 / 3))
+
+    def timerEvent(self, event: typing.Optional['QTimerEvent']) -> None:
+        for component in self.updatable_components:
+            component.update_info(self.context)
