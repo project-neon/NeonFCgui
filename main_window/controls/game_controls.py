@@ -11,13 +11,14 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtGui import QPalette, QColor, QFont, QIcon
 from PyQt6.QtCore import QSize, Qt
 from entities.match import Match
+from main_window.informations.log import Log
 
 class Control_Params(QWidget):
     """
     Additional window to show the robot's control parameters.
     """
 
-    def __init__(self, context: Match, param_list=[]):
+    def __init__(self, context: Match, log: Log, param_list=[]):
         super().__init__()
         self.setMaximumWidth(0) # Total width of its children
         self.setMaximumHeight(0) # Total height of its children
@@ -28,48 +29,60 @@ class Control_Params(QWidget):
         self.setPalette(palette)
 
         self.context = context
+        self.log = log
 
-        # param_list = [KP, KI, KD, K_W, R_M]
+        # param_list = [KP, KI, KD, K_W, R_M, V_M]
         # TODO get parm_list once when comunication with NeonFC is stablished?
+        # TODO change param_list to a dictionary
         if param_list:
-            self.parameters = param_list
+            kp = param_list[0]
+            ki = param_list[1]
+            kd = param_list[2]
+            kw = param_list[3]
+            rm = param_list[4]
+            vm = param_list[5]
+            {"kp":kp, "ki":ki, "kd":kd, "kw":kw, "rm":rm, "vm":vm}
         else:
             # Default parameters:
-            # TODO button to change default?
-            # TODO save default parameters on a file?
+            # TODO button to change default
+            # TODO save default parameters on a file
             kp = 1
             ki = 0
             kd = 0
             kw = 3.5
             rm = 0.44
-            self.parameters = [kp, ki, kd, kw, rm]
-            print(
-                "Parâmetros padrão: KP = " + str(kp) + "; KI = " + str(ki) + "; KD = " + str(kd) +
-                "; KW = " + str(kw) + "; RM = " + str(rm)
-            )
-            # TODO show this message on log
+            vm = 0.5
+            self.parameters = {"kp":kp, "ki":ki, "kd":kd, "kw":kw, "rm":rm, "vm":vm}
+            msg = f"Parâmetros padrão:\nKP={str(kp)};  KI={str(ki)};  KD={str(kd)};  KW={str(kw)};  RM={str(rm)};  VM={str(vm)}"
+            print(msg)
+            self.log.add_message(msg)
+            # TODO show this message on log?
             # TODO send info to Info_Api
 
         # Creating QLineEdits for each parameter
         self.kp_line = QLineEdit()
-        self.kp_line.setText(str(self.parameters[0]))
+        self.kp_line.setText(str(self.parameters["kp"]))
         self.kp_line.setFixedWidth(60)
 
         self.ki_line = QLineEdit()
-        self.ki_line.setText(str(self.parameters[1]))
+        self.ki_line.setText(str(self.parameters["ki"]))
         self.ki_line.setFixedWidth(60)
 
         self.kd_line = QLineEdit()
-        self.kd_line.setText(str(self.parameters[2]))
+        self.kd_line.setText(str(self.parameters["kd"]))
         self.kd_line.setFixedWidth(60)
 
         self.kw_line = QLineEdit()
-        self.kw_line.setText(str(self.parameters[3]))
+        self.kw_line.setText(str(self.parameters["kw"]))
         self.kw_line.setFixedWidth(60)
 
         self.rm_line = QLineEdit()
-        self.rm_line.setText(str(self.parameters[4]))
+        self.rm_line.setText(str(self.parameters["rm"]))
         self.rm_line.setFixedWidth(60)
+
+        self.vm_line = QLineEdit()
+        self.vm_line.setText(str(self.parameters["vm"]))
+        self.vm_line.setFixedWidth(60)
 
         v_layout = QVBoxLayout()
         v_layout.addWidget(QLabel("<h3> Parâmetros do controle dos robôs </h3>", parent=self), alignment=Qt.AlignmentFlag.AlignHCenter)
@@ -81,8 +94,9 @@ class Control_Params(QWidget):
         self.params_table.addWidget(QLabel("KP", parent=self), 0, 0, alignment=Qt.AlignmentFlag.AlignHCenter)
         self.params_table.addWidget(QLabel("KI", parent=self), 0, 1, alignment=Qt.AlignmentFlag.AlignHCenter)
         self.params_table.addWidget(QLabel("KD", parent=self), 0, 2, alignment=Qt.AlignmentFlag.AlignHCenter)
-        self.params_table.addWidget(QLabel("KW", parent=self), 0, 3, alignment=Qt.AlignmentFlag.AlignHCenter)
-        self.params_table.addWidget(QLabel("RM", parent=self), 0, 4, alignment=Qt.AlignmentFlag.AlignHCenter)
+        self.params_table.addWidget(QLabel("K_W", parent=self), 0, 3, alignment=Qt.AlignmentFlag.AlignHCenter)
+        self.params_table.addWidget(QLabel("R_M", parent=self), 0, 4, alignment=Qt.AlignmentFlag.AlignHCenter)
+        self.params_table.addWidget(QLabel("V_M", parent=self), 0, 5, alignment=Qt.AlignmentFlag.AlignHCenter)
 
         # Table values
         self.params_table.addWidget(self.kp_line, 1, 0, alignment=Qt.AlignmentFlag.AlignHCenter)
@@ -90,6 +104,7 @@ class Control_Params(QWidget):
         self.params_table.addWidget(self.kd_line, 1, 2, alignment=Qt.AlignmentFlag.AlignHCenter)
         self.params_table.addWidget(self.kw_line, 1, 3, alignment=Qt.AlignmentFlag.AlignHCenter)
         self.params_table.addWidget(self.rm_line, 1, 4, alignment=Qt.AlignmentFlag.AlignHCenter)
+        self.params_table.addWidget(self.vm_line, 1, 5, alignment=Qt.AlignmentFlag.AlignHCenter)
 
         v_layout.addLayout(self.params_table)
 
@@ -108,13 +123,14 @@ class Control_Params(QWidget):
         kd = self.kd_line.text()
         kw = self.kw_line.text()
         rm = self.rm_line.text()
+        vm = self.vm_line.text()
 
         # Validando os valores dos parametros
         # KP, KI, KD >= 0
-        # KW, RM > 0
-        params = [kp, ki, kd, kw, rm]
+        # KW, RM, VM > 0
+        params = [kp, ki, kd, kw, rm, vm]
         value_error = False
-        for i in range(5):
+        for i in range(6):
             if self.is_float(params[i]):
                 params[i] = float(params[i])
             else:
@@ -125,21 +141,21 @@ class Control_Params(QWidget):
         kd = params[2]
         kw = params[3]
         rm = params[4]
+        vm = params[5]
         
         if value_error:
             print("Todos os parâmetros devem conter valores numéricos.")
         else:
             if kp < 0 or ki < 0 or kd < 0:
                 print("KP, KI e KD devem ter valores não negativos.")
-            elif kw <= 0 or rm <= 0:
-                print("KW e RM devem ter valores positivos.")
+            elif kw <= 0 or rm <= 0 or vm <= 0:
+                print("K_W, R_M e V_M devem ter valores positivos.")
             else:
-                print(
-                    "Parâmetros atuais: KP = " + str(kp) + "; KI = " + str(ki) + "; KD = " + str(kd) +
-                    "; KW = " + str(kw) + "; RM = " + str(rm)
-                )
-                p = {"kp":kp, "ki":ki, "kd":kd, "kw":kw, "rm":rm}
-                self.context.set_control_parameters(p)
+                self.parameters = {"kp":kp, "ki":ki, "kd":kd, "kw":kw, "rm":rm, "vm":vm}
+                msg = f"Parâmetros atuais:\nKP={str(kp)};  KI={str(ki)};  KD={str(kd)};  KW={str(kw)};  RM={str(rm)};  VM={str(vm)}"
+                print(msg)
+                self.log.add_message(msg)
+                self.context.set_control_parameters(self.parameters)
         # TODO show these messages on log
     
     def is_float(self, string):
@@ -152,7 +168,7 @@ class Control_Params(QWidget):
             return False
 
 class GameControls(QWidget):
-    def __init__(self, context: Match):
+    def __init__(self, context: Match, log: Log):
         super(GameControls, self).__init__()
         self.setAutoFillBackground(True)
         palette = self.palette()
@@ -160,6 +176,7 @@ class GameControls(QWidget):
         self.setPalette(palette)
 
         self.context = context
+        self.log = log
 
         # Creating the PLAY, HALT and RESET buttons
         # To add icon to the button we will use the QIcon object, which
@@ -207,8 +224,10 @@ class GameControls(QWidget):
         self.coach_list = ['Teste 1', 'Teste 2', 'Coach Teste 3']
         # self.coach_list = ['No coach found']
         self.current_coach = self.coach_list[0]
-        print(f"Current Coach: {self.current_coach}")
-        # TODO display this info on this gui's log section?
+        # Display this info on this gui's log section
+        msg = f"Coach atual:\n{self.current_coach}"
+        print(msg)
+        self.log.add_message(msg)
 
         coach_section = QWidget()
         coach_layout = QVBoxLayout()
@@ -228,10 +247,10 @@ class GameControls(QWidget):
 
         """
         Adding parameters' window
-        param_list = [kp, ki, kd, kw, rm]
+        param_list = [kp, ki, kd, kw, rm, vm]
         """
-        params=[] # TODO receive params or get this from info object?
-        self.params_window = Control_Params(self.context, params)
+        params=[] # TODO receive params or get this from info object? Change it to dict?
+        self.params_window = Control_Params(self.context, self.log, params)
 
         # Button to open parameter settings' window
         self.btn_params = QPushButton(text="Parâmetros", parent=self)
@@ -287,7 +306,9 @@ class GameControls(QWidget):
 
     def select_coach(self):
         coach_name = self.btn_coach.currentText()
-        print(f"Current Coach: {coach_name}")
+        msg = f"Coach atual:\n{coach_name}"
+        print(msg)
+        self.log.add_message(msg)
 
     def toggle_params(self):
         if self.params_window.isVisible():

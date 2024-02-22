@@ -98,8 +98,11 @@ class MainWindow(QMainWindow):
         # Top section with buttons
         top_h_layout = QHBoxLayout()
         
+        # Log widget displaying errors and warning messages
+        self.log_widget = Log()
+        
         # Adding game status controls widget
-        game_controls_widget = GameControls(self.context)
+        game_controls_widget = GameControls(self.context, self.log_widget)
         h = int(self.window_height/10)
         game_controls_widget.setFixedHeight(int(h*2.5))
         top_h_layout.addWidget(game_controls_widget)
@@ -130,9 +133,8 @@ class MainWindow(QMainWindow):
         grid.addWidget(game_info_widget, 1, 3, 4, 3)
         self.updatable_components.append(game_info_widget)
 
-        # Log displaying errors and warning messages
-        log_widget = Log()
-        grid.addWidget(log_widget, 5, 3, 5, 3)
+        # Add log widget to grid
+        grid.addWidget(self.log_widget, 5, 3, 5, 3)
 
         # Robots' informations section
         # TODO adjust for 6 robots when category == SSL
