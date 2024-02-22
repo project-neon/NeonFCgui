@@ -221,13 +221,13 @@ class GameControls(QWidget):
 
         # Creating coach drop-down selection
         # TODO receive coach list and create msg for empty list
-        self.coach_list = ['Teste 1', 'Teste 2', 'Coach Teste 3']
-        # self.coach_list = ['No coach found']
+        # self.coach_list = ['Teste 1', 'Teste 2', 'Coach Teste 3']
+        self.coach_list = ['No coach found']
         self.current_coach = self.coach_list[0]
         # Display this info on this gui's log section
         msg = f"Coach atual:\n{self.current_coach}"
         print(msg)
-        self.log.add_message(msg)
+        # self.log.add_message(msg)
 
         coach_section = QWidget()
         coach_layout = QVBoxLayout()
