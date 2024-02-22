@@ -17,11 +17,8 @@ class Control_Params(QWidget):
     Additional window to show the robot's control parameters.
     """
 
-    def __init__(self, param_list=[]):
+    def __init__(self, context: Match, param_list=[]):
         super().__init__()
-
-        # TODO validar os valores dos parametros
-
         self.setMaximumWidth(0) # Total width of its children
         self.setMaximumHeight(0) # Total height of its children
         self.setWindowTitle("Control Parameters")
@@ -30,6 +27,8 @@ class Control_Params(QWidget):
         palette.setColor(QPalette.ColorRole.Window, QColor('#b3a4d3'))
         self.setPalette(palette)
 
+        self.context = context
+
         # param_list = [KP, KI, KD, K_W, R_M]
         # TODO get parm_list once when comunication with NeonFC is stablished?
         if param_list:
@@ -37,6 +36,7 @@ class Control_Params(QWidget):
         else:
             # Default parameters:
             # TODO button to change default?
+            # TODO save default parameters on a file?
             kp = 1
             ki = 0
             kd = 0
@@ -108,12 +108,48 @@ class Control_Params(QWidget):
         kd = self.kd_line.text()
         kw = self.kw_line.text()
         rm = self.rm_line.text()
-        print(
-            "Parâmetros atuais: KP = " + str(kp) + "; KI = " + str(ki) + "; KD = " + str(kd) +
-            "; KW = " + str(kw) + "; RM = " + str(rm)
-        )
-        # TODO show this message on log
-        # TODO send info to Info_Api
+
+        # Validando os valores dos parametros
+        # KP, KI, KD >= 0
+        # KW, RM > 0
+        params = [kp, ki, kd, kw, rm]
+        value_error = False
+        for i in range(5):
+            if self.is_float(params[i]):
+                params[i] = float(params[i])
+            else:
+                value_error = True
+        
+        kp = params[0]
+        ki = params[1]
+        kd = params[2]
+        kw = params[3]
+        rm = params[4]
+        
+        if value_error:
+            print("Todos os parâmetros devem conter valores numéricos.")
+        else:
+            if kp < 0 or ki < 0 or kd < 0:
+                print("KP, KI e KD devem ter valores não negativos.")
+            elif kw <= 0 or rm <= 0:
+                print("KW e RM devem ter valores positivos.")
+            else:
+                print(
+                    "Parâmetros atuais: KP = " + str(kp) + "; KI = " + str(ki) + "; KD = " + str(kd) +
+                    "; KW = " + str(kw) + "; RM = " + str(rm)
+                )
+                p = {"kp":kp, "ki":ki, "kd":kd, "kw":kw, "rm":rm}
+                self.context.set_control_parameters(p)
+        # TODO show these messages on log
+    
+    def is_float(self, string):
+        try:
+            # Return true if float
+            float(string)
+            return True
+        except ValueError:
+            # Return False if Error
+            return False
 
 class GameControls(QWidget):
     def __init__(self, context: Match):
@@ -195,7 +231,7 @@ class GameControls(QWidget):
         param_list = [kp, ki, kd, kw, rm]
         """
         params=[] # TODO receive params or get this from info object?
-        self.params_window = Control_Params(params)
+        self.params_window = Control_Params(self.context, params)
 
         # Button to open parameter settings' window
         self.btn_params = QPushButton(text="Parâmetros", parent=self)

@@ -26,6 +26,10 @@ class Match():
         self.robots_ids = [5, 7, 8]
         self.opposites_ids = [0, 1, 2]
 
+        # Default parameter values
+        # TODO option to change default params/save them in a file
+        self.control_parameters = {"kp":1, "ki":0, "kd":0, "kw":3.5, "rm":0.44}
+
         self.start()
         
     def start(self):
@@ -53,6 +57,10 @@ class Match():
     
     def set_team_side(self, side):
         self.team_side = side
+    
+    def set_control_parameters(self, parameters):
+        self.control_parameters = parameters
+        # print(self.control_parameters)
     
     def fetch_robot_by_id(self, robot_id: int):
         # FIXME: can't put explicit return type due to circular import

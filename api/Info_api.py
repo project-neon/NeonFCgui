@@ -17,7 +17,7 @@ class Info_Api():
             'TEAM_COLOR' :  self.match.team_color,
             'GAME_STATUS' : self.match.game_status,
             'TEAM_SIDE' : self.match.team_side,
-            #'PARAMETERS': [{f"{robot.robot_id}": (kp, ki, kd, uni)} for robot in self.robots]
+            # 'PARAMETERS': self.match.control_parameters
         })
 
         self.save_data(data_send)
