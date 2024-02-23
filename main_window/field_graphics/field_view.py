@@ -116,9 +116,9 @@ class FieldView(QOpenGLWidget):
             r_7 = self.match.fetch_robot_by_id(7)
             r_8 = self.match.fetch_robot_by_id(8)
 
-            self.r1.x = r_5.robot_pos[0]; self.r1.y = r_5.robot_pos[2]
-            self.r2.x = r_7.robot_pos[0]; self.r2.y = r_7.robot_pos[2]
-            self.r3.x = r_8.robot_pos[0]; self.r3.y = r_8.robot_pos[2]
+            self.r1.x = r_5.robot_pos[0]; self.r1.y = r_5.robot_pos[1]; self.r1.rotation = r_5.robot_pos[2]
+            self.r2.x = r_7.robot_pos[0]; self.r2.y = r_7.robot_pos[1]; self.r2.rotation = r_7.robot_pos[2]
+            self.r3.x = r_8.robot_pos[0]; self.r3.y = r_8.robot_pos[1]; self.r3.rotation = r_8.robot_pos[2]
 
 
         self.sim_time += 1
