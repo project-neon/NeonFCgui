@@ -1,4 +1,7 @@
+import math
 import os
+import time
+
 from api import Api
 import entities
 
@@ -9,6 +12,7 @@ CATEGORIES = {
 class Match():
     def __init__(self, team_side = "left", team_color = "blue", coach_name = None, category="3v3"):
         
+        self.update_rate = 0
         self.coach_name = coach_name
         self.team_side =  team_side
         self.team_color = team_color
@@ -41,11 +45,15 @@ class Match():
             entities.Robot(i, (0,0,0)) for i in self.robots_ids
         ]
 
-
+    last_update_time: int = 0 #TODO: this solution is held with duct tape
     def update_information(self, **kwargs): #Function to update values recieved in api
         for key, value in kwargs.items():
             if hasattr(self, key.lower()):
                 setattr(self, key.lower(), value)
+        t_epoch = math.ceil(time.time() * 1000)
+        self.update_rate = t_epoch - self.last_update_time
+        self.last_update_time = t_epoch
+
 
     
     def set_game_status(self, status):
