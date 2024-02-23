@@ -20,7 +20,6 @@ class Robot(Renderable):
 
         super().__init__(template.vertices, colors, template.shaderProgram)
 
-
     def color_accordingly_to_id(self, robot_id: int, team_color=None):
         if team_color is None:
             team_color = [.95, .95, .1]
@@ -31,6 +30,7 @@ class Robot(Renderable):
             self.update_color([.1, .1, .1], team_color, [.1, .7, .1], [.9, .5, .6])
         elif robot_id == 8:
             self.update_color([.1, .1, .1], team_color, [.2, .2, 1.], [.9, .5, .8])
+
 
     def gen_color_array(self, robot_color: list,back_tag_color: list, left_tag_color: list, right_tag_color: list):
         r = robot_color[0]; g = robot_color[1]; b = robot_color[2]
@@ -48,4 +48,4 @@ class Robot(Renderable):
     def update_color(self, robot_color: list,back_tag_color: list, left_tag_color: list, right_tag_color: list):
         self.colors = self.gen_color_array(robot_color,back_tag_color,left_tag_color,right_tag_color)
         GL.glBindBuffer(GL.GL_ARRAY_BUFFER, self.colorVBO)
-    
+        GL.glBufferData(GL.GL_ARRAY_BUFFER, self.colors, GL.GL_STATIC_DRAW)
