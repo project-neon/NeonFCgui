@@ -117,7 +117,7 @@ class MainWindow(QMainWindow):
         # Lower section with field visualization,
         # robot informations, game informations and fouls
         bottom_h_layout = QHBoxLayout()
-        bottom_h_layout.addWidget(FieldView(), stretch=1)
+        bottom_h_layout.addWidget(FieldView(self.context), stretch=1)
 
         # GUI mode and NeonFC informations displayed
         # in a grid (10 rows, 6 columns)

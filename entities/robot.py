@@ -8,7 +8,8 @@ class Robot():
         self.strategy = None
 
 
-    def update_information(self, **kwargs): #Function to update values recieved in api
+    def update_information(self, **kwargs):
+        """ Function to update values received in api """
         for key, value in kwargs.items():
             if key == 'TEAM_ROBOTS_POS' and self.team == True:
                 self.robot_pos = value.get(self.robot_id)

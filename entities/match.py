@@ -46,7 +46,8 @@ class Match():
         ]
 
     last_update_time: int = 0 #TODO: this solution is held with duct tape
-    def update_information(self, **kwargs): #Function to update values recieved in api
+    def update_information(self, **kwargs):
+        """ Function to update values received in api """
         for key, value in kwargs.items():
             if hasattr(self, key.lower()):
                 setattr(self, key.lower(), value)
@@ -70,7 +71,7 @@ class Match():
         self.control_parameters = parameters
     
     def fetch_robot_by_id(self, robot_id: int):
-        # FIXME: can't put explicit return type due to circular import
+        # FIXME: cannot explicitly define Robot as function return type due to circular import
         for robot in self.robots:
             if robot.robot_id == robot_id: return robot
         return None

@@ -10,6 +10,7 @@ from PyQt6.QtCore import QTimerEvent
 from PyQt6.QtOpenGLWidgets import QOpenGLWidget
 from PyQt6.QtWidgets import QLabel
 
+from entities import Match
 from main_window.field_graphics.field_objects.robot import Robot
 from main_window.field_graphics.field_objects.text import Text
 from main_window.field_graphics.rendering.animation_manager import AnimationManager
@@ -18,6 +19,7 @@ from main_window.field_graphics.rendering.render_manager import RenderingContext
 
 class FieldView(QOpenGLWidget):
     context: RenderingContext = None
+    no_info: bool = True
     sim_time: int = 0
     rotation = AnimationManager()
     x_translation = AnimationManager(accel_constant=.1, anti_derivative_constant=.2)
@@ -27,12 +29,13 @@ class FieldView(QOpenGLWidget):
     scroll_level: float = 0
     scroll_wheel_sensibility = 3
 
-    def __init__(self):
+    def __init__(self, context: Match):
         super().__init__()
         self.r1 = self.r2 = self.r3 = None
         self.context = RenderingContext()
         self.scroll_level = 7
         self.setFocusPolicy(self.focusPolicy().StrongFocus)
+        self.match = context
         QLabel("<h1>Campo!</h1>", parent=self)
 
     def initializeGL(self):
@@ -93,19 +96,30 @@ class FieldView(QOpenGLWidget):
         self.scale.update(time)
 
     def timerEvent(self, event: typing.Optional['QTimerEvent']) -> None:
-        # TODO: remover
-        self.r1.x = math.sin(self.sim_time/100) * 20
-        self.r1.y = math.cos(self.sim_time/100) * 20
+        self.no_info = self.match.last_update_time == 0
+        if self.no_info: # TODO: remover
+            self.r1.x = math.sin(self.sim_time/100) * 20
+            self.r1.y = math.cos(self.sim_time/100) * 20
 
-        self.r2.x = math.sin(self.sim_time/100 + math.pi * 4/3) * 20
-        self.r2.y = math.cos(self.sim_time/100 + math.pi * 4/3) * 20
+            self.r2.x = math.sin(self.sim_time/100 + math.pi * 4/3) * 20
+            self.r2.y = math.cos(self.sim_time/100 + math.pi * 4/3) * 20
 
-        self.r3.x = math.sin(self.sim_time/100 + math.pi * 2/3) * 20
-        self.r3.y = math.cos(self.sim_time/100 + math.pi * 2/3) * 20
+            self.r3.x = math.sin(self.sim_time/100 + math.pi * 2/3) * 20
+            self.r3.y = math.cos(self.sim_time/100 + math.pi * 2/3) * 20
 
-        self.r1.rotation += (1/100)
-        self.r2.rotation += (1/100)
-        self.r3.rotation += (1/100)
+            self.r1.rotation += (1/100)
+            self.r2.rotation += (1/100)
+            self.r3.rotation += (1/100)
+
+        else:
+            r_5 = self.match.fetch_robot_by_id(5)
+            r_7 = self.match.fetch_robot_by_id(7)
+            r_8 = self.match.fetch_robot_by_id(8)
+
+            self.r1.x = r_5.robot_pos[0]; self.r1.y = r_5.robot_pos[2]
+            self.r2.x = r_7.robot_pos[0]; self.r2.y = r_7.robot_pos[2]
+            self.r3.x = r_8.robot_pos[0]; self.r3.y = r_8.robot_pos[2]
+
 
         self.sim_time += 1
 

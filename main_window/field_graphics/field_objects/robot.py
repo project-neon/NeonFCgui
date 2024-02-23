@@ -4,7 +4,6 @@ from PyQt6.QtOpenGL import QOpenGLShaderProgram
 
 from main_window.field_graphics.rendering.render_manager import Renderable, compileShaderProgram, modelFromJSON
 
-
 def shaderProgram() -> QOpenGLShaderProgram:
     vsh = open("main_window/field_graphics/assets/shaders/VertexShader.vsh").read()
     fsh = open("main_window/field_graphics/assets/shaders/FragmentShader.fsh").read()
