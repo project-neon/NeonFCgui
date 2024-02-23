@@ -40,6 +40,7 @@ class FieldView(QOpenGLWidget):
         GL.glInitGl42VERSION()
         setupGL()
         GL.glClearColor(.2, .5, .2, 1)
+
         self.r1: Robot = Robot([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
         self.r2: Robot = Robot([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
         self.r3: Robot = Robot([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
@@ -57,6 +58,7 @@ class FieldView(QOpenGLWidget):
         self.context.objects.append(self.r3)
 
         field = modelFromJSON(open("main_window/field_graphics/assets/models/field_vsss.json").read())
+
         for obj in field:
             self.context.objects.append(obj)
 
@@ -106,6 +108,7 @@ class FieldView(QOpenGLWidget):
         self.r3.rotation += (1/100)
 
         self.sim_time += 1
+
         self.makeCurrent()
         self.update_translations(1)
         self.update()

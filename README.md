@@ -4,10 +4,12 @@ This GUI is meant to offer easy visualization and control over the NeonFC softwa
 
 To use this GUI, clone this repository and make sure to have PyQT6, PyOpenGL, numpy and Pillow installed:  
 `git clone https://github.com/project-neon/NeonSoccerGUI.git`  
-`pip install PyQT6`  
-`pip install PyOpenGL`  
-`pip install numpy`  
-`pip install -U Pillow`
+```
+pip install PyQT6
+pip install PyOpenGL
+pip install numpy
+pip install -U Pillow
+```
 
 Then, in order to start the program, run:  
 `python3 neonGUI.py`  
