@@ -46,6 +46,7 @@ class Match():
         ]
 
     last_update_time: int = 0 #TODO: this solution is held with duct tape
+
     def update_information(self, **kwargs):
         """ Function to update values received in api """
         for key, value in kwargs.items():
