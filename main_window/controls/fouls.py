@@ -77,8 +77,8 @@ class Fouls(QWidget):
 
         # Foul color buttons
         # TODO leave button selected
-        self.btn_blue = Button(text='blue')
-        self.Btn_yellow = Button(text='yellow')
+        self.btn_blue = Button(text='Azul')
+        self.btn_yellow = Button(text='Amarelo')
 
         grid = QGridLayout()
         grid.setSpacing(12)
@@ -89,7 +89,7 @@ class Fouls(QWidget):
         grid.addWidget(title, 0, 0, alignment=Qt.AlignmentFlag.AlignHCenter) # row:0, column:0, spans 1 row, spans 2 columns
 
         grid.addWidget(self.btn_blue, 1, 0, alignment=Qt.AlignmentFlag.AlignHCenter)
-        grid.addWidget(self.Btn_yellow, 2, 0, alignment=Qt.AlignmentFlag.AlignHCenter)
+        grid.addWidget(self.btn_yellow, 2, 0, alignment=Qt.AlignmentFlag.AlignHCenter)
 
         layout.addLayout(grid)
         

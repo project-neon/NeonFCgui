@@ -10,7 +10,7 @@ from main_window.field_graphics.rendering.render_manager import Renderable, load
 class Text(Renderable):
     texture_id = -1
     texture_coordinates_VBO = -1
-    texture_coors = []
+    texture_coords = None
 
     def __init__(self, display: str, texture_directory: str, color=None, size=1, fixed_rotation=True, tracking: Renderable | None = None, anchor: tuple = (0, 0)):
 
@@ -26,15 +26,16 @@ class Text(Renderable):
 
         vertices = []
         colors = []
+        self.texture_coords = [] # FIXME: EU NÃO TENHO A MÍNIMA IDEIA DO POR QUÊ ELE RECUPERA AS COORDENADAS DA INSTÂNCIA ANTERIOR MAS É ISSO
 
         i = 0.0
 
-        for act in display:
+        for act in self.display:
             pos: int = ord(act) - 32
             bmp_x: int = pos % 16
             bmp_y: int = math.floor(pos / 16)
 
-            wspc_c = i / 2 - display.__len__() / 4
+            wspc_c = i / 2 - self.display.__len__() / 4
 
             vertices.append(wspc_c);      vertices.append(-.5); vertices.append(-.8)  # --
             vertices.append(wspc_c + .5); vertices.append(-.5); vertices.append(-.8)  # +-
@@ -51,17 +52,17 @@ class Text(Renderable):
             txs_x_b = bmp_x / 16;       txs_y_e = 1 - (bmp_y / 16)
             txs_x_e = txs_x_b + 1 / 32; txs_y_b = txs_y_e - 1 / 16
 
-            self.texture_coors.append(txs_x_b); self.texture_coors.append(txs_y_b)
-            self.texture_coors.append(txs_x_e); self.texture_coors.append(txs_y_b)
-            self.texture_coors.append(txs_x_b); self.texture_coors.append(txs_y_e)
+            self.texture_coords.append(txs_x_b); self.texture_coords.append(txs_y_b)
+            self.texture_coords.append(txs_x_e); self.texture_coords.append(txs_y_b)
+            self.texture_coords.append(txs_x_b); self.texture_coords.append(txs_y_e)
 
-            self.texture_coors.append(txs_x_b); self.texture_coors.append(txs_y_e)
-            self.texture_coors.append(txs_x_e); self.texture_coors.append(txs_y_b)
-            self.texture_coors.append(txs_x_e); self.texture_coors.append(txs_y_e)
+            self.texture_coords.append(txs_x_b); self.texture_coords.append(txs_y_e)
+            self.texture_coords.append(txs_x_e); self.texture_coords.append(txs_y_b)
+            self.texture_coords.append(txs_x_e); self.texture_coords.append(txs_y_e)
 
             i += 1
 
-        self.texture_coors = np.asarray(self.texture_coors, dtype=numpy.float32)
+        self.texture_coords = np.asarray(self.texture_coords, dtype=numpy.float32)
 
         for i in range(int(vertices.__len__()/3)):
             vertices[i*3] *= size; vertices[i*3+1] *= size
@@ -105,4 +106,4 @@ class Text(Renderable):
     def update_vertex_attributes(self):
         super().update_vertex_attributes()
         GL.glBindBuffer(GL.GL_ARRAY_BUFFER, self.texture_coordinates_VBO)
-        GL.glBufferData(GL.GL_ARRAY_BUFFER, self.texture_coors, GL.GL_STATIC_DRAW)
+        GL.glBufferData(GL.GL_ARRAY_BUFFER, self.texture_coords, GL.GL_STATIC_DRAW)
