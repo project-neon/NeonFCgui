@@ -28,7 +28,7 @@ class GUI(object):
 
         self.api = Api(self.api_address, self.api_port)
         self.api_recv = Api_recv(self.match, self.api_address, self.api_recv_port)
-        self.info_api = Info_Api(self.match, self.match.robots, self.match.opposites, self.match.ball, self.match.coach_name)
+        self.info_api = Info_Api(self.match, self.match.robots, self.match.opposites, self.match.ball, self.match.control_parameters, self.match.coach_name)
 
     
     def start(self):

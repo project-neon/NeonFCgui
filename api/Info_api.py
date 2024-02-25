@@ -1,12 +1,13 @@
 
 class Info_Api():
-    def __init__(self, match, robots, opposites, ball, coach = None):
+    def __init__(self, match, robots, opposites, ball, parameters, coach = None):
         
         self.match = match
         self.robots = robots
         self.opposites = opposites
         self.coach = coach
         self.ball = ball
+        self.parameters = parameters
 
         self.data = {}
 
@@ -17,7 +18,7 @@ class Info_Api():
             'TEAM_COLOR' :  self.match.team_color,
             'GAME_STATUS' : self.match.game_status,
             'TEAM_SIDE' : self.match.team_side,
-            # 'PARAMETERS': self.match.control_parameters
+            'PARAMETERS': self.parameters
         })
 
         self.save_data(data_send)
