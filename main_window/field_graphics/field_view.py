@@ -31,6 +31,7 @@ class FieldView(QOpenGLWidget):
 
     def __init__(self, context: Match):
         super().__init__()
+        self.ball = None
         self.r1 = self.r2 = self.r3 = None
         self.context = RenderingContext()
         self.scroll_level = 7
@@ -74,6 +75,9 @@ class FieldView(QOpenGLWidget):
         self.context.objects.append(robot_text_2)
         self.context.objects.append(robot_text_3)
 
+        self.ball = modelFromJSON(open("main_window/field_graphics/assets/models/ball.json").read())[0]
+        self.context.objects.append(self.ball)
+
         self.startTimer(math.ceil(100 / 6))
 
     def resizeGL(self, w: int, h: int) -> None:
@@ -115,11 +119,12 @@ class FieldView(QOpenGLWidget):
             r_5 = self.match.fetch_robot_by_id(5)
             r_7 = self.match.fetch_robot_by_id(7)
             r_8 = self.match.fetch_robot_by_id(8)
+            ball = self.match.ball
 
             self.r1.x = r_5.robot_pos[0]; self.r1.y = r_5.robot_pos[1]; self.r1.rotation = r_5.robot_pos[2]
             self.r2.x = r_7.robot_pos[0]; self.r2.y = r_7.robot_pos[1]; self.r2.rotation = r_7.robot_pos[2]
             self.r3.x = r_8.robot_pos[0]; self.r3.y = r_8.robot_pos[1]; self.r3.rotation = r_8.robot_pos[2]
-
+            self.ball.x = ball.ball_pos[0]; self.ball.y = ball.ball_pos[1]
 
         self.sim_time += 1
 
