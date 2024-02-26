@@ -55,8 +55,6 @@ class Match():
         t_epoch = math.ceil(time.time() * 1000)
         self.update_rate = t_epoch - self.last_update_time
         self.last_update_time = t_epoch
-
-
     
     def set_game_status(self, status):
         self.game_status = status

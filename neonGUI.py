@@ -32,9 +32,14 @@ class GUI(object):
 
     
     def start(self):
-        # self.api.start()
-        # self.api_recv.start()
+        self.api.start()
+        self.api_recv.connect_info(self.info_api)
+        self.api_recv.start()
         self.app.start()
+
+    def update(self):
+            
+        self.api.send_data(self.Info_api)
 
 gui = GUI()
 gui.start()

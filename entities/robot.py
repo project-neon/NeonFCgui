@@ -12,8 +12,11 @@ class Robot():
         """ Function to update values received in api """
         for key, value in kwargs.items():
             if key == 'TEAM_ROBOTS_POS' and self.team == True:
-                self.robot_pos = value.get(self.robot_id)
+                for pos in value:
+                    self.robot_pos = pos.get(self.robot_id, self.robot_pos)
             elif key == 'OPPOSITE_ROBOTS_POS' and self.team == False:
-                self.robot_pos = value.get(self.robot_id)
+                for pos in value:
+                    self.robot_pos = pos.get(self.robot_id, self.robot_pos)
             elif key == 'ROBOTS_STRATEGY' and self.team == True:
-                self.strategy = value.get(self.robot_id)
+                for pos in value:
+                    self.strategy = pos.get(self.robot_id, self.strategy)

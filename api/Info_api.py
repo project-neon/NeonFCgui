@@ -27,10 +27,14 @@ class Info_Api():
 
     def update_recv(self,info_recv):
 
-        self.match.update(**info_recv)
-        self.ball.update(**info_recv)
-        self.robots.update(**info_recv)
-        self.opposites.update(**info_recv)
+        self.match.update_information(**info_recv)
+        self.ball.update_information(**info_recv)
+
+        for robot in self.robots:
+            robot.update_information(**info_recv)
+
+        for opposite in self.opposites:
+            opposite.update_information(**info_recv)
 
         self.save_data(info_recv)
 
