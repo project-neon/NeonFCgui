@@ -14,6 +14,8 @@ class Info_Api():
 
     def organize_send(self):
 
+        self.parameters = self.match.control_parameters
+
         data_send = dict({
             'TEAM_COLOR' :  self.match.team_color,
             'GAME_STATUS' : self.match.game_status,
