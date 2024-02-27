@@ -38,11 +38,11 @@ class Match():
         
     def start(self):
         self.opposites = [
-            entities.Robot(i, (0,0,0), False) for i in self.opposites_ids
+            entities.Robot(i, [0,0,0], False) for i in self.opposites_ids
         ]
 
         self.robots = [
-            entities.Robot(i, (0,0,0)) for i in self.robots_ids
+            entities.Robot(i, [0,0,0]) for i in self.robots_ids
         ]
 
     last_update_time: int = 0 #TODO: this solution is held with duct tape
@@ -50,13 +50,16 @@ class Match():
     def update_information(self, **kwargs):
         """ Function to update values received in api """
         for key, value in kwargs.items():
+            if key == 'TEAM_COLOR' and value != self.team_color:
+                for opposites in self.opposites:
+                    opposites.change_team()
+                for robot in self.robots:
+                    robot.change_team()
             if hasattr(self, key.lower()):
                 setattr(self, key.lower(), value)
         t_epoch = math.ceil(time.time() * 1000)
         self.update_rate = t_epoch - self.last_update_time
         self.last_update_time = t_epoch
-
-
     
     def set_game_status(self, status):
         self.game_status = status

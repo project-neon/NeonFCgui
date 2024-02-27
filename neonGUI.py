@@ -6,6 +6,8 @@ from app import App
 from api import Api, Api_recv, Info_Api
 from entities import Match
 import json
+import threading
+import time
 
 def get_config(config_file = None):
     if config_file:
@@ -20,7 +22,7 @@ class GUI(object):
         self.match = Match()
         self.app = App(self)
 
-        self.config = get_config(config_file)
+        self.config = get_config(config_file)    
 
         self.api_address = self.config.get("network").get("api_address")
         self.api_port = self.config.get("network").get("api_port")
@@ -32,9 +34,26 @@ class GUI(object):
 
     
     def start(self):
-        # self.api.start()
-        # self.api_recv.start()
-        self.app.start()
+        self.api.start()
+        self.api_recv.connect_info(self.info_api)
+        self.api_recv.start()
 
+        # Start the update function in a separate thread
+        self.update_thread = threading.Thread(target=self.update)
+        self.update_thread.start()
+
+        # Ensure that the update_thread is running before starting the app
+        while not self.update_thread.is_alive():
+            time.sleep(0.1)
+
+        # Start the app in the main thread
+        self.app.start()
+        print(self.info_api.data)
+
+    def update(self):
+        while True:
+            self.api.send_data(self.info_api)
+
+        
 gui = GUI()
 gui.start()

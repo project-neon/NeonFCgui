@@ -34,7 +34,7 @@ class Api(metaclass=SingletonMeta):
         self.obj_socket = socket(AF_INET, SOCK_DGRAM)
 
     # Sends dict game data to socket listener
-    def send_data(self):
+    def send_data(self, Info_api):
         data_dict = Info_api.organize_send()
         msg = json.dumps(data_dict)
         self.obj_socket.sendto(msg.encode(), (self.address, self.port))
