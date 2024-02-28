@@ -28,7 +28,7 @@ class Match():
         self.opposites = []
 
         self.robots_ids = [5, 7, 8]
-        self.opposites_ids = [0, 1, 2]
+        self.opposites_ids = [5, 7, 8]
 
         # Default parameter values
         # TODO option to change default params/save them in a file
