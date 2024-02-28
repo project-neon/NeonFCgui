@@ -11,5 +11,5 @@ pip install numpy
 pip install -U Pillow
 ```
 
-Then, in order to start the program, run:  
+Then, in order to start the program, with the version 3.12.1 of python, run:  
 `python3 neonGUI.py`  

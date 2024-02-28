@@ -50,11 +50,6 @@ class Match():
     def update_information(self, **kwargs):
         """ Function to update values received in api """
         for key, value in kwargs.items():
-            if key == 'TEAM_COLOR' and value != self.team_color:
-                for opposites in self.opposites:
-                    opposites.change_team()
-                for robot in self.robots:
-                    robot.change_team()
             if hasattr(self, key.lower()):
                 setattr(self, key.lower(), value)
         t_epoch = math.ceil(time.time() * 1000)
@@ -65,6 +60,12 @@ class Match():
         self.game_status = status
 
     def set_team_color(self, color):
+        if self.team_color != color:
+            for robot in self.robots:
+                 robot.change_team()
+            for opposite in self.opposites:
+                opposite.change_team()
+            self.robots, self.opposites = self.opposites, self.robots
         self.team_color = color
         self.opposite_team_color = 'yellow' if self.team_color == 'blue' else 'blue'
     

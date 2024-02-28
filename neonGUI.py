@@ -38,15 +38,12 @@ class GUI(object):
         self.api_recv.connect_info(self.info_api)
         self.api_recv.start()
 
-        # Start the update function in a separate thread
         self.update_thread = threading.Thread(target=self.update)
         self.update_thread.start()
 
-        # Ensure that the update_thread is running before starting the app
         while not self.update_thread.is_alive():
             time.sleep(0.1)
 
-        # Start the app in the main thread
         self.app.start()
         print(self.info_api.data)
 
