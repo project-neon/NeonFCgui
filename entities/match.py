@@ -32,7 +32,7 @@ class Match():
 
         # Default parameter values
         # TODO option to change default params/save them in a file
-        self.control_parameters = {"kp":1, "ki":0, "kd":0, "kw":3.5, "rm":0.44, "vm":0.5}
+        self.control_parameters = {"pid_kp":1, "ki":0, "kd":0, "kw":3.5, "rm":0.44, "vm":0.5, "uni_kp":1}
 
         self.start()
         
