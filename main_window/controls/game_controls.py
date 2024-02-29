@@ -35,34 +35,36 @@ class Control_Params(QWidget):
         # TODO get parm_list once when comunication with NeonFC is stablished?
         # TODO change param_list to a dictionary
         if param_list:
-            kp = param_list[0]
+            pid_kp = param_list[0]
             ki = param_list[1]
             kd = param_list[2]
             kw = param_list[3]
             rm = param_list[4]
             vm = param_list[5]
-            {"kp":kp, "ki":ki, "kd":kd, "kw":kw, "rm":rm, "vm":vm}
+            uni_kp = param_list[6]
+            {"pid_kp":pid_kp, "ki":ki, "kd":kd, "kw":kw, "rm":rm, "vm":vm, "uni_kp":uni_kp}
         else:
             # Default parameters:
             # TODO button to change default
             # TODO save default parameters on a file
-            kp = 1
+            pid_kp = 1
             ki = 0
             kd = 0
             kw = 3.5
             rm = 0.44
             vm = 0.5
-            self.parameters = {"kp":kp, "ki":ki, "kd":kd, "kw":kw, "rm":rm, "vm":vm}
-            msg = f"Parâmetros padrão:\nKP={str(kp)};  KI={str(ki)};  KD={str(kd)};  KW={str(kw)};  RM={str(rm)};  VM={str(vm)}"
+            uni_kp = 1
+            self.parameters = {"pid_kp":pid_kp, "ki":ki, "kd":kd, "kw":kw, "rm":rm, "vm":vm, "uni_kp":uni_kp}
+            msg = f"Parâmetros padrão:\nPID_KP={str(pid_kp)};  KI={str(ki)};  KD={str(kd)};  KW={str(kw)};  RM={str(rm)};  VM={str(vm)}; uni_KP ={str(uni_kp)}"
             print(msg)
             self.log.add_message(msg)
             # TODO show this message on log?
             # TODO send info to Info_Api
 
         # Creating QLineEdits for each parameter
-        self.kp_line = QLineEdit()
-        self.kp_line.setText(str(self.parameters["kp"]))
-        self.kp_line.setFixedWidth(60)
+        self.pid_kp_line = QLineEdit()
+        self.pid_kp_line.setText(str(self.parameters["pid_kp"]))
+        self.pid_kp_line.setFixedWidth(60)
 
         self.ki_line = QLineEdit()
         self.ki_line.setText(str(self.parameters["ki"]))
@@ -84,6 +86,10 @@ class Control_Params(QWidget):
         self.vm_line.setText(str(self.parameters["vm"]))
         self.vm_line.setFixedWidth(60)
 
+        self.uni_kp_line = QLineEdit()
+        self.uni_kp_line.setText(str(self.parameters["uni_kp"]))
+        self.uni_kp_line.setFixedWidth(60)
+
         v_layout = QVBoxLayout()
         v_layout.addWidget(QLabel("<h3> Parâmetros do controle dos robôs </h3>", parent=self), alignment=Qt.AlignmentFlag.AlignHCenter)
 
@@ -91,20 +97,23 @@ class Control_Params(QWidget):
         self.params_table = QGridLayout()
 
         # Table labels
-        self.params_table.addWidget(QLabel("KP", parent=self), 0, 0, alignment=Qt.AlignmentFlag.AlignHCenter)
+        self.params_table.addWidget(QLabel("PID_KP", parent=self), 0, 0, alignment=Qt.AlignmentFlag.AlignHCenter)
         self.params_table.addWidget(QLabel("KI", parent=self), 0, 1, alignment=Qt.AlignmentFlag.AlignHCenter)
         self.params_table.addWidget(QLabel("KD", parent=self), 0, 2, alignment=Qt.AlignmentFlag.AlignHCenter)
         self.params_table.addWidget(QLabel("K_W", parent=self), 0, 3, alignment=Qt.AlignmentFlag.AlignHCenter)
         self.params_table.addWidget(QLabel("R_M", parent=self), 0, 4, alignment=Qt.AlignmentFlag.AlignHCenter)
         self.params_table.addWidget(QLabel("V_M", parent=self), 0, 5, alignment=Qt.AlignmentFlag.AlignHCenter)
+        self.params_table.addWidget(QLabel("UNI_KP", parent=self), 0, 6, alignment=Qt.AlignmentFlag.AlignHCenter)
 
         # Table values
-        self.params_table.addWidget(self.kp_line, 1, 0, alignment=Qt.AlignmentFlag.AlignHCenter)
+        self.params_table.addWidget(self.pid_kp_line, 1, 0, alignment=Qt.AlignmentFlag.AlignHCenter)
         self.params_table.addWidget(self.ki_line, 1, 1, alignment=Qt.AlignmentFlag.AlignHCenter)
         self.params_table.addWidget(self.kd_line, 1, 2, alignment=Qt.AlignmentFlag.AlignHCenter)
         self.params_table.addWidget(self.kw_line, 1, 3, alignment=Qt.AlignmentFlag.AlignHCenter)
         self.params_table.addWidget(self.rm_line, 1, 4, alignment=Qt.AlignmentFlag.AlignHCenter)
         self.params_table.addWidget(self.vm_line, 1, 5, alignment=Qt.AlignmentFlag.AlignHCenter)
+        self.params_table.addWidget(self.uni_kp_line, 1, 6, alignment=Qt.AlignmentFlag.AlignHCenter)
+
 
         v_layout.addLayout(self.params_table)
 
@@ -118,41 +127,43 @@ class Control_Params(QWidget):
         self.setLayout(v_layout)
     
     def changeParams(self):
-        kp = self.kp_line.text()
+        pid_kp = self.pid_kp_line.text()
         ki = self.ki_line.text()
         kd = self.kd_line.text()
         kw = self.kw_line.text()
         rm = self.rm_line.text()
         vm = self.vm_line.text()
+        uni_kp = self.uni_kp_line.text()
 
         # Validando os valores dos parametros
         # KP, KI, KD >= 0
         # KW, RM, VM > 0
-        params = [kp, ki, kd, kw, rm, vm]
+        params = [pid_kp, ki, kd, kw, rm, vm, uni_kp]
         value_error = False
-        for i in range(6):
+        for i in range(7):
             if self.is_float(params[i]):
                 params[i] = float(params[i])
             else:
                 value_error = True
         
-        kp = params[0]
+        pid_kp = params[0]
         ki = params[1]
         kd = params[2]
         kw = params[3]
         rm = params[4]
         vm = params[5]
+        uni_kp = params[6]
         
         if value_error:
             print("Todos os parâmetros devem conter valores numéricos.")
         else:
-            if kp < 0 or ki < 0 or kd < 0:
-                print("KP, KI e KD devem ter valores não negativos.")
-            elif kw <= 0 or rm <= 0 or vm <= 0:
-                print("K_W, R_M e V_M devem ter valores positivos.")
+            if pid_kp < 0 or ki < 0 or kd < 0:
+                print("PID_KP, KI e KD devem ter valores não negativos.")
+            elif kw <= 0 or rm <= 0 or vm <= 0 or uni_kp < 0:
+                print("K_W, R_M e V_M devem ter valores positivos. UNI_KP deve ter valor não negativo.")
             else:
-                self.parameters = {"kp":kp, "ki":ki, "kd":kd, "kw":kw, "rm":rm, "vm":vm}
-                msg = f"Parâmetros atuais:\nKP={str(kp)};  KI={str(ki)};  KD={str(kd)};  KW={str(kw)};  RM={str(rm)};  VM={str(vm)}"
+                self.parameters = {"kp":pid_kp, "ki":ki, "kd":kd, "kw":kw, "rm":rm, "vm":vm, "uni_kp":uni_kp}
+                msg = f"Parâmetros atuais:\nPID_KP={str(pid_kp)};  KI={str(ki)};  KD={str(kd)};  KW={str(kw)};  RM={str(rm)};  VM={str(vm)}; UNI_KP = {str(uni_kp)}"
                 print(msg)
                 self.log.add_message(msg)
                 self.context.set_control_parameters(self.parameters)
@@ -247,7 +258,7 @@ class GameControls(QWidget):
 
         """
         Adding parameters' window
-        param_list = [kp, ki, kd, kw, rm, vm]
+        param_list = [pid_kp, ki, kd, kw, rm, vm, uni_kp]
         """
         params=[] # TODO receive params or get this from info object? Change it to dict?
         self.params_window = Control_Params(self.context, self.log, params)
