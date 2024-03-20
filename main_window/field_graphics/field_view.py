@@ -64,6 +64,7 @@ class FieldView(QOpenGLWidget):
         field = modelFromJSON(open("main_window/field_graphics/assets/models/field_vsss.json").read())
 
         for obj in field:
+            obj.x = 75; obj.y = 65
             self.context.objects.append(obj)
 
         #Text("Socorro","main_window/field_graphics/assets/bitmaps/Arial Bold_1024.bmp")
@@ -122,10 +123,11 @@ class FieldView(QOpenGLWidget):
             ball = self.match.ball
 
             
-            self.r1.x = r_5.robot_pos[0]; self.r1.y = r_5.robot_pos[1]; self.r1.rotation = r_5.robot_pos[2]
-            self.r2.x = r_7.robot_pos[0]; self.r2.y = r_7.robot_pos[1]; self.r2.rotation = r_7.robot_pos[2]
-            self.r3.x = r_8.robot_pos[0]; self.r3.y = r_8.robot_pos[1]; self.r3.rotation = r_8.robot_pos[2]
-            self.ball.x = ball.ball_pos[0]; self.ball.y = ball.ball_pos[1]
+            self.r1.x = r_5.robot_pos[0] * 100; self.r1.y = r_5.robot_pos[1] * 100; self.r1.rotation = -r_5.robot_pos[2] + math.pi/2
+            self.r2.x = r_7.robot_pos[0] * 100; self.r2.y = r_7.robot_pos[1] * 100; self.r2.rotation = -r_7.robot_pos[2] + math.pi/2
+            self.r3.x = r_8.robot_pos[0] * 100; self.r3.y = r_8.robot_pos[1] * 100; self.r3.rotation = -r_8.robot_pos[2] + math.pi/2
+            self.ball.x = ball.ball_pos[0] * 100; self.ball.y = ball.ball_pos[1] * 100
+            print(r_7.robot_pos)
 
         self.sim_time += 1
 

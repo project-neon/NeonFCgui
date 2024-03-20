@@ -162,7 +162,7 @@ class Control_Params(QWidget):
             elif kw <= 0 or rm <= 0 or vm <= 0 or uni_kp < 0:
                 print("K_W, R_M e V_M devem ter valores positivos. UNI_KP deve ter valor não negativo.")
             else:
-                self.parameters = {"kp":pid_kp, "ki":ki, "kd":kd, "kw":kw, "rm":rm, "vm":vm, "uni_kp":uni_kp}
+                self.parameters = {"pid_kp":pid_kp, "ki":ki, "kd":kd, "kw":kw, "rm":rm, "vm":vm, "uni_kp":uni_kp}
                 msg = f"Parâmetros atuais:\nPID_KP={str(pid_kp)};  KI={str(ki)};  KD={str(kd)};  KW={str(kw)};  RM={str(rm)};  VM={str(vm)}; UNI_KP = {str(uni_kp)}"
                 print(msg)
                 self.log.add_message(msg)
