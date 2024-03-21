@@ -10,6 +10,7 @@ from PyQt6.QtCore import QTimerEvent
 from PyQt6.QtOpenGLWidgets import QOpenGLWidget
 from PyQt6.QtWidgets import QLabel
 
+from entities import Match
 from main_window.field_graphics.field_objects.robot import Robot
 from main_window.field_graphics.field_objects.text import Text
 from main_window.field_graphics.rendering.animation_manager import AnimationManager
@@ -18,6 +19,7 @@ from main_window.field_graphics.rendering.render_manager import RenderingContext
 
 class FieldView(QOpenGLWidget):
     context: RenderingContext = None
+    no_info: bool = True
     sim_time: int = 0
     rotation = AnimationManager()
     x_translation = AnimationManager(accel_constant=.1, anti_derivative_constant=.2)
@@ -27,11 +29,14 @@ class FieldView(QOpenGLWidget):
     scroll_level: float = 0
     scroll_wheel_sensibility = 3
 
-    def __init__(self):
+    def __init__(self, context: Match):
         super().__init__()
+        self.ball = None
+        self.r1 = self.r2 = self.r3 = None
         self.context = RenderingContext()
         self.scroll_level = 7
         self.setFocusPolicy(self.focusPolicy().StrongFocus)
+        self.match = context
         QLabel("<h1>Campo!</h1>", parent=self)
 
     def initializeGL(self):
@@ -39,14 +44,40 @@ class FieldView(QOpenGLWidget):
         GL.glInitGl42VERSION()
         setupGL()
         GL.glClearColor(.2, .5, .2, 1)
-        self.r = Robot([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
-        self.context.objects.append(self.r)
-        field = modelFromJSON(open("main_window/field_graphics/assets/models/field_VSSS.json").read())
+
+        self.r1: Robot = Robot([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
+        self.r2: Robot = Robot([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
+        self.r3: Robot = Robot([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
+
+        self.r1.rotation = math.pi/2
+        self.r2.rotation = -math.pi/6
+        self.r3.rotation = math.pi * (9.5/3)
+
+        self.r1.color_accordingly_to_id(5)
+        self.r2.color_accordingly_to_id(7)
+        self.r3.color_accordingly_to_id(8)
+
+        self.context.objects.append(self.r1)
+        self.context.objects.append(self.r2)
+        self.context.objects.append(self.r3)
+
+        field = modelFromJSON(open("main_window/field_graphics/assets/models/field_vsss.json").read())
+
         for obj in field:
+            obj.x = 75; obj.y = 65
             self.context.objects.append(obj)
 
-        text = Text("#01", "main_window/field_graphics/assets/bitmaps/Arial Bold_1024.bmp", size=6, tracking=self.r, anchor=(10, 0))
-        self.context.objects.append(text)
+        #Text("Socorro","main_window/field_graphics/assets/bitmaps/Arial Bold_1024.bmp")
+        robot_text_1 = Text("#05", "main_window/field_graphics/assets/bitmaps/Arial Bold_1024.bmp", size=6, tracking=self.r1, anchor=(10, 0))
+        robot_text_2 = Text("#07", "main_window/field_graphics/assets/bitmaps/Arial Bold_1024.bmp", size=6, tracking=self.r2, anchor=(10, 0))
+        robot_text_3 = Text("#08", "main_window/field_graphics/assets/bitmaps/Arial Bold_1024.bmp", size=6, tracking=self.r3, anchor=(10, 0))
+
+        self.context.objects.append(robot_text_1)
+        self.context.objects.append(robot_text_2)
+        self.context.objects.append(robot_text_3)
+
+        self.ball = modelFromJSON(open("main_window/field_graphics/assets/models/ball.json").read())[0]
+        self.context.objects.append(self.ball)
 
         self.startTimer(math.ceil(100 / 6))
 
@@ -70,17 +101,35 @@ class FieldView(QOpenGLWidget):
         self.scale.update(time)
 
     def timerEvent(self, event: typing.Optional['QTimerEvent']) -> None:
-        self.sim_time += 1
-        #self.r.rotation = self.sim_time / 350  # <-- TODO remover isso, essa rotação é só pra testes
-        # enquanto a gente não recebe nada da API é o jeito de verificar se o robô
-        # tá se adaptando às transformações corretamente
-        self.r.x = math.sin(self.sim_time/200) * 80
-        self.r.y = math.cos(self.sim_time/200) * 40
-        self.r.rotation = self.sim_time/25
+        self.no_info = self.match.last_update_time == 0
+        if self.no_info: # TODO: remover
+            self.r1.x = math.sin(self.sim_time/100) * 20
+            self.r1.y = math.cos(self.sim_time/100) * 20
 
-        s,s2,c,c2 = (math.sin(self.sim_time / 40) * .5 + .5, math.sin(3.5+self.sim_time/56) * .5 + .5,
-                     math.cos(2+self.sim_time / 67) * .5 + .5, math.cos(self.sim_time/71) * .5 + .5)
-        self.r.update_color([s,c,s2], [s2,c,s], [s2,s,c2], [c,c2,s])
+            self.r2.x = math.sin(self.sim_time/100 + math.pi * 4/3) * 20
+            self.r2.y = math.cos(self.sim_time/100 + math.pi * 4/3) * 20
+
+            self.r3.x = math.sin(self.sim_time/100 + math.pi * 2/3) * 20
+            self.r3.y = math.cos(self.sim_time/100 + math.pi * 2/3) * 20
+
+            self.r1.rotation += (1/100)
+            self.r2.rotation += (1/100)
+            self.r3.rotation += (1/100)
+
+        else:
+            r_5 = self.match.fetch_robot_by_id(5)
+            r_7 = self.match.fetch_robot_by_id(7)
+            r_8 = self.match.fetch_robot_by_id(8)
+            ball = self.match.ball
+
+            
+            self.r1.x = r_5.robot_pos[0] * 100; self.r1.y = r_5.robot_pos[1] * 100; self.r1.rotation = -r_5.robot_pos[2] + math.pi/2
+            self.r2.x = r_7.robot_pos[0] * 100; self.r2.y = r_7.robot_pos[1] * 100; self.r2.rotation = -r_7.robot_pos[2] + math.pi/2
+            self.r3.x = r_8.robot_pos[0] * 100; self.r3.y = r_8.robot_pos[1] * 100; self.r3.rotation = -r_8.robot_pos[2] + math.pi/2
+            self.ball.x = ball.ball_pos[0] * 100; self.ball.y = ball.ball_pos[1] * 100
+            print(r_7.robot_pos)
+
+        self.sim_time += 1
 
         self.makeCurrent()
         self.update_translations(1)

@@ -6,6 +6,9 @@ from PyQt6.QtWidgets import QLabel, QWidget, QVBoxLayout
 from PyQt6.QtGui import QPalette, QColor
 from PyQt6.QtCore import Qt
 
+from entities import match, Match
+
+
 class GameInfo(QWidget):
     def __init__(self):
         super(GameInfo, self).__init__()
@@ -35,3 +38,9 @@ class GameInfo(QWidget):
         # TODO atualizar o texto dessa label
 
         self.setLayout(layout)
+
+    def update_info(self, status: Match):
+        self.game_status = status.game_status
+        self.update_rate = status.update_rate
+        self.lbl_status.setText("Status atual:<br/>" + str(self.game_status))
+        self.lbl_rate.setText("Taxa de atualização:<br/>" + str(self.update_rate))

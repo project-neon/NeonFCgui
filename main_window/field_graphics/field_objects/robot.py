@@ -4,7 +4,6 @@ from PyQt6.QtOpenGL import QOpenGLShaderProgram
 
 from main_window.field_graphics.rendering.render_manager import Renderable, compileShaderProgram, modelFromJSON
 
-
 def shaderProgram() -> QOpenGLShaderProgram:
     vsh = open("main_window/field_graphics/assets/shaders/VertexShader.vsh").read()
     fsh = open("main_window/field_graphics/assets/shaders/FragmentShader.fsh").read()
@@ -19,6 +18,18 @@ class Robot(Renderable):
         colors = self.gen_color_array(robot_color,back_tag_color,left_tag_color,right_tag_color)
 
         super().__init__(template.vertices, colors, template.shaderProgram)
+
+    def color_accordingly_to_id(self, robot_id: int, team_color=None):
+        if team_color is None:
+            team_color = [.95, .95, .1]
+
+        if robot_id == 5:
+            self.update_color([.1, .1, .1], team_color, [.2, .2, 1.], [.1, .7, .1])
+        elif robot_id == 7:
+            self.update_color([.1, .1, .1], team_color, [.1, .7, .1], [.9, .5, .6])
+        elif robot_id == 8:
+            self.update_color([.1, .1, .1], team_color, [.2, .2, 1.], [.9, .5, .8])
+
 
     def gen_color_array(self, robot_color: list,back_tag_color: list, left_tag_color: list, right_tag_color: list):
         r = robot_color[0]; g = robot_color[1]; b = robot_color[2]
