@@ -43,4 +43,4 @@ class GameInfo(QWidget):
         self.game_status = status.game_status
         self.update_rate = status.update_rate
         self.lbl_status.setText("Status atual:<br/>" + str(self.game_status))
-        self.lbl_rate.setText("Taxa de atualização:<br/>" + str(self.update_rate))
+        self.lbl_rate.setText("Taxa de atualização:<br/>" + str(self.update_rate) + "ms")

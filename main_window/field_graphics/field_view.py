@@ -64,10 +64,9 @@ class FieldView(QOpenGLWidget):
         field = modelFromJSON(open("main_window/field_graphics/assets/models/field_vsss.json").read())
 
         for obj in field:
-            obj.x = 75; obj.y = 65
+            #obj.x = 75; obj.y = 65
             self.context.objects.append(obj)
 
-        #Text("Socorro","main_window/field_graphics/assets/bitmaps/Arial Bold_1024.bmp")
         robot_text_1 = Text("#05", "main_window/field_graphics/assets/bitmaps/Arial Bold_1024.bmp", size=6, tracking=self.r1, anchor=(10, 0))
         robot_text_2 = Text("#07", "main_window/field_graphics/assets/bitmaps/Arial Bold_1024.bmp", size=6, tracking=self.r2, anchor=(10, 0))
         robot_text_3 = Text("#08", "main_window/field_graphics/assets/bitmaps/Arial Bold_1024.bmp", size=6, tracking=self.r3, anchor=(10, 0))
@@ -102,14 +101,14 @@ class FieldView(QOpenGLWidget):
 
     def update_robot_coord(self, robot_id: int, model: Renderable):
         r = self.match.fetch_robot_by_id(robot_id)
-        model.x = r.robot_pos[0] * 100
-        model.y = r.robot_pos[1] * 100
+        model.x = r.robot_pos[0] * 100 - 75 # TODO mudar pra dimensões do campo grande
+        model.y = r.robot_pos[1] * 100 - 65
         model.rotation = -r.robot_pos[2] + math.pi/2
 
 
     def timerEvent(self, event: typing.Optional['QTimerEvent']) -> None:
         self.no_info = self.match.last_update_time == 0
-        if self.no_info: # TODO: remover
+        if self.no_info:
             self.r1.x = math.sin(self.sim_time/100) * 20
             self.r1.y = math.cos(self.sim_time/100) * 20
 
