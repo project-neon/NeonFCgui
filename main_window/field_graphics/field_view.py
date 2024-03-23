@@ -14,7 +14,7 @@ from entities import Match
 from main_window.field_graphics.field_objects.robot import Robot
 from main_window.field_graphics.field_objects.text import Text
 from main_window.field_graphics.rendering.animation_manager import AnimationManager
-from main_window.field_graphics.rendering.render_manager import RenderingContext, setupGL, modelFromJSON
+from main_window.field_graphics.rendering.render_manager import RenderingContext, setupGL, modelFromJSON, Renderable
 
 
 class FieldView(QOpenGLWidget):
@@ -100,6 +100,13 @@ class FieldView(QOpenGLWidget):
         self.y_translation.update(time)
         self.scale.update(time)
 
+    def update_robot_coord(self, robot_id: int, model: Renderable):
+        r = self.match.fetch_robot_by_id(robot_id)
+        model.x = r.robot_pos[0] * 100
+        model.y = r.robot_pos[1] * 100
+        model.rotation = -r.robot_pos[2] + math.pi/2
+
+
     def timerEvent(self, event: typing.Optional['QTimerEvent']) -> None:
         self.no_info = self.match.last_update_time == 0
         if self.no_info: # TODO: remover
@@ -117,17 +124,12 @@ class FieldView(QOpenGLWidget):
             self.r3.rotation += (1/100)
 
         else:
-            r_5 = self.match.fetch_robot_by_id(5)
-            r_7 = self.match.fetch_robot_by_id(7)
-            r_8 = self.match.fetch_robot_by_id(8)
-            ball = self.match.ball
+            self.update_robot_coord(5,self.r1)
+            self.update_robot_coord(7,self.r2)
+            self.update_robot_coord(8,self.r3)
 
-            
-            self.r1.x = r_5.robot_pos[0] * 100; self.r1.y = r_5.robot_pos[1] * 100; self.r1.rotation = -r_5.robot_pos[2] + math.pi/2
-            self.r2.x = r_7.robot_pos[0] * 100; self.r2.y = r_7.robot_pos[1] * 100; self.r2.rotation = -r_7.robot_pos[2] + math.pi/2
-            self.r3.x = r_8.robot_pos[0] * 100; self.r3.y = r_8.robot_pos[1] * 100; self.r3.rotation = -r_8.robot_pos[2] + math.pi/2
+            ball = self.match.ball
             self.ball.x = ball.ball_pos[0] * 100; self.ball.y = ball.ball_pos[1] * 100
-            print(r_7.robot_pos)
 
         self.sim_time += 1
 
