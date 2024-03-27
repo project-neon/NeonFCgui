@@ -13,7 +13,7 @@ from PyQt6.QtCore import QSize, Qt
 from entities.match import Match
 from main_window.informations.log import Log
 
-class Control_Params(QWidget):
+class ControlParams(QWidget):
     """
     Additional window to show the robot's control parameters.
     """
@@ -261,7 +261,7 @@ class GameControls(QWidget):
         param_list = [pid_kp, ki, kd, kw, rm, vm, uni_kp]
         """
         params=[] # TODO receive params or get this from info object? Change it to dict?
-        self.params_window = Control_Params(self.context, self.log, params)
+        self.params_window = ControlParams(self.context, self.log, params)
 
         # Button to open parameter settings' window
         self.btn_params = QPushButton(text="Parâmetros", parent=self)
