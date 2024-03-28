@@ -11,7 +11,7 @@ from PyQt6.QtOpenGLWidgets import QOpenGLWidget
 from PyQt6.QtWidgets import QLabel
 
 from entities import Match
-from main_window.field_graphics.field_objects.robot import RobotMesh
+from main_window.field_graphics.field_objects.robot_mesh import RobotMesh
 from main_window.field_graphics.field_objects.text import Text
 from main_window.field_graphics.rendering.animation_manager import AnimationManager
 from main_window.field_graphics.rendering.render_manager import RenderingContext, setupGL, modelFromJSON, Renderable

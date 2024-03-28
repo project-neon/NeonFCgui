@@ -16,8 +16,7 @@ from PyQt6.QtCore import Qt, QTimerEvent
 
 from entities import Match
 from main_window.field_graphics.field_view import FieldView
-from main_window.controls import *
-from main_window.informations import *
+from main_window.widgets import *
 
 class GameMode(QWidget):
 
