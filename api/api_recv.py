@@ -3,9 +3,9 @@ import json
 import threading
 import struct
 
-class Api_recv(threading.Thread):
+class ApiRecv(threading.Thread):
     def __init__(self, match, address, port):
-        super(Api_recv, self).__init__()
+        super(ApiRecv, self).__init__()
 
         BUFFER_SIZE = 2048
 
