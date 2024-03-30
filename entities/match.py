@@ -14,7 +14,7 @@ class Match():
         
         self.update_rate = 0
         self.coach_name = coach_name
-        self.coach_list = None
+        self.coach_list = ['No coach found']
         self.team_side =  team_side
         self.team_color = team_color
         self.category = category
@@ -29,7 +29,7 @@ class Match():
         self.opposites = []
 
         self.robots_ids = [5, 7, 8]
-        self.opposites_ids = [4, 5, 7]
+        self.opposites_ids = [5, 7, 8]
 
         # Default parameter values
         # TODO option to change default params/save them in a file

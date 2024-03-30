@@ -29,6 +29,7 @@ class InfoApi():
              'KI': self.parameters['ki'],
              'KD': self.parameters['kd'],
              'KW': self.parameters['kw'],
+             'VM': self.parameters['vm'],
              'RM': self.parameters['rm'],
              'UNI_KP': self.parameters['uni_kp']
             }
