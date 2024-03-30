@@ -14,6 +14,7 @@ class Match():
         
         self.update_rate = 0
         self.coach_name = coach_name
+        self.coach_list = None
         self.team_side =  team_side
         self.team_color = team_color
         self.category = category
@@ -28,7 +29,7 @@ class Match():
         self.opposites = []
 
         self.robots_ids = [5, 7, 8]
-        self.opposites_ids = [5, 7, 8]
+        self.opposites_ids = [4, 5, 7]
 
         # Default parameter values
         # TODO option to change default params/save them in a file
@@ -47,11 +48,10 @@ class Match():
 
     last_update_time: int = 0 #TODO: this solution is held with duct tape
 
-    def update_information(self, **kwargs):
+    def update_information(self, info):
         """ Function to update values received in api """
-        for key, value in kwargs.items():
-            if hasattr(self, key.lower()):
-                setattr(self, key.lower(), value)
+        for key, value in info.items():
+            setattr(self, key.lower(), value)
         t_epoch = math.ceil(time.time() * 1000)
         self.update_rate = t_epoch - self.last_update_time
         self.last_update_time = t_epoch

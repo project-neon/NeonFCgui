@@ -1,5 +1,7 @@
 
 class InfoApi():
+    update_list = []
+
     def __init__(self, match, robots, opposites, ball, parameters, coach = None):
         
         self.match = match
@@ -16,11 +18,20 @@ class InfoApi():
 
         self.parameters = self.match.control_parameters
 
-        data_send = dict({
-            'TEAM_COLOR' :  self.match.team_color,
-            'GAME_STATUS' : self.match.game_status,
-            'TEAM_SIDE' : self.match.team_side,
-            'PARAMETERS': self.parameters
+        data_send = dict(
+        {'MATCH':
+            {'TEAM_COLOR' :  self.match.team_color,
+             'GAME_STATUS' : self.match.game_status,
+             'TEAM_SIDE' : self.match.team_side
+            },
+         'PARAMETERS': 
+            {'PID_KP': self.parameters['pid_kp'],
+             'KI': self.parameters['ki'],
+             'KD': self.parameters['kd'],
+             'KW': self.parameters['kw'],
+             'RM': self.parameters['rm'],
+             'UNI_KP': self.parameters['uni_kp']
+            }
         })
 
         self.save_data(data_send)
@@ -29,14 +40,14 @@ class InfoApi():
 
     def update_recv(self,info_recv):
 
-        self.match.update_information(**info_recv)
-        self.ball.update_information(**info_recv)
+        self.match.update_information(info_recv['MATCH'])
+        self.ball.update_information(info_recv['BALL'])
 
         for robot in self.robots:
-            robot.update_information(**info_recv)
+            robot.update_information(info_recv['TEAM_ROBOTS'])
 
         for opposite in self.opposites:
-            opposite.update_information(**info_recv)
+            opposite.update_information(info_recv['OPPOSITE_ROBOTS'])
 
         self.save_data(info_recv)
 
