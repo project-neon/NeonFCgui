@@ -64,7 +64,7 @@ class FieldView(QOpenGLWidget):
         field = modelFromJSON(open("main_window/field_graphics/assets/models/field_vsss.json").read())
 
         for obj in field:
-            obj.x = 75; obj.y = 65
+            # obj.x = 75; obj.y = 65
             self.context.objects.append(obj)
 
         #Text("Socorro","main_window/field_graphics/assets/bitmaps/Arial Bold_1024.bmp")
