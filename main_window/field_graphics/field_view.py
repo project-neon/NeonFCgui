@@ -129,7 +129,7 @@ class FieldView(QOpenGLWidget):
             self.update_robot_coord(8,self.r3)
 
             ball = self.match.ball
-            self.ball.x = ball.ball_pos[0] * 100; self.ball.y = ball.ball_pos[1] * 100
+            self.ball.x = ball.ball_pos[0] * 100 - 75; self.ball.y = ball.ball_pos[1] * 100 - 65
 
         self.sim_time += 1
 
