@@ -11,9 +11,9 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtGui import QPalette, QColor, QFont, QIcon
 from PyQt6.QtCore import QSize, Qt
 from entities.match import Match
-from main_window.informations.log import Log
+from main_window.widgets.log import Log
 
-class Control_Params(QWidget):
+class ControlParams(QWidget):
     """
     Additional window to show the robot's control parameters.
     """
@@ -55,7 +55,7 @@ class Control_Params(QWidget):
             vm = 0.5
             uni_kp = 1
             self.parameters = {"pid_kp":pid_kp, "ki":ki, "kd":kd, "kw":kw, "rm":rm, "vm":vm, "uni_kp":uni_kp}
-            msg = f"Parâmetros padrão:\nPID_KP={str(pid_kp)};  KI={str(ki)};  KD={str(kd)};  KW={str(kw)};  RM={str(rm)};  VM={str(vm)}; uni_KP ={str(uni_kp)}"
+            msg = f"Parâmetros padrão:\nPID_KP={str(pid_kp)};  KI={str(ki)};  KD={str(kd)};  KW={str(kw)};  RM={str(rm)};  VM={str(vm)}; UNI_KP ={str(uni_kp)}"
             print(msg)
             self.log.add_message(msg)
             # TODO show this message on log?
@@ -200,17 +200,18 @@ class GameControls(QWidget):
         self.btn_start.setFixedSize(170, 60)
         self.btn_start.clicked.connect(self.gameStatus)
 
-        self.btn_halt = QPushButton(icon=QIcon(self.path_to_icons+"halt.svg"), text=" HALT", parent=self)
-        self.btn_halt.setIconSize(QSize(40, 40))
-        self.btn_halt.setFont(QFont('Arial', 15))
-        self.btn_halt.setFixedSize(170, 60)
-        self.btn_halt.clicked.connect(self.gameStatus)
+        self.btn_stop = QPushButton(icon=QIcon(self.path_to_icons+"halt.svg"), text=" STOP", parent=self)
+        self.btn_stop.setIconSize(QSize(40, 40))
+        self.btn_stop.setFont(QFont('Arial', 15))
+        self.btn_stop.setFixedSize(170, 60)
+        self.btn_stop.clicked.connect(self.gameStatus)
         
-        self.btn_reset = QPushButton(icon=QIcon(self.path_to_icons+"Reset_1.svg"), text=" RESET", parent=self)
-        self.btn_reset.setIconSize(QSize(40, 40))
-        self.btn_reset.setFont(QFont('Arial', 15))
-        self.btn_reset.setFixedSize(170, 60)
-        self.btn_reset.clicked.connect(self.gameStatus)
+        # TODO Implementar no futuro quando tiver a opção de alternar entre SSL e Mini
+        # self.btn_reset = QPushButton(icon=QIcon(self.path_to_icons+"reset.svg"), text=" RESET", parent=self)
+        # self.btn_reset.setIconSize(QSize(40, 40))
+        # self.btn_reset.setFont(QFont('Arial', 15))
+        # self.btn_reset.setFixedSize(170, 60)
+        # self.btn_reset.clicked.connect(self.gameStatus)
 
         # Creating buttons to change color and side
         self.current_color = 'blue'
@@ -261,7 +262,7 @@ class GameControls(QWidget):
         param_list = [pid_kp, ki, kd, kw, rm, vm, uni_kp]
         """
         params=[] # TODO receive params or get this from info object? Change it to dict?
-        self.params_window = Control_Params(self.context, self.log, params)
+        self.params_window = ControlParams(self.context, self.log, params)
 
         # Button to open parameter settings' window
         self.btn_params = QPushButton(text="Parâmetros", parent=self)
@@ -277,10 +278,17 @@ class GameControls(QWidget):
         grid.addWidget(coach_section, 0, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignHCenter) # row:0, column:0, spans 1 row, spans 2 columns
         grid.addWidget(self.btn_params, 0, 2, alignment=Qt.AlignmentFlag.AlignHCenter)
         grid.addWidget(self.btn_change_color, 0, 3, alignment=Qt.AlignmentFlag.AlignRight)
-        grid.addWidget(self.btn_start, 1, 0, alignment=Qt.AlignmentFlag.AlignHCenter)
-        grid.addWidget(self.btn_halt, 1, 1, alignment=Qt.AlignmentFlag.AlignHCenter)
-        grid.addWidget(self.btn_reset, 1, 2, alignment=Qt.AlignmentFlag.AlignHCenter)
+        # Start, stop and reset buttons
+        h_layout_buttons = QHBoxLayout()
+        h_layout_buttons.addWidget(self.btn_start, alignment=Qt.AlignmentFlag.AlignLeft)
+        h_layout_buttons.addWidget(QLabel("          "))
+        h_layout_buttons.addWidget(self.btn_stop, alignment=Qt.AlignmentFlag.AlignLeft)
+        # TODO add reset button when there's the SSl/mini options
+        # grid.addWidget(self.btn_start, 1, 0, alignment=Qt.AlignmentFlag.AlignHCenter)
+        # grid.addWidget(self.btn_stop, 1, 1, alignment=Qt.AlignmentFlag.AlignHCenter)
+        # grid.addWidget(self.btn_reset, 1, 2, alignment=Qt.AlignmentFlag.AlignHCenter)
         grid.addWidget(self.btn_change_side, 1, 3, alignment=Qt.AlignmentFlag.AlignRight)
+        grid.addLayout(h_layout_buttons, 1, 0, 1, 3, alignment=Qt.AlignmentFlag.AlignHCenter)
         layout.addLayout(grid)
         
         self.setLayout(layout)
@@ -310,10 +318,11 @@ class GameControls(QWidget):
 
         if sender is self.btn_start:
             self.context.set_game_status("GAME_ON")
-        elif sender is self.btn_halt:
-            self.context.set_game_status("HALT")
-        elif sender is self.btn_reset:
+        elif sender is self.btn_stop:
             self.context.set_game_status("STOP")
+        # TODO Implementar no futuro
+        # elif sender is self.btn_reset:
+        #     self.context.set_game_status("HALT")
 
     def select_coach(self):
         coach_name = self.btn_coach.currentText()

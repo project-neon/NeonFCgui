@@ -5,7 +5,6 @@ class Ball():
         self.ball_pos = ball_pos
 
 
-    def update_information(self, **kwargs): #Function to update values recieved in api
-        for key, value in kwargs.items():
-            if hasattr(self, key.lower()):
-                setattr(self, key.lower(), value)        
+    def update_information(self, info): #Function to update values recieved in api
+        for key, value in info.items():
+            setattr(self, key.lower(), value)        

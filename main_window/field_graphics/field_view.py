@@ -11,7 +11,7 @@ from PyQt6.QtOpenGLWidgets import QOpenGLWidget
 from PyQt6.QtWidgets import QLabel
 
 from entities import Match
-from main_window.field_graphics.field_objects.robot import Robot
+from main_window.field_graphics.field_objects.robot_mesh import RobotMesh
 from main_window.field_graphics.field_objects.text import Text
 from main_window.field_graphics.rendering.animation_manager import AnimationManager
 from main_window.field_graphics.rendering.render_manager import RenderingContext, setupGL, modelFromJSON, Renderable
@@ -45,9 +45,9 @@ class FieldView(QOpenGLWidget):
         setupGL()
         GL.glClearColor(.2, .5, .2, 1)
 
-        self.r1: Robot = Robot([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
-        self.r2: Robot = Robot([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
-        self.r3: Robot = Robot([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
+        self.r1: RobotMesh = RobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
+        self.r2: RobotMesh = RobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
+        self.r3: RobotMesh = RobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
 
         self.r1.rotation = math.pi/2
         self.r2.rotation = -math.pi/6
@@ -102,8 +102,8 @@ class FieldView(QOpenGLWidget):
 
     def update_robot_coord(self, robot_id: int, model: Renderable):
         r = self.match.fetch_robot_by_id(robot_id)
-        model.x = r.robot_pos[0] * 100
-        model.y = r.robot_pos[1] * 100
+        model.x = r.robot_pos[0] * 100 - 75 # TODO mudar pra dimensões do campo grande
+        model.y = r.robot_pos[1] * 100 - 65
         model.rotation = -r.robot_pos[2] + math.pi/2
 
 
