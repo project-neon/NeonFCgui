@@ -27,14 +27,12 @@ def gen_color_array(robot_color: list, back_tag_color: list, left_tag_color: lis
 
 class Robot(Renderable):
     def __init__(self, robot_color: list, back_tag_color: list, left_tag_color: list, right_tag_color: list):
-
         template: Renderable = modelFromJSON(open("main_window/field_graphics/assets/models/robot.json").read())[0]
-
         colors = gen_color_array(robot_color,back_tag_color,left_tag_color,right_tag_color)
-
         super().__init__(template.vertices, colors, template.shaderProgram)
 
     def color_accordingly_to_id(self, robot_id: int, team_color=None):
+        # TODO this must be loaded by a JSON file and not hardcoded
         if team_color is None:
             team_color = [.95, .95, .1]
 
