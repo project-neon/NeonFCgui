@@ -1,5 +1,5 @@
 
-class Info_Api():
+class InfoApi():
     def __init__(self, match, robots, opposites, ball, parameters, coach = None):
         
         self.match = match

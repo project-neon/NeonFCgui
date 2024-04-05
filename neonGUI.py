@@ -3,7 +3,7 @@ Main body of code. Execute to start program.
 """
 
 from app import App
-from api import Api, Api_recv, Info_Api
+from api import Api, ApiRecv, InfoApi
 from entities import Match
 import json
 import threading
@@ -17,7 +17,7 @@ def get_config(config_file = None):
 
     return config
 
-class GUI(object):
+class NeonSoccerGUI(object):
     def __init__(self, config_file = None):
         self.match = Match()
         self.app = App(self)
@@ -29,8 +29,8 @@ class GUI(object):
         self.api_recv_port = self.config.get("network").get("api_recv_port")
 
         self.api = Api(self.api_address, self.api_port)
-        self.api_recv = Api_recv(self.match, self.api_address, self.api_recv_port)
-        self.info_api = Info_Api(self.match, self.match.robots, self.match.opposites, self.match.ball, self.match.control_parameters, self.match.coach_name)
+        self.api_recv = ApiRecv(self.match, self.api_address, self.api_recv_port)
+        self.info_api = InfoApi(self.match, self.match.robots, self.match.opposites, self.match.ball, self.match.control_parameters, self.match.coach_name)
 
     
     def start(self):
@@ -52,5 +52,5 @@ class GUI(object):
             self.api.send_data(self.info_api)
 
         
-gui = GUI()
+gui = NeonSoccerGUI()
 gui.start()

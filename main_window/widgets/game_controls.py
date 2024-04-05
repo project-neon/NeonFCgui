@@ -11,9 +11,9 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtGui import QPalette, QColor, QFont, QIcon
 from PyQt6.QtCore import QSize, Qt
 from entities.match import Match
-from main_window.informations.log import Log
+from main_window.widgets.log import Log
 
-class Control_Params(QWidget):
+class ControlParams(QWidget):
     """
     Additional window to show the robot's control parameters.
     """
@@ -55,7 +55,7 @@ class Control_Params(QWidget):
             vm = 0.5
             uni_kp = 1
             self.parameters = {"pid_kp":pid_kp, "ki":ki, "kd":kd, "kw":kw, "rm":rm, "vm":vm, "uni_kp":uni_kp}
-            msg = f"Parâmetros padrão:\nPID_KP={str(pid_kp)};  KI={str(ki)};  KD={str(kd)};  KW={str(kw)};  RM={str(rm)};  VM={str(vm)}; uni_KP ={str(uni_kp)}"
+            msg = f"Parâmetros padrão:\nPID_KP={str(pid_kp)};  KI={str(ki)};  KD={str(kd)};  KW={str(kw)};  RM={str(rm)};  VM={str(vm)}; UNI_KP ={str(uni_kp)}"
             print(msg)
             self.log.add_message(msg)
             # TODO show this message on log?
@@ -206,7 +206,7 @@ class GameControls(QWidget):
         self.btn_halt.setFixedSize(170, 60)
         self.btn_halt.clicked.connect(self.gameStatus)
         
-        self.btn_reset = QPushButton(icon=QIcon(self.path_to_icons+"Reset_1.svg"), text=" RESET", parent=self)
+        self.btn_reset = QPushButton(icon=QIcon(self.path_to_icons+"reset.svg"), text=" RESET", parent=self)
         self.btn_reset.setIconSize(QSize(40, 40))
         self.btn_reset.setFont(QFont('Arial', 15))
         self.btn_reset.setFixedSize(170, 60)
@@ -261,7 +261,7 @@ class GameControls(QWidget):
         param_list = [pid_kp, ki, kd, kw, rm, vm, uni_kp]
         """
         params=[] # TODO receive params or get this from info object? Change it to dict?
-        self.params_window = Control_Params(self.context, self.log, params)
+        self.params_window = ControlParams(self.context, self.log, params)
 
         # Button to open parameter settings' window
         self.btn_params = QPushButton(text="Parâmetros", parent=self)
