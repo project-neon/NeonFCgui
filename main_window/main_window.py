@@ -56,7 +56,7 @@ class MainWindow(QMainWindow):
         top_h_layout.addWidget(self.game_controls_widget)
 
         # Adding game fouls section
-        self.fouls_widget = Fouls()
+        self.fouls_widget = Fouls(self.context)
         self.fouls_widget.setFixedHeight(int(h*2.5))
         top_h_layout.addWidget(self.fouls_widget)
 
