@@ -87,7 +87,7 @@ class MainWindow(QMainWindow):
 
         # Robots' informations section
         # TODO adjust for 6 robots when category == SSL
-        self.robots_widget = RobotsInfo()
+        self.robots_widget = RobotsInfo(self.context)
         grid.addWidget(self.robots_widget, 0, 0, 10, 3)
         self.updatable_components.append(self.robots_widget)
 
