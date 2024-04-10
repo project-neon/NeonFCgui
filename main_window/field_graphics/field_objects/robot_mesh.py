@@ -1,3 +1,5 @@
+import json
+
 import numpy as np
 from OpenGL import GL
 from PyQt6.QtOpenGL import QOpenGLShaderProgram
@@ -31,17 +33,13 @@ class RobotMesh(Renderable):
         colors = gen_color_array(robot_color,back_tag_color,left_tag_color,right_tag_color)
         super().__init__(template.vertices, colors, template.shaderProgram)
 
-    def color_accordingly_to_id(self, robot_id: int, team_color=None):
-        # TODO this must be loaded by a JSON file and not hardcoded
-        if team_color is None:
-            team_color = [.95, .95, .1]
-
-        if robot_id == 5:
-            self.update_color([.1, .1, .1], team_color, [.2, .2, 1.], [.1, .7, .1])
-        elif robot_id == 7:
-            self.update_color([.1, .1, .1], team_color, [.1, .7, .1], [.9, .5, .6])
-        elif robot_id == 8:
-            self.update_color([.1, .1, .1], team_color, [.2, .2, 1.], [.9, .5, .8])
+    def color_accordingly_to_id(self, robot_id: int):
+        # FIXME: hardcoded path, plus the func does not actually take the ID into question
+        dat = json.loads(open("id_dict.json").read())[robot_id]
+        back_tag = dat["back_tag"]; back_tag = [back_tag["r"],back_tag["g"],back_tag["b"]]
+        left_tag = dat["left_tag"]; left_tag = [left_tag["r"],left_tag["g"],left_tag["b"]]
+        right_tag = dat["right_tag"]; right_tag = [right_tag["r"],right_tag["g"],right_tag["b"]]
+        self.update_color([.1,.1,.1], back_tag, left_tag, right_tag)
 
     def update_color(self, robot_color: list,back_tag_color: list, left_tag_color: list, right_tag_color: list):
         self.colors = gen_color_array(robot_color,back_tag_color,left_tag_color,right_tag_color)
