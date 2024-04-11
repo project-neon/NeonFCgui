@@ -241,16 +241,9 @@ class GameControls(QWidget):
             self.current_coach = context.coach_name
         else:
             self.current_coach = self.coach_list[0]
-        
-        # get current coach index in coach list
-        coach_index = 0
-        for i in range(len(self.coach_list)):
-            if self.coach_list[i] == self.current_coach:
-                coach_index = i
-                break
-        # current coach is put on top of the coach_list
-        if coach_index != 0:
-            (self.coach_list[0], self.coach_list[coach_index]) = (self.coach_list[coach_index], self.coach_list[0])
+
+        # Function to find current coach's index in coach_list
+        coach_index = self.get_coach_index(self.current_coach)
 
         # Display this info on this gui's log section
         msg = f"Coach atual:\n{self.current_coach}"
@@ -269,6 +262,8 @@ class GameControls(QWidget):
         self.btn_coach.setMinimumWidth(340)
         # self.btn_coach.setSizePolicy(QSizePolicy.horizontalStretch)
         self.btn_coach.addItems(self.coach_list)
+        # select current coach
+        self.btn_coach.setCurrentIndex(coach_index)
         self.btn_coach.activated.connect(self.select_coach)
         coach_layout.addWidget(self.btn_coach, alignment=Qt.AlignmentFlag.AlignHCenter)
         coach_section.setLayout(coach_layout)
@@ -340,6 +335,12 @@ class GameControls(QWidget):
         # elif sender is self.btn_reset:
         #     self.context.set_game_status("HALT")
 
+    def get_coach_index(self, coach):
+        for i in range(len(self.coach_list)):
+            if self.coach_list[i] == coach:
+                return i
+        return 0
+    
     def select_coach(self):
         coach_name = self.btn_coach.currentText()
         msg = f"Coach atual:\n{coach_name}"
@@ -351,3 +352,20 @@ class GameControls(QWidget):
             self.params_window.hide()
         else:
             self.params_window.show()
+
+    def update_info(self, status: Match):
+        coach = status.coach_name
+        if coach != None and coach != self.current_coach:
+            self.current_coach = coach
+            msg = f"Coach atual:\n{self.current_coach}"
+            print(msg)
+            self.log.add_message(msg)
+        
+        if status.coach_list != self.coach_list:
+            self.coach_list = status.coach_list
+            # Repopulate coach's dropdown button
+            self.btn_coach.clear()
+            self.btn_coach.addItems(self.coach_list)
+
+        coach_index = self.get_coach_index(self.current_coach)
+        self.btn_coach.setCurrentIndex(coach_index)

@@ -95,4 +95,4 @@ class RobotsInfo(QWidget):
             robot_info = status.fetch_robot_by_id(robot.id)
             if robot_info is not None:
                 # TODO since there's no battery information in the API side then it cannot be imported
-                robot.update_info(0,str(robot.strategy))
+                robot.update_info(-1,str(robot.strategy))
