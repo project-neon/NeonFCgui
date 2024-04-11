@@ -22,7 +22,8 @@ class InfoApi():
         {'MATCH':
             {'TEAM_COLOR' :  self.match.team_color,
              'GAME_STATUS' : self.match.game_status,
-             'TEAM_SIDE' : self.match.team_side
+             'TEAM_SIDE' : self.match.team_side,
+             'COACH_NAME': self.match.coach_name
             },
          'PARAMETERS': 
             {'PID_KP': self.parameters['pid_kp'],
@@ -40,6 +41,7 @@ class InfoApi():
         return data_send
 
     def update_recv(self,info_recv):
+        print('a')
 
         self.match.update_information(info_recv['MATCH'])
         self.ball.update_information(info_recv['BALL'])

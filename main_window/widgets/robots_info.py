@@ -12,6 +12,7 @@ from entities import Match, Robot
 class RobotFrame(QFrame):
     def __init__(self, robot):
         super(RobotFrame, self).__init__()
+        self.robot = robot
         self.id = robot.robot_id
         v_layout = QVBoxLayout()
 
@@ -27,7 +28,7 @@ class RobotFrame(QFrame):
         # Robot's strategy
         self.strategy = 'None'
         if robot.strategy != None:
-            self.strategy = robot.strategy
+            self.strategy = robot.strategy 
         self.lbl_strategy = QLabel("Estratégia:<br/>" + str(self.strategy), parent=self)
         self.lbl_strategy.setWordWrap(True)
         v_layout.addWidget(self.lbl_strategy)
@@ -44,8 +45,9 @@ class RobotFrame(QFrame):
         self.setFrameStyle(QFrame.Shape.Box | QFrame.Shadow.Plain)
         self.setLineWidth(1)
 
-    def update_info(self, battery, strategy):
-        self.strategy = strategy
+    def update_info(self, battery):
+        if self.robot.strategy != None:
+                self.strategy = self.robot.strategy
         self.lbl_strategy.setText("Estratégia:<br/>" + self.strategy)
         self.battery = battery
         self.lbl_battery.setText("Bateria:<br/>" + str(self.battery) + "%")
@@ -95,4 +97,4 @@ class RobotsInfo(QWidget):
             robot_info = status.fetch_robot_by_id(robot.id)
             if robot_info is not None:
                 # TODO since there's no battery information in the API side then it cannot be imported
-                robot.update_info(-1,str(robot.strategy))
+                robot.update_info(0)
