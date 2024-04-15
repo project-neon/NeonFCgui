@@ -29,7 +29,7 @@ class RobotFrame(QFrame):
         self.strategy = 'None'
         if robot.strategy != None:
             self.strategy = robot.strategy 
-        self.lbl_strategy = QLabel("Estratégia:<br/>" + self.strategy, parent=self)
+        self.lbl_strategy = QLabel("Estratégia:<br/>" + str(self.strategy), parent=self)
         self.lbl_strategy.setWordWrap(True)
         v_layout.addWidget(self.lbl_strategy)
 
@@ -46,7 +46,7 @@ class RobotFrame(QFrame):
         self.setLineWidth(1)
 
     def update_info(self, battery):
-        if self.robot.strategy != None:
+        if self.robot.strategy == None:
                 self.strategy = 'None'
         else:
             self.strategy = self.robot.strategy

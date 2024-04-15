@@ -44,7 +44,6 @@ class InfoApi():
 
         self.match.update_information(info_recv['MATCH'])
         self.ball.update_information(info_recv['BALL'])
-
         for robot in self.robots:
             robot.update_information(info_recv['TEAM_ROBOTS'])
 

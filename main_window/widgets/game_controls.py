@@ -343,6 +343,8 @@ class GameControls(QWidget):
     
     def select_coach(self):
         coach_name = self.btn_coach.currentText()
+        self.current_coach = coach_name
+        self.context.coach_name = coach_name
         msg = f"Coach atual:\n{coach_name}"
         print(msg)
         self.log.add_message(msg)
