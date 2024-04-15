@@ -41,7 +41,6 @@ class InfoApi():
         return data_send
 
     def update_recv(self,info_recv):
-        print('a')
 
         self.match.update_information(info_recv['MATCH'])
         self.ball.update_information(info_recv['BALL'])

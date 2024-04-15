@@ -45,7 +45,6 @@ class NeonSoccerGUI(object):
             time.sleep(0.1)
 
         self.app.start()
-        print(self.info_api.data)
 
     def update(self):
         while True:
