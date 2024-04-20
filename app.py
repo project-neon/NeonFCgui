@@ -19,5 +19,5 @@ class App(threading.Thread):
     def start(self):
         # Show application's GUI
         self.window.show()
-        self.window.showMaximized()
+        # self.window.showMaximized()
         self.app.exec()
