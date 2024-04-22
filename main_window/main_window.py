@@ -24,18 +24,19 @@ class MainWindow(QMainWindow):
     context: Match = None
     updatable_components = []
 
-    def __init__(self, context: Match):
-        # Puts the given match as context for interface display sync
-        self.context = context
-
+    def __init__(self, context: Match, s_width = 1200, s_height = 900):
         # Create application's GUI
         super(MainWindow, self).__init__()
         self.setWindowTitle("Neon Soccer")
+
+        # Puts the given match as context for interface display sync
+        self.context = context
+
+        self.screen_width = s_width
+        self.screen_height = s_height
         
-        # self.window_width = 1200
-        # self.window_height = 900
-        self.window_width = 900
-        self.window_height = 675
+        self.window_width = 1200
+        self.window_height = 900
         self.setGeometry(100, 100, self.window_width, self.window_height)
         self.setFont(QFont('Arial', 15))
 
