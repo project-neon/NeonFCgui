@@ -1,14 +1,16 @@
 from PyQt6.QtWidgets import QWidget, QRadioButton, QLabel, QVBoxLayout
 from PyQt6.QtGui import QFont, QPalette, QColor
 from PyQt6.QtCore import Qt
+from main_window.widgets.log import Log
 
 class GameMode(QWidget):
-    def __init__(self):
+    def __init__(self, log: Log):
         super(GameMode, self).__init__()
         self.setAutoFillBackground(True)
         palette = self.palette()
         palette.setColor(QPalette.ColorRole.Window, QColor('#b3a4d3'))
         self.setPalette(palette)
+        self.log= log
 
         self.mode = 'training'
 
@@ -47,7 +49,8 @@ class GameMode(QWidget):
         if sender.isChecked():
             if sender == self.btn_trainning:
                 self.mode = 'trainning'
+                self.log.add_message('Modo alterado: Treino')
             elif sender == self.btn_competition:
                 self.mode = 'competition'
+                self.log.add_message('Modo alterado: Competicao')
             print("Mode: "+self.mode)
-            # TODO display this message on log?

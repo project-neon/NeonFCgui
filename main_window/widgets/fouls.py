@@ -6,6 +6,7 @@ foul buttons will be displayed.
 from PyQt6.QtWidgets import QLabel, QWidget, QPushButton, QGridLayout, QHBoxLayout
 from PyQt6.QtGui import QPalette, QColor, QFont
 from PyQt6.QtCore import QSize, Qt
+from main_window.widgets.log import Log
 
 class Button(QPushButton):
     def __init__(self, text="", w=180, h=60):
@@ -15,12 +16,13 @@ class Button(QPushButton):
         # TODO connect buttons to function onClick()?
 
 class Fouls(QWidget):
-    def __init__(self):
+    def __init__(self, log:Log):
         super(Fouls, self).__init__()
         self.setAutoFillBackground(True)
         palette = self.palette()
         palette.setColor(QPalette.ColorRole.Window, QColor('#b3a4d3'))
         self.setPalette(palette)
+        self.log=log
 
         self.foul_color = 'blue'
         self.quadrant = 1
