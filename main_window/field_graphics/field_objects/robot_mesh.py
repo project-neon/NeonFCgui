@@ -33,7 +33,9 @@ class RobotMesh(Renderable):
         colors = gen_color_array(robot_color,back_tag_color,left_tag_color,right_tag_color)
         super().__init__(template.vertices, colors, template.shaderProgram)
 
-    def color_accordingly_to_id(self, robot_id: int):
+    def color_accordingly_to_id(self, robot_id: int, team_yellow: bool):
+        # FIXME: bandaid solution
+        if team_yellow: robot_id += 10
         # FIXME: hardcoded path, plus the func does not actually take the ID into question
         dat = json.loads(open("id_dict.json").read())[robot_id]
         back_tag = dat["back_tag"]; back_tag = [back_tag["r"],back_tag["g"],back_tag["b"]]
