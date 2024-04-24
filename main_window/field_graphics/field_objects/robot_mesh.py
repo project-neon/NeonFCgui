@@ -33,7 +33,7 @@ class RobotMesh(Renderable):
         colors = gen_color_array(robot_color,back_tag_color,left_tag_color,right_tag_color)
         super().__init__(template.vertices, colors, template.shaderProgram)
 
-    def color_accordingly_to_id(self, robot_id: int, team_yellow: bool):
+    def color_accordingly_to_id(self, robot_id: int, team_yellow: bool = False):
         # FIXME: bandaid solution
         if team_yellow: robot_id += 10
         # FIXME: hardcoded path, plus the func does not actually take the ID into question
