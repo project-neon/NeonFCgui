@@ -6,12 +6,12 @@ log and game mode selection.
 """
 import math
 import typing
-
+import os
 from PyQt6.QtWidgets import (
     QMainWindow, QWidget, QLabel,
     QVBoxLayout, QHBoxLayout, QGridLayout
 )
-from PyQt6.QtGui import QFont, QPalette, QColor
+from PyQt6.QtGui import QFont, QPalette, QColor, QIcon
 from PyQt6.QtCore import Qt, QTimerEvent
 
 from entities import Match
@@ -28,6 +28,10 @@ class MainWindow(QMainWindow):
         # Create application's GUI
         super(MainWindow, self).__init__()
         self.setWindowTitle("Neon Soccer")
+
+        self.path_to_icons = os.getcwd()+"/main_window/images/"
+        icon = QIcon(self.path_to_icons+"neon_green_logo.png")
+        self.setWindowIcon(icon)
 
         # Puts the given match as context for interface display sync
         self.context = context
