@@ -36,7 +36,7 @@ class InfoApi():
             }
         })
 
-        print(data_send)
+        #print(data_send)
 
         self.save_data(data_send)
 
