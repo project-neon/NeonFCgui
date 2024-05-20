@@ -311,17 +311,21 @@ class GameControls(QWidget):
             if self.current_color == 'blue':
                 sender.setIcon(QIcon(self.path_to_icons+"yellow.svg"))
                 self.current_color = 'yellow'
+                self.log.add_message("A cor foi alterada para: Amarelo")
             else:
                 sender.setIcon(QIcon(self.path_to_icons+"blue.svg"))
                 self.current_color = 'blue'
+                self.log.add_message("A cor foi alterada para: Azul")
             self.context.set_team_color(self.current_color)
         elif sender is self.btn_change_side:
             if self.current_side == 'left':
                 sender.setIcon(QIcon(self.path_to_icons+"right.svg"))
                 self.current_side = 'right'
+                self.log.add_message("O lado foi alterada para: Direita")
             else:
                 sender.setIcon(QIcon(self.path_to_icons+"left.svg"))
                 self.current_side = 'left'
+                self.log.add_message("O lado foi alterada para: Esquerda")
             self.context.set_team_side(self.current_side)
     
     def gameStatus(self):

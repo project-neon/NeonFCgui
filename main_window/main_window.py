@@ -6,12 +6,12 @@ log and game mode selection.
 """
 import math
 import typing
-
+import os
 from PyQt6.QtWidgets import (
     QMainWindow, QWidget, QLabel,
     QVBoxLayout, QHBoxLayout, QGridLayout
 )
-from PyQt6.QtGui import QFont, QPalette, QColor
+from PyQt6.QtGui import QFont, QPalette, QColor, QIcon
 from PyQt6.QtCore import Qt, QTimerEvent
 
 from entities import Match
@@ -24,14 +24,21 @@ class MainWindow(QMainWindow):
     context: Match = None
     updatable_components = []
 
-    def __init__(self, context: Match):
-        # Puts the given match as context for interface display sync
-        self.context = context
-
+    def __init__(self, context: Match, s_width = 1200, s_height = 900):
         # Create application's GUI
         super(MainWindow, self).__init__()
         self.setWindowTitle("Neon Soccer")
-        
+
+        self.path_to_icons = os.getcwd()+"/main_window/images/"
+        icon = QIcon(self.path_to_icons+"neon_green_logo.png")
+        self.setWindowIcon(icon)
+
+        # Puts the given match as context for interface display sync
+        self.context = context
+
+        self.screen_width = s_width
+        self.screen_height = s_height
+
         self.window_width = 1200
         self.window_height = 900
         self.setGeometry(100, 100, self.window_width, self.window_height)
@@ -57,7 +64,7 @@ class MainWindow(QMainWindow):
         self.updatable_components.append(self.game_controls_widget)
 
         # Adding game fouls section
-        self.fouls_widget = Fouls()
+        self.fouls_widget = Fouls(self.context, self.log_widget)
         self.fouls_widget.setFixedHeight(int(h*2.5))
         top_h_layout.addWidget(self.fouls_widget)
 
@@ -75,7 +82,7 @@ class MainWindow(QMainWindow):
         grid = QGridLayout()
 
         # Widget to choose game mode
-        self.mode_widget = GameMode()
+        self.mode_widget = GameMode(self.log_widget)
         grid.addWidget(self.mode_widget, 0, 3, 1, 3) # starts at row:0, column:3, spans 1 row, spans 3 columns
 
         # NeonFC's informations

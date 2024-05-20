@@ -43,6 +43,7 @@ class RobotMesh(Renderable):
         right_tag = dat["right_tag"]; right_tag = [right_tag["r"],right_tag["g"],right_tag["b"]]
         self.update_color([.1,.1,.1], back_tag, left_tag, right_tag)
 
+
     def update_color(self, robot_color: list,back_tag_color: list, left_tag_color: list, right_tag_color: list):
         self.colors = gen_color_array(robot_color,back_tag_color,left_tag_color,right_tag_color)
         GL.glBindBuffer(GL.GL_ARRAY_BUFFER, self.colorVBO)
