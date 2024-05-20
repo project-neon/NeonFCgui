@@ -17,7 +17,7 @@ def get_config(config_file = None):
 
     return config
 
-class NeonSoccerGUI(object):
+class NeonFCGUI(object):
     def __init__(self, config_file = None):
         self.match = Match()
         self.app = App(self)
@@ -48,5 +48,5 @@ class NeonSoccerGUI(object):
             self.api.send_data(self.info_api)
 
         
-gui = NeonSoccerGUI()
+gui = NeonFCGUI()
 gui.start()
