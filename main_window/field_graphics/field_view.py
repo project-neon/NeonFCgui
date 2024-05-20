@@ -64,9 +64,18 @@ class FieldView(QOpenGLWidget):
         field = modelFromJSON(open("main_window/field_graphics/assets/models/field_vsss.json").read())
 
         for obj in field:
-            #obj.x = 75; obj.y = 65
+            # obj.x = 75; obj.y = 65
             self.context.objects.append(obj)
 
+        for i in range(0,20):
+            r: RobotMesh = RobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
+            r.color_accordingly_to_id(i)
+            r.x = i*9 - 85
+            r.y = -72
+            r.rotation = math.pi
+            self.context.objects.append(r)
+
+        #Text("Socorro","main_window/field_graphics/assets/bitmaps/Arial Bold_1024.bmp")
         robot_text_1 = Text("#05", "main_window/field_graphics/assets/bitmaps/Arial Bold_1024.bmp", size=6, tracking=self.r1, anchor=(10, 0))
         robot_text_2 = Text("#07", "main_window/field_graphics/assets/bitmaps/Arial Bold_1024.bmp", size=6, tracking=self.r2, anchor=(10, 0))
         robot_text_3 = Text("#08", "main_window/field_graphics/assets/bitmaps/Arial Bold_1024.bmp", size=6, tracking=self.r3, anchor=(10, 0))
@@ -108,7 +117,7 @@ class FieldView(QOpenGLWidget):
 
     def timerEvent(self, event: typing.Optional['QTimerEvent']) -> None:
         self.no_info = self.match.last_update_time == 0
-        if self.no_info:
+        if self.no_info: # TODO: remover
             self.r1.x = math.sin(self.sim_time/100) * 20
             self.r1.y = math.cos(self.sim_time/100) * 20
 

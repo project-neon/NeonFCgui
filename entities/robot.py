@@ -14,15 +14,10 @@ class Robot():
         else:
             self.team = True
 
-    def update_information(self, **kwargs):
+    def update_information(self, info):
         """ Function to update values received in api """
-        for key, value in kwargs.items():
-            if key == 'TEAM_ROBOTS_POS' and self.team == True:
-                for pos in value:
-                    self.robot_pos = pos.get(str(self.robot_id), self.robot_pos)
-            elif key == 'OPPOSITE_ROBOTS_POS' and self.team == False:
-                for pos in value:
-                    self.robot_pos = pos.get(str(self.robot_id), self.robot_pos)
-            elif key == 'ROBOTS_STRATEGY' and self.team == True:
-                for strat in value:     
-                    self.strategy = strat.get(str(self.robot_id), self.strategy)
+        self.robot_pos = info['ROBOT_POS'][str(self.robot_id)]
+        if not self.team:   
+            self.strategy = None
+        else:
+            self.strategy = info['STRATEGY'][str(self.robot_id)]

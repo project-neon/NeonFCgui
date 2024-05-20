@@ -200,17 +200,18 @@ class GameControls(QWidget):
         self.btn_start.setFixedSize(170, 60)
         self.btn_start.clicked.connect(self.gameStatus)
 
-        self.btn_halt = QPushButton(icon=QIcon(self.path_to_icons+"halt.svg"), text=" HALT", parent=self)
-        self.btn_halt.setIconSize(QSize(40, 40))
-        self.btn_halt.setFont(QFont('Arial', 15))
-        self.btn_halt.setFixedSize(170, 60)
-        self.btn_halt.clicked.connect(self.gameStatus)
+        self.btn_stop = QPushButton(icon=QIcon(self.path_to_icons+"halt.svg"), text=" STOP", parent=self)
+        self.btn_stop.setIconSize(QSize(40, 40))
+        self.btn_stop.setFont(QFont('Arial', 15))
+        self.btn_stop.setFixedSize(170, 60)
+        self.btn_stop.clicked.connect(self.gameStatus)
         
-        self.btn_reset = QPushButton(icon=QIcon(self.path_to_icons+"reset.svg"), text=" RESET", parent=self)
-        self.btn_reset.setIconSize(QSize(40, 40))
-        self.btn_reset.setFont(QFont('Arial', 15))
-        self.btn_reset.setFixedSize(170, 60)
-        self.btn_reset.clicked.connect(self.gameStatus)
+        # TODO Implementar no futuro quando tiver a opção de alternar entre SSL e Mini
+        # self.btn_reset = QPushButton(icon=QIcon(self.path_to_icons+"reset.svg"), text=" RESET", parent=self)
+        # self.btn_reset.setIconSize(QSize(40, 40))
+        # self.btn_reset.setFont(QFont('Arial', 15))
+        # self.btn_reset.setFixedSize(170, 60)
+        # self.btn_reset.clicked.connect(self.gameStatus)
 
         # Creating buttons to change color and side
         self.current_color = 'blue'
@@ -231,14 +232,23 @@ class GameControls(QWidget):
         self.btn_change_side.clicked.connect(self.change)
 
         # Creating coach drop-down selection
-        # TODO receive coach list and create msg for empty list
-        # self.coach_list = ['Teste 1', 'Teste 2', 'Coach Teste 3']
-        self.coach_list = ['No coach found']
-        self.current_coach = self.coach_list[0]
+        if context.coach_list:
+            self.coach_list = context.coach_list
+        else:
+            self.coach_list = ['No coach found']
+        
+        if context.coach_name != None:
+            self.current_coach = context.coach_name
+        else:
+            self.current_coach = self.coach_list[0]
+
+        # Function to find current coach's index in coach_list
+        coach_index = self.get_coach_index(self.current_coach)
+
         # Display this info on this gui's log section
         msg = f"Coach atual:\n{self.current_coach}"
         print(msg)
-        # self.log.add_message(msg)
+        self.log.add_message(msg)
 
         coach_section = QWidget()
         coach_layout = QVBoxLayout()
@@ -252,6 +262,8 @@ class GameControls(QWidget):
         self.btn_coach.setMinimumWidth(340)
         # self.btn_coach.setSizePolicy(QSizePolicy.horizontalStretch)
         self.btn_coach.addItems(self.coach_list)
+        # select current coach
+        self.btn_coach.setCurrentIndex(coach_index)
         self.btn_coach.activated.connect(self.select_coach)
         coach_layout.addWidget(self.btn_coach, alignment=Qt.AlignmentFlag.AlignHCenter)
         coach_section.setLayout(coach_layout)
@@ -277,10 +289,17 @@ class GameControls(QWidget):
         grid.addWidget(coach_section, 0, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignHCenter) # row:0, column:0, spans 1 row, spans 2 columns
         grid.addWidget(self.btn_params, 0, 2, alignment=Qt.AlignmentFlag.AlignHCenter)
         grid.addWidget(self.btn_change_color, 0, 3, alignment=Qt.AlignmentFlag.AlignRight)
-        grid.addWidget(self.btn_start, 1, 0, alignment=Qt.AlignmentFlag.AlignHCenter)
-        grid.addWidget(self.btn_halt, 1, 1, alignment=Qt.AlignmentFlag.AlignHCenter)
-        grid.addWidget(self.btn_reset, 1, 2, alignment=Qt.AlignmentFlag.AlignHCenter)
+        # Start, stop and reset buttons
+        h_layout_buttons = QHBoxLayout()
+        h_layout_buttons.addWidget(self.btn_start, alignment=Qt.AlignmentFlag.AlignLeft)
+        h_layout_buttons.addWidget(QLabel("          "))
+        h_layout_buttons.addWidget(self.btn_stop, alignment=Qt.AlignmentFlag.AlignLeft)
+        # TODO add reset button when there's the SSl/mini options
+        # grid.addWidget(self.btn_start, 1, 0, alignment=Qt.AlignmentFlag.AlignHCenter)
+        # grid.addWidget(self.btn_stop, 1, 1, alignment=Qt.AlignmentFlag.AlignHCenter)
+        # grid.addWidget(self.btn_reset, 1, 2, alignment=Qt.AlignmentFlag.AlignHCenter)
         grid.addWidget(self.btn_change_side, 1, 3, alignment=Qt.AlignmentFlag.AlignRight)
+        grid.addLayout(h_layout_buttons, 1, 0, 1, 3, alignment=Qt.AlignmentFlag.AlignHCenter)
         layout.addLayout(grid)
         
         self.setLayout(layout)
@@ -314,13 +333,22 @@ class GameControls(QWidget):
 
         if sender is self.btn_start:
             self.context.set_game_status("GAME_ON")
-        elif sender is self.btn_halt:
-            self.context.set_game_status("HALT")
-        elif sender is self.btn_reset:
+        elif sender is self.btn_stop:
             self.context.set_game_status("STOP")
+        # TODO Implementar no futuro
+        # elif sender is self.btn_reset:
+        #     self.context.set_game_status("HALT")
 
+    def get_coach_index(self, coach):
+        for i in range(len(self.coach_list)):
+            if self.coach_list[i] == coach:
+                return i
+        return 0
+    
     def select_coach(self):
         coach_name = self.btn_coach.currentText()
+        self.current_coach = coach_name
+        self.context.coach_name = coach_name
         msg = f"Coach atual:\n{coach_name}"
         print(msg)
         self.log.add_message(msg)
@@ -330,3 +358,20 @@ class GameControls(QWidget):
             self.params_window.hide()
         else:
             self.params_window.show()
+
+    def update_info(self, status: Match):
+        coach = status.coach_name
+        if coach != None and coach != self.current_coach:
+            self.current_coach = coach
+            msg = f"Coach atual:\n{self.current_coach}"
+            print(msg)
+            self.log.add_message(msg)
+        
+        if status.coach_list != self.coach_list:
+            self.coach_list = status.coach_list
+            # Repopulate coach's dropdown button
+            self.btn_coach.clear()
+            self.btn_coach.addItems(self.coach_list)
+
+        coach_index = self.get_coach_index(self.current_coach)
+        self.btn_coach.setCurrentIndex(coach_index)

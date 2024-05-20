@@ -61,6 +61,7 @@ class MainWindow(QMainWindow):
         h = int(self.window_height/10)
         self.game_controls_widget.setFixedHeight(int(h*2.5))
         top_h_layout.addWidget(self.game_controls_widget)
+        self.updatable_components.append(self.game_controls_widget)
 
         # Adding game fouls section
         self.fouls_widget = Fouls(self.context, self.log_widget)
@@ -94,7 +95,7 @@ class MainWindow(QMainWindow):
 
         # Robots' informations section
         # TODO adjust for 6 robots when category == SSL
-        self.robots_widget = RobotsInfo()
+        self.robots_widget = RobotsInfo(self.context)
         grid.addWidget(self.robots_widget, 0, 0, 10, 3)
         self.updatable_components.append(self.robots_widget)
 

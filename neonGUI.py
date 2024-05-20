@@ -41,11 +41,7 @@ class NeonSoccerGUI(object):
         self.update_thread = threading.Thread(target=self.update)
         self.update_thread.start()
 
-        while not self.update_thread.is_alive():
-            time.sleep(0.1)
-
         self.app.start()
-        print(self.info_api.data)
 
     def update(self):
         while True:

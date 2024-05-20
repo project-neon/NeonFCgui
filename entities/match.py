@@ -14,6 +14,7 @@ class Match():
         
         self.update_rate = 0
         self.coach_name = coach_name
+        self.coach_list = ['No coach found']
         self.team_side =  team_side
         self.team_color = team_color
         self.category = category
@@ -49,11 +50,10 @@ class Match():
 
     last_update_time: int = 0 #TODO: this solution is held with duct tape
 
-    def update_information(self, **kwargs):
+    def update_information(self, info):
         """ Function to update values received in api """
-        for key, value in kwargs.items():
-            if hasattr(self, key.lower()):
-                setattr(self, key.lower(), value)
+        for key, value in info.items():
+            setattr(self, key.lower(), value)
         t_epoch = math.ceil(time.time() * 1000)
         self.update_rate = t_epoch - self.last_update_time
         self.last_update_time = t_epoch
