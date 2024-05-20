@@ -22,6 +22,8 @@ class Match():
         self.opposite_team_color = 'yellow' if self.team_color == 'blue' else 'blue'
 
         self.game_status = 'STOP'
+        self.foul_quadrant = 1
+        self.foul_color = 'blue'
 
         self.ball = entities.Ball()
         self.robots = []
@@ -58,6 +60,12 @@ class Match():
     
     def set_game_status(self, status):
         self.game_status = status
+    
+    def set_foul_quadrant(self, q):
+        self.foul_quadrant = q
+    
+    def set_foul_color(self, c):
+        self.foul_color = c
 
     def set_team_color(self, color):
         if self.team_color != color:

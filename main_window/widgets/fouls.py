@@ -146,6 +146,7 @@ class Fouls(QWidget):
         sender = self.sender()
         sender.setChecked(True)
         self.quadrant = int(sender.text())
+        self.context.set_foul_quadrant(self.quadrant)
     
     def change_color(self):
         sender = self.sender()
@@ -157,3 +158,4 @@ class Fouls(QWidget):
             self.btn_blue.setChecked(False)
             self.btn_yellow.setChecked(True)
             self.foul_color = 'yellow'
+        self.context.set_foul_color(self.foul_color)
