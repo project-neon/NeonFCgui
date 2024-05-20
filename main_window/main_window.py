@@ -34,8 +34,6 @@ class MainWindow(QMainWindow):
 
         self.screen_width = s_width
         self.screen_height = s_height
-        print(self.screen_width)
-        print(self.screen_height)
 
         self.window_width = 1200
         self.window_height = 900
