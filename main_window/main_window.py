@@ -38,7 +38,7 @@ class MainWindow(QMainWindow):
 
         self.screen_width = s_width
         self.screen_height = s_height
-        
+
         self.window_width = 1200
         self.window_height = 900
         self.setGeometry(100, 100, self.window_width, self.window_height)
@@ -63,7 +63,7 @@ class MainWindow(QMainWindow):
         top_h_layout.addWidget(self.game_controls_widget)
 
         # Adding game fouls section
-        self.fouls_widget = Fouls(self.context)
+        self.fouls_widget = Fouls(self.context, self.log_widget)
         self.fouls_widget.setFixedHeight(int(h*2.5))
         top_h_layout.addWidget(self.fouls_widget)
 
@@ -81,7 +81,7 @@ class MainWindow(QMainWindow):
         grid = QGridLayout()
 
         # Widget to choose game mode
-        self.mode_widget = GameMode()
+        self.mode_widget = GameMode(self.log_widget)
         grid.addWidget(self.mode_widget, 0, 3, 1, 3) # starts at row:0, column:3, spans 1 row, spans 3 columns
 
         # NeonFC's informations
