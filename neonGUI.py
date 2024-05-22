@@ -2,14 +2,15 @@
 Main body of code. Execute to start program.
 """
 
-from app import App
-from api import Api, ApiRecv, InfoApi
-from entities import Match
 import json
 import threading
-import time
 
-def get_config(config_file = None):
+from api import Api, ApiRecv, InfoApi
+from app import App
+from entities import Match
+
+
+def get_config(config_file=None):
     if config_file:
         config = json.loads(open(config_file, 'r').read())
     else:
@@ -17,12 +18,13 @@ def get_config(config_file = None):
 
     return config
 
+
 class NeonFCGUI(object):
-    def __init__(self, config_file = None):
+    def __init__(self, config_file=None):
         self.match = Match()
         self.app = App(self)
 
-        self.config = get_config(config_file)    
+        self.config = get_config(config_file)
 
         self.api_address = self.config.get("network").get("api_address")
         self.api_port = self.config.get("network").get("api_port")
@@ -30,9 +32,9 @@ class NeonFCGUI(object):
 
         self.api = Api(self.api_address, self.api_port)
         self.api_recv = ApiRecv(self.match, self.api_address, self.api_recv_port)
-        self.info_api = InfoApi(self.match, self.match.robots, self.match.opposites, self.match.ball, self.match.control_parameters, self.match.coach_name)
+        self.info_api = InfoApi(self.match, self.match.robots, self.match.opposites, self.match.ball,
+                                self.match.control_parameters, self.match.coach_name)
 
-    
     def start(self):
         self.api.start()
         self.api_recv.connect_info(self.info_api)
@@ -47,6 +49,6 @@ class NeonFCGUI(object):
         while True:
             self.api.send_data(self.info_api)
 
-        
+
 gui = NeonFCGUI()
 gui.start()

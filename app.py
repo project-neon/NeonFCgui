@@ -11,7 +11,7 @@ from PyQt6.QtWidgets import QApplication
 
 class App(threading.Thread):
     def __init__(self, gui):
-        QApplication.setAttribute(Qt.ApplicationAttribute.AA_UseDesktopOpenGL)  # <- TODO é ok eu colocar isso aqui? precisa fazer isso antes do objeto ser criado - Júlio
+        QApplication.setAttribute(Qt.ApplicationAttribute.AA_UseDesktopOpenGL)
         self.gui = gui
 
         self.app = QApplication(sys.argv)
