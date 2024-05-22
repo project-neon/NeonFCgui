@@ -1,8 +1,9 @@
-from main_window.field_graphics.rendering.objects.renderable_mesh import RenderableMesh
+from main_window.field_graphics.rendering.renderable import Renderable
 
 
 class RenderingContext:
-    objects: list[RenderableMesh] = []
+    # TODO: VAO IMPLEMENTATION
+    objects: list[Renderable] = []
     x: float = 0
     y: float = 0
     aspect_ratio: float = 0
@@ -21,8 +22,10 @@ class RenderingContext:
     def set_aspect_ratio(self, aspect_ratio):
         self.aspect_ratio = aspect_ratio
 
-    def draw(self, sim_time):
+    def draw(self, sim_time: float):
+        print("draw called")
         for obj in self.objects:
-            obj.draw(self.x, self.y,
-                     self.scale,
+            print("objeto " + str(type(obj)))
+            obj.draw(self.x, self.y, self.scale,
                      self.rotation, self.aspect_ratio, sim_time)
+        print("desenhado :)\n")

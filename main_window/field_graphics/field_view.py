@@ -4,6 +4,7 @@ Section of the GUI where the field will be displayed.
 import math
 import typing
 
+import numpy as np
 from OpenGL import GL
 from PyQt6 import QtGui
 from PyQt6.QtCore import QTimerEvent
@@ -14,6 +15,7 @@ from entities import Match
 from main_window.field_graphics.field_objects.robot_mesh import RobotMesh
 from main_window.field_graphics.field_objects.text import Text
 from main_window.field_graphics.rendering.objects.animation_manager import AnimationManager
+from main_window.field_graphics.rendering.objects.renderable_line import RenderableLine
 from main_window.field_graphics.rendering.render_manager import setupGL, modelFromJSON, RenderableMesh
 from main_window.field_graphics.rendering.objects.rendering_context import RenderingContext
 
@@ -67,6 +69,18 @@ class FieldView(QOpenGLWidget):
         for obj in field:
             # obj.x = 75; obj.y = 65
             self.context.objects.append(obj)
+
+        print('oi :D')
+
+        lineverts = [-1,-1,0, 1,-1,0, 0,0,0, 0,1,-1, -1,1,0]
+        linecolors = [1,0,0, 1,1,0, 1,0,1, 0,0,1, 0,1,0]
+
+        lineverts = np.asarray(lineverts,dtype=np.float32)
+        linecolors = np.asarray(linecolors,dtype=np.float32)
+        line = RenderableLine(lineverts, linecolors, self.r1.shaderProgram)
+        self.context.objects.append(line)
+
+        print('tchau :(')
 
         for i in range(0,20):
             r: RobotMesh = RobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
