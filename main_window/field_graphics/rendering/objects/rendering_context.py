@@ -1,4 +1,4 @@
-from main_window.field_graphics.rendering.objects.renderable import RenderableMesh
+from main_window.field_graphics.rendering.objects.renderable_mesh import RenderableMesh
 
 
 class RenderingContext:

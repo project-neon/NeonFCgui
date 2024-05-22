@@ -8,7 +8,7 @@ from OpenGL import GL
 from PIL import Image
 from PyQt6.QtOpenGL import QOpenGLShaderProgram, QOpenGLShader
 
-from main_window.field_graphics.rendering.objects.renderable import RenderableMesh
+from main_window.field_graphics.rendering.objects.renderable_mesh import RenderableMesh
 
 
 def compileShaderProgram(vertex_shader: str, fragment_shader: str) -> QOpenGLShaderProgram | None:
