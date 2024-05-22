@@ -4,15 +4,15 @@ import numpy
 import numpy as np
 from OpenGL import GL
 
-from main_window.field_graphics.rendering.render_manager import Renderable, loadTexture, compileShaderProgram
+from main_window.field_graphics.rendering.render_manager import RenderableMesh, loadTexture, compileShaderProgram
 
 
-class Text(Renderable):
+class Text(RenderableMesh):
     texture_id = -1
     texture_coordinates_VBO = -1
     texture_coords = None
 
-    def __init__(self, display: str, texture_directory: str, color=None, size=1, fixed_rotation=True, tracking: Renderable | None = None, anchor: tuple = (0, 0)):
+    def __init__(self, display: str, texture_directory: str, color=None, size=1, fixed_rotation=True, tracking: RenderableMesh | None = None, anchor: tuple = (0, 0)):
 
         if color is None:
             color = [1, 1, 1, 1]

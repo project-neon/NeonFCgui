@@ -171,21 +171,21 @@ Um exemplo de como criar um quadrado renderizável:
 ```python
 import numpy as np
 from main_window.field_graphics.rendering import render_manager
-from main_window.field_graphics.rendering.render_manager import Renderable
+from main_window.field_graphics.rendering.render_manager import RenderableMesh
 
 # Note que esse código só pode rodar DEPOIS da inicialização do OpenGL
-vertices = [-1,-1,0, 1,-1,0, -1,1,0, 1,1,0, -1,1,0, 1,-1,0] #6 Vértices -> 2 Triângulos
-vertices = np.asarray(vertices,dtype=np.float32)
-colors = [1,0,0 , 0,1,0 , 0,0,1, 1,1,0, 0,0,1, 0,1,0] #6 Vértices -> 6 cores
-colors = np.asarray(colors,dtype=np.float32)
+vertices = [-1, -1, 0, 1, -1, 0, -1, 1, 0, 1, 1, 0, -1, 1, 0, 1, -1, 0]  # 6 Vértices -> 2 Triângulos
+vertices = np.asarray(vertices, dtype=np.float32)
+colors = [1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0]  # 6 Vértices -> 6 cores
+colors = np.asarray(colors, dtype=np.float32)
 
 # Carrega os shaders:
 vsh = open("main_window/field_graphics/shaders/VertexShader.vsh").read()
 fsh = open("main_window/field_graphics/shaders/FragmentShader.fsh").read()
-shader_program = render_manager.compileShaderProgram(vsh,fsh) # <- Compila os shaders
+shader_program = render_manager.compileShaderProgram(vsh, fsh)  # <- Compila os shaders
 
 # Inicializa o modelo:
-model = Renderable(vertices,colors,shader_program)
+model = RenderableMesh(vertices, colors, shader_program)
 
 ```
 

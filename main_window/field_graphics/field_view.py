@@ -14,7 +14,7 @@ from entities import Match
 from main_window.field_graphics.field_objects.robot_mesh import RobotMesh
 from main_window.field_graphics.field_objects.text import Text
 from main_window.field_graphics.rendering.animation_manager import AnimationManager
-from main_window.field_graphics.rendering.render_manager import RenderingContext, setupGL, modelFromJSON, Renderable
+from main_window.field_graphics.rendering.render_manager import RenderingContext, setupGL, modelFromJSON, RenderableMesh
 
 
 class FieldView(QOpenGLWidget):
@@ -108,7 +108,7 @@ class FieldView(QOpenGLWidget):
         self.y_translation.update(time)
         self.scale.update(time)
 
-    def update_robot_coord(self, robot_id: int, model: Renderable):
+    def update_robot_coord(self, robot_id: int, model: RenderableMesh):
         r = self.match.fetch_robot_by_id(robot_id)
         model.x = r.robot_pos[0] * 100 - 75 # TODO mudar pra dimensões do campo grande
         model.y = r.robot_pos[1] * 100 - 65

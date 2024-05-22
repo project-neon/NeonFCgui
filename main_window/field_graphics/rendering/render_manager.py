@@ -55,9 +55,9 @@ def loadTexture(path: str) -> int:
     return texture_id
 
 
-class Renderable:
+class RenderableMesh:
     """
-    The Renderable class represents any object that may be rendered under a OpenGL context,
+    The RenderableMest class represents any object that may be rendered under a OpenGL context,
     As a OOP quirk, it must handle its own rendering calls, memory allocation
     and external data, such as spatial translations, those features are already
     implemented by the class, however additional vertex attributes and uniforms
@@ -163,13 +163,13 @@ def modelFromJSON(data: str):
             elif uniform_type == "vec4": GL.glUniform4f(loc, float(uniform["v0"]), float(uniform["v1"]), float(uniform["v2"]), float(uniform["v3"]))
 
         models.append(
-            Renderable(np.asarray(vert_data, dtype=np.float32), np.asarray(color_data, dtype=np.float32), program)
+            RenderableMesh(np.asarray(vert_data, dtype=np.float32), np.asarray(color_data, dtype=np.float32), program)
         )
     return models
 
 
 class RenderingContext:
-    objects: list[Renderable] = []
+    objects: list[RenderableMesh] = []
     x: float = 0
     y: float = 0
     aspect_ratio: float = 0
