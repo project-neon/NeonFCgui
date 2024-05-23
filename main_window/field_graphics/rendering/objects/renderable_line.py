@@ -32,7 +32,7 @@ class RenderableLine(Renderable):
         self.colors = colors
         self.shaderProgram = shader_program
         self.update_shader_uniform_locations()
-        self.line_count = len(vertices) - 1 # FIXME ?
+        self.line_count = len(vertices)/3 - 3 # FIXME ?
         self.vertexVBO = GL.glGenBuffers(1)
         self.colorVBO = GL.glGenBuffers(1)
         self.update_vertex_attributes()
@@ -76,7 +76,7 @@ class RenderableLine(Renderable):
         GL.glBindBuffer(GL.GL_ARRAY_BUFFER, self.vertexVBO)
         self.shaderProgram.setAttributeBuffer(0, GL.GL_FLOAT, 0, 3)
 
-        GL.glDrawArrays(GL.GL_LINE_STRIP, 0, self.line_count)
+        GL.glDrawArrays(GL.GL_LINE_STRIP, 0, self.line_count * 3)
 
         GL.glDisableVertexAttribArray(0)
         GL.glDisableVertexAttribArray(1)
