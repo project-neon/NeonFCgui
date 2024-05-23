@@ -55,6 +55,7 @@ class RenderableLine(Renderable):
         if not buffer is None: self.vertices = buffer
         GL.glBindBuffer(GL.GL_ARRAY_BUFFER, self.vertexVBO)
         GL.glBufferData(GL.GL_ARRAY_BUFFER, self.vertices, GL.GL_STATIC_DRAW)
+        self.line_count = len(self.vertices) - 1
         pass
 
     def draw(self, tx, ty, scale, rotation, aspect_ratio, sim_time):
@@ -63,7 +64,7 @@ class RenderableLine(Renderable):
         GL.glUseProgram(self.shaderProgram.programId())
         GL.glUniform3f(self.shader_uniform_locations['g_coordinate_vector_loc'], tx, ty, 0)
         GL.glUniform3f(self.shader_uniform_locations['coordinate_vector_loc'], self.x, self.y, self.z)
-        GL.glUniform1f(self.shader_uniform_locations['g_rotation_float_loc'], rotation)
+        GL.glUniform1f(self.shader_uniform_locations['g_rotation_float_loc'], 0)
         GL.glUniform1f(self.shader_uniform_locations['aspect_ratio_float_loc'], aspect_ratio)
         GL.glUniform1f(self.shader_uniform_locations['g_scale_float_loc'], scale)
 

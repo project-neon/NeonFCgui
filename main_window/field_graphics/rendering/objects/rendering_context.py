@@ -23,9 +23,6 @@ class RenderingContext:
         self.aspect_ratio = aspect_ratio
 
     def draw(self, sim_time: float):
-        print("draw called")
         for obj in self.objects:
-            print("objeto " + str(type(obj)))
             obj.draw(self.x, self.y, self.scale,
                      self.rotation, self.aspect_ratio, sim_time)
-        print("desenhado :)\n")
