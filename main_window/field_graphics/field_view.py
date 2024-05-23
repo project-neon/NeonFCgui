@@ -2,8 +2,11 @@
 Section of the GUI where the field will be displayed.
 """
 import math
+import random
 import typing
 
+import numpy
+import numpy as np
 from OpenGL import GL
 from PyQt6 import QtGui
 from PyQt6.QtCore import QTimerEvent
@@ -11,10 +14,13 @@ from PyQt6.QtOpenGLWidgets import QOpenGLWidget
 from PyQt6.QtWidgets import QLabel
 
 from entities import Match
+from main_window.field_graphics.field_objects import robot_mesh
 from main_window.field_graphics.field_objects.robot_mesh import RobotMesh
 from main_window.field_graphics.field_objects.text import Text
-from main_window.field_graphics.rendering.animation_manager import AnimationManager
-from main_window.field_graphics.rendering.render_manager import RenderingContext, setupGL, modelFromJSON, Renderable
+from main_window.field_graphics.rendering.objects.animation_manager import AnimationManager
+from main_window.field_graphics.rendering.objects.renderable_line import RenderableLine
+from main_window.field_graphics.rendering.render_manager import setupGL, modelFromJSON, RenderableMesh
+from main_window.field_graphics.rendering.objects.rendering_context import RenderingContext
 
 
 class FieldView(QOpenGLWidget):
@@ -67,6 +73,16 @@ class FieldView(QOpenGLWidget):
             # obj.x = 75; obj.y = 65
             self.context.objects.append(obj)
 
+        lineverts = [-1,-1,0, 1,-1,0, 0,0,0, 0,1,-1, -1,1,0]
+        linecolors = []
+        rand = random.Random()
+        for i in range(0,128*3):
+            linecolors.append(rand.random())
+        lineverts = np.asarray(lineverts,dtype=np.float32)
+        linecolors = np.asarray(linecolors,dtype=np.float32)
+        self.test_line = RenderableLine(lineverts, linecolors, robot_mesh.shaderProgram())
+        self.context.objects.append(self.test_line)
+
         for i in range(0,20):
             r: RobotMesh = RobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
             r.color_accordingly_to_id(i)
@@ -108,7 +124,7 @@ class FieldView(QOpenGLWidget):
         self.y_translation.update(time)
         self.scale.update(time)
 
-    def update_robot_coord(self, robot_id: int, model: Renderable):
+    def update_robot_coord(self, robot_id: int, model: RenderableMesh):
         r = self.match.fetch_robot_by_id(robot_id)
         model.x = r.robot_pos[0] * 100 - 75 # TODO mudar pra dimensões do campo grande
         model.y = r.robot_pos[1] * 100 - 65
@@ -116,8 +132,19 @@ class FieldView(QOpenGLWidget):
 
 
     def timerEvent(self, event: typing.Optional['QTimerEvent']) -> None:
-        self.no_info = self.match.last_update_time == 0
-        if self.no_info: # TODO: remover
+        # TODO: isso é pra testes, remova (eventualmente)
+
+        lineverts = []
+        rand = random.Random()
+        for i in range(0,128):
+            c = math.sin(20 + i*3 + self.sim_time / 200)
+            lineverts.append(60 * c * c - 30)
+            lineverts.append(60*math.cos(i/3 + self.sim_time/300))
+            lineverts.append(-0.5)
+
+        self.test_line.update_line_buffer(numpy.asarray(lineverts,dtype=np.float32))
+
+        if self.no_info:
             self.r1.x = math.sin(self.sim_time/100) * 20
             self.r1.y = math.cos(self.sim_time/100) * 20
 
