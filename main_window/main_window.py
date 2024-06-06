@@ -44,6 +44,13 @@ class MainWindow(QMainWindow):
         self.setGeometry(100, 100, self.window_width, self.window_height)
         self.setFont(QFont('Arial', 15))
 
+        # Creating category selection widget 
+        self.start_widget = CategorySelect()
+        # start_layout = QVBoxLayout()
+        # start_layout.addWidget(self.start_widget)
+        # self.setLayout(start_layout)
+
+
         # Organizing the layout
         # Vertical layout divided into top section
         # for controls and a bottom section for the
@@ -106,9 +113,11 @@ class MainWindow(QMainWindow):
         bottom_h_layout.addWidget(grid_widget, alignment=Qt.AlignmentFlag.AlignRight)
         window_layout.addLayout(bottom_h_layout)
 
-        widget = QWidget()
-        widget.setLayout(window_layout)
-        self.setCentralWidget(widget)
+        # widget = QWidget()
+        # widget.setLayout(start_layout)
+        # widget.setLayout(window_layout)
+    
+        self.setCentralWidget(self.start_widget)
 
         # Creates the timer that refreshes interface components periodically
         self.startTimer(math.ceil(100 / 3))

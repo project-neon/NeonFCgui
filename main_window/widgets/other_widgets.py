@@ -2,6 +2,19 @@ from PyQt6.QtWidgets import QWidget, QRadioButton, QLabel, QVBoxLayout
 from PyQt6.QtGui import QFont, QPalette, QColor
 from PyQt6.QtCore import Qt
 from main_window.widgets.log import Log
+import os
+
+class CategorySelect(QWidget):
+    def __init__(self):
+        super(CategorySelect, self).__init__()
+        self.path_to_icon = os.getcwd()+"/main_window/images/futebol.png"
+        self.label = QLabel(self)
+        css_text = "background-image: url('"+self.path_to_icon+"');"
+        self.label.setStyleSheet(css_text)
+        Layout = QVBoxLayout()
+        Layout.addWidget(self.label)
+        self.setLayout(Layout)
+
 
 class GameMode(QWidget):
     def __init__(self, log: Log):
