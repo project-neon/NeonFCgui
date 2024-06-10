@@ -15,6 +15,7 @@ from PyQt6.QtWidgets import QLabel
 
 from entities import Match
 from field_graphics.field_objects import vss_robot_mesh
+from field_graphics.field_objects.ssl_robot_mesh import SSLRobotMesh
 from field_graphics.field_objects.vss_robot_mesh import VSSRobotMesh
 from field_graphics.field_objects.text import Text
 from field_graphics.rendering.objects.animation_manager import AnimationManager
@@ -80,8 +81,11 @@ class FieldView(QOpenGLWidget):
             linecolors.append(rand.random())
         lineverts = np.asarray(lineverts,dtype=np.float32)
         linecolors = np.asarray(linecolors,dtype=np.float32)
+
         self.test_line = RenderableLine(lineverts, linecolors, vss_robot_mesh.shaderProgram())
+        self.test_SSL_R = SSLRobotMesh(0)
         self.context.objects.append(self.test_line)
+        self.context.objects.append(self.test_SSL_R)
 
         for i in range(0,20):
             r: VSSRobotMesh = VSSRobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
