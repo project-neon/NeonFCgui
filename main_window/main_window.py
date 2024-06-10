@@ -8,14 +8,13 @@ import math
 import typing
 import os
 from PyQt6.QtWidgets import (
-    QMainWindow, QWidget, QLabel,
-    QVBoxLayout, QHBoxLayout, QGridLayout
+    QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QGridLayout
 )
-from PyQt6.QtGui import QFont, QPalette, QColor, QIcon
+from PyQt6.QtGui import QFont, QIcon
 from PyQt6.QtCore import Qt, QTimerEvent
 
 from entities import Match
-from main_window.field_graphics.field_view import FieldView
+from main_window.widgets.field_view import FieldView
 from main_window.widgets import *
 
 class MainWindow(QMainWindow):

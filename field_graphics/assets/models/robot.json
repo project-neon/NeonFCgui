@@ -2,8 +2,8 @@
   "objects":[
     {
       "shader": {
-        "vertex": "main_window/field_graphics/assets/shaders/VertexShader.vsh",
-        "fragment": "main_window/field_graphics/assets/shaders/FragmentShader.fsh",
+        "vertex": "field_graphics/assets/shaders/VertexShader.vsh",
+        "fragment": "field_graphics/assets/shaders/FragmentShader.fsh",
         "uniforms": []
       },
       "vertices": [

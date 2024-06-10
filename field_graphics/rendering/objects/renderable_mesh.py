@@ -2,7 +2,7 @@ from OpenGL import GL
 from PyQt6.QtOpenGL import QOpenGLShaderProgram
 from numpy.core import multiarray
 
-from main_window.field_graphics.rendering.renderable import Renderable
+from field_graphics.rendering.renderable import Renderable
 class RenderableMesh (Renderable):
     """
     The RenderableMesh class represents any object that may be rendered under a OpenGL context,

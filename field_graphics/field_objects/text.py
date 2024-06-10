@@ -4,7 +4,7 @@ import numpy
 import numpy as np
 from OpenGL import GL
 
-from main_window.field_graphics.rendering.render_manager import RenderableMesh, loadTexture, compileShaderProgram
+from field_graphics.rendering.render_manager import RenderableMesh, loadTexture, compileShaderProgram
 
 
 class Text(RenderableMesh):
@@ -76,9 +76,9 @@ class Text(RenderableMesh):
         vertices = np.asarray(vertices, dtype=np.float32)
         colors = np.asarray(colors, dtype=np.float32)
 
-        vsh = "main_window/field_graphics/assets/shaders/TextVertexShader.vsh"
+        vsh = "field_graphics/assets/shaders/TextVertexShader.vsh"
         vsh = open(vsh).read()
-        fsh = "main_window/field_graphics/assets/shaders/TextFragmentShader.fsh"
+        fsh = "field_graphics/assets/shaders/TextFragmentShader.fsh"
         fsh = open(fsh).read()
         shader = compileShaderProgram(vsh, fsh)
         super().__init__(vertices, colors, shader)
