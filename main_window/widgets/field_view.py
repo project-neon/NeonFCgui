@@ -14,8 +14,8 @@ from PyQt6.QtOpenGLWidgets import QOpenGLWidget
 from PyQt6.QtWidgets import QLabel
 
 from entities import Match
-from field_graphics.field_objects import robot_mesh
-from field_graphics.field_objects.robot_mesh import RobotMesh
+from field_graphics.field_objects import vss_robot_mesh
+from field_graphics.field_objects.vss_robot_mesh import VSSRobotMesh
 from field_graphics.field_objects.text import Text
 from field_graphics.rendering.objects.animation_manager import AnimationManager
 from field_graphics.rendering.objects.renderable_line import RenderableLine
@@ -51,9 +51,9 @@ class FieldView(QOpenGLWidget):
         setupGL()
         GL.glClearColor(.2, .5, .2, 1)
 
-        self.r1: RobotMesh = RobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
-        self.r2: RobotMesh = RobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
-        self.r3: RobotMesh = RobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
+        self.r1: VSSRobotMesh = VSSRobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
+        self.r2: VSSRobotMesh = VSSRobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
+        self.r3: VSSRobotMesh = VSSRobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
 
         self.r1.rotation = math.pi/2
         self.r2.rotation = -math.pi/6
@@ -80,11 +80,11 @@ class FieldView(QOpenGLWidget):
             linecolors.append(rand.random())
         lineverts = np.asarray(lineverts,dtype=np.float32)
         linecolors = np.asarray(linecolors,dtype=np.float32)
-        self.test_line = RenderableLine(lineverts, linecolors, robot_mesh.shaderProgram())
+        self.test_line = RenderableLine(lineverts, linecolors, vss_robot_mesh.shaderProgram())
         self.context.objects.append(self.test_line)
 
         for i in range(0,20):
-            r: RobotMesh = RobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
+            r: VSSRobotMesh = VSSRobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
             r.color_accordingly_to_id(i)
             r.x = i*9 - 85
             r.y = -72
