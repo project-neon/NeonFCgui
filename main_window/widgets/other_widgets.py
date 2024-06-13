@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QRadioButton, QLabel, QVBoxLayout
+from PyQt6.QtWidgets import QWidget, QRadioButton, QLabel, QVBoxLayout, QPushButton
 from PyQt6.QtGui import QFont, QPalette, QColor
 from PyQt6.QtCore import Qt
 from main_window.widgets.log import Log
@@ -7,13 +7,38 @@ import os
 class CategorySelect(QWidget):
     def __init__(self):
         super(CategorySelect, self).__init__()
+        self.setFixedSize(1000,800)
         self.path_to_icon = os.getcwd()+"/main_window/images/futebol.png"
         self.label = QLabel(self)
         css_text = "background-image: url('"+self.path_to_icon+"');"
         self.label.setStyleSheet(css_text)
+
+        # Creating SSL Button
+        self.btn_ssl = QPushButton("SSL",self.label)
+        self.btn_ssl.setStyleSheet('QPushButton {background: #FFFFFF}')
+        self.btn_ssl.setGeometry(int((self.width()-200)/2), int((self.height()-80)/2)-50 , 200, 80)
+        self.btn_ssl.setFont(QFont('Arial', 25))
+        self.btn_ssl.clicked.connect(self.select)
+
+        # Creating "Mini" Button
+        self.btn_mini = QPushButton("MINI",self.label)
+        self.btn_mini.setStyleSheet('QPushButton {background: #FFFFFF}')
+        self.btn_mini.setGeometry(int((self.width()-200)/2), int((self.height()-80)/2)+50 , 200, 80)
+        self.btn_mini.setFont(QFont('Arial', 25))
+        self.btn_mini.clicked.connect(self.select)
+
+
+        self.category = ""
         Layout = QVBoxLayout()
         Layout.addWidget(self.label)
         self.setLayout(Layout)
+
+    def select(self):    
+        sender = self.sender()
+        self.category = sender.text()
+        # print(self.category)
+        # TODO Send "self.category" to "main_window"
+
 
 
 class GameMode(QWidget):

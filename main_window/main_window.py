@@ -39,8 +39,8 @@ class MainWindow(QMainWindow):
         self.screen_width = s_width
         self.screen_height = s_height
 
-        self.window_width = 1200
-        self.window_height = 900
+        self.window_width = 1000
+        self.window_height = 800
         self.setGeometry(100, 100, self.window_width, self.window_height)
         self.setFont(QFont('Arial', 15))
 
