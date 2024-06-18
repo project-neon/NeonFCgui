@@ -74,15 +74,6 @@ class FieldView(QOpenGLWidget):
             # obj.x = 75; obj.y = 65
             self.context.objects.append(obj)
 
-        lineverts = [-1,-1,0, 1,-1,0, 0,0,0, 0,1,-1, -1,1,0]
-        linecolors = []
-        rand = random.Random()
-        for i in range(0,128*3):
-            linecolors.append(rand.random())
-        lineverts = np.asarray(lineverts,dtype=np.float32)
-        linecolors = np.asarray(linecolors,dtype=np.float32)
-
-        self.test_line = RenderableLine(lineverts, linecolors, vss_robot_mesh.shaderProgram())
         self.test_SSL_R = SSLRobotMesh(0)
         self.context.objects.append(self.test_line)
         self.context.objects.append(self.test_SSL_R)
@@ -136,17 +127,6 @@ class FieldView(QOpenGLWidget):
 
 
     def timerEvent(self, event: typing.Optional['QTimerEvent']) -> None:
-        # TODO: isso é pra testes, remova (eventualmente)
-
-        lineverts = []
-        rand = random.Random()
-        for i in range(0,128):
-            c = math.sin(20 + i*3 + self.sim_time / 200)
-            lineverts.append(60 * c * c - 30)
-            lineverts.append(60*math.cos(i/3 + self.sim_time/300))
-            lineverts.append(-0.5)
-
-        self.test_line.update_line_buffer(numpy.asarray(lineverts,dtype=np.float32))
 
         if self.no_info:
             self.r1.x = math.sin(self.sim_time/100) * 20
