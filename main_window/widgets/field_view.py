@@ -75,6 +75,8 @@ class FieldView(QOpenGLWidget):
             self.context.objects.append(obj)
 
         self.test_SSL_R = SSLRobotMesh(0)
+        self.test_SSL_R.y = 10
+
         self.context.objects.append(self.test_SSL_R)
 
         for i in range(0,20):

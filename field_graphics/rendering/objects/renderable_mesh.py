@@ -61,6 +61,7 @@ class RenderableMesh (Renderable):
         """
         self.shaderProgram.bind()
         GL.glUseProgram(self.shaderProgram.programId())
+
         GL.glUniform3f(self.shader_uniform_locations['g_coordinate_vector_loc'], tx, ty, 0)
         GL.glUniform1f(self.shader_uniform_locations['g_rotation_float_loc'], rotation)
         GL.glUniform1f(self.shader_uniform_locations['aspect_ratio_float_loc'], aspect_ratio)

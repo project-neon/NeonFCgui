@@ -7,14 +7,14 @@ from field_graphics.rendering.render_manager import compileShaderProgram, modelF
 
 def shaderProgram() -> QOpenGLShaderProgram:
     vsh = open("field_graphics/assets/shaders/VertexShader.vsh").read()
-    fsh = open("field_graphics/assets/shaders/CutCircleFragmentShader.fsh").read()
+    fsh = open("field_graphics/assets/shaders/SSLRobotFragmentShader.fsh").read()
     return compileShaderProgram(vsh, fsh)
 
 
 def gen_color_array(robot_id):
     data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     return np.asarray(data)
-
+# TODO sinceramente faz tudo no shader msm Deus não existe
 
 class SSLRobotMesh(RenderableMesh):
     def __init__(self, id):

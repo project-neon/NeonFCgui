@@ -10,7 +10,7 @@ out vec4 color;
 
 void main(){
     color = fragColor;
-    if(length(relativeCoords) > radius || relativeCoords.y > threashold){
+    if(length(relativeCoords.xy) > radius || relativeCoords.y > threashold){
         color.a = 0;
     }
 }
