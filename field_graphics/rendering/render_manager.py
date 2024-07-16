@@ -78,7 +78,6 @@ def modelFromJSON(data: str):
 
         GL.glUseProgram(program.programId())
         for uniform in uniforms:
-            print(uniform)
             uniform_type = uniform["type"] #TODO: support all data types
             loc = GL.glGetUniformLocation(program.programId(), uniform["name"])
             if uniform_type == "int": GL.glUniform1i(loc, int(uniform["v0"]))
@@ -87,12 +86,11 @@ def modelFromJSON(data: str):
             elif uniform_type == "vec3": GL.glUniform3f(loc, float(uniform["v0"]), float(uniform["v1"]), float(uniform["v2"]))
             elif uniform_type == "vec4": GL.glUniform4f(loc, float(uniform["v0"]), float(uniform["v1"]), float(uniform["v2"]), float(uniform["v3"]))
             elif uniform_type == "mat4":
-                pass
                 uniform_data = [ float(uniform["v0"]), float(uniform["v1"]), float(uniform["v2"]), float(uniform["v3"]),
                                  float(uniform["v4"]), float(uniform["v5"]), float(uniform["v6"]), float(uniform["v7"]),
                                  float(uniform["v8"]), float(uniform["v9"]), float(uniform["v10"]), float(uniform["v11"]),
                                  float(uniform["v12"]), float(uniform["v13"]), float(uniform["v14"]), float(uniform["v15"])]
-                #GL.glUniformMatrix4fv(loc,1,GL.GL_FALSE, np.asarray(uniform_data,dtype=np.float32))
+                GL.glUniformMatrix4fv(loc,1,GL.GL_FALSE, np.asarray(uniform_data,dtype=np.float32))
         models.append(
             RenderableMesh(np.asarray(vert_data, dtype=np.float32), np.asarray(color_data, dtype=np.float32), program)
         )
