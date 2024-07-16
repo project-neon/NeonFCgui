@@ -9,7 +9,7 @@ uniform int id = 0;
 
 //FIXME pq eu não consigo adicionar uniforms funcionais ao shader?
 
-const vec4 pink = vec4(1,0.3411,0.2,1); // Rosa Neon, sim eu sou muito esperto
+const vec4 pink = vec4(1,0.0627,0.9411,1); // Rosa Neon, sim eu sou muito esperto
 const vec4 green = vec4(0,1,0,1);
 const vec4 blue = vec4(0,0,1,1);
 
@@ -20,7 +20,7 @@ struct Tag {
     vec4 bottomRight;
 };
 
-const Tag[16] tagDict = Tag[16]( //FIXME isso não deveria existir, PQ EU NÃO CONSIGO PASSAR UNIFORMS PRA CÁ????
+const Tag[16] tagDict = Tag[16]( //FIXME isso não deveria existir, PQ EU NÃO CONSIGO PASSAR UNIFORMS PRA CA????
     Tag(pink,pink,green,pink), // 0
     Tag(green,pink,green,pink), // 1
     Tag(green,green,green,pink), // 2
@@ -47,13 +47,19 @@ void main(){
         color.a = 0;
     }
     else if(length(relativeCoords.xy) <= 2.5){
-        //color = colors[2];
+        color = blue;
     }
     else if(length(vec2(-5.4772,3.5)-relativeCoords.xy) <= 2.0){
-        //color = colors[0];
+        color = tagDict[id].topLeft;
     }
     else if(length(vec2(5.4772,3.5)-relativeCoords.xy) <= 2.0){
-        //color = colors[1];
+        color = tagDict[id].topRight;
+    }
+    else if(length(vec2(-3.5,-5.4772)-relativeCoords.xy) <= 2.0){
+        color = tagDict[id].bottomLeft;
+    }
+    else if(length(vec2(3.5,-5.4772)-relativeCoords.xy) <= 2.0){
+        color = tagDict[id].bottomRight;
     }
 
 

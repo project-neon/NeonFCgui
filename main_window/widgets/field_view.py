@@ -74,11 +74,14 @@ class FieldView(QOpenGLWidget):
             # obj.x = 75; obj.y = 65
             self.context.objects.append(obj)
 
-        self.test_SSL_R = SSLRobotMesh(0)
-        self.test_SSL_R.y = 10
+        #TODO move isso pra uma função de teestes
+        for i in range(0,16):
+            test_SSL_R = SSLRobotMesh(i)
+            test_SSL_R.y = 90
+            test_SSL_R.x = (i * 20) - 160
+            self.context.objects.append(test_SSL_R)
 
-        self.context.objects.append(self.test_SSL_R)
-
+        #TODO move isso pra uma função de testes
         for i in range(0,20):
             r: VSSRobotMesh = VSSRobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
             r.color_accordingly_to_id(i)

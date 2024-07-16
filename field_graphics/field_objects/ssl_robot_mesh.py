@@ -1,4 +1,5 @@
 import numpy as np
+from OpenGL import GL
 from PyQt6.QtOpenGL import QOpenGLShaderProgram
 
 from field_graphics.rendering.objects.renderable_mesh import RenderableMesh
@@ -10,14 +11,16 @@ def shaderProgram() -> QOpenGLShaderProgram:
     fsh = open("field_graphics/assets/shaders/SSLRobotFragmentShader.fsh").read()
     return compileShaderProgram(vsh, fsh)
 
-
-def gen_color_array(robot_id):
-    data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    return np.asarray(data)
-# TODO sinceramente faz tudo no shader msm Deus não existe
-
 class SSLRobotMesh(RenderableMesh):
-    def __init__(self, id):
+    def __init__(self, id: int):
         template: RenderableMesh = modelFromJSON(open("field_graphics/assets/models/robot_ssl.json").read())[0]
-        colors = gen_color_array(id)
-        super().__init__(template.vertices, colors, template.shaderProgram)
+        super().__init__(template.vertices, np.asarray([0,0,0,0,0,0,0,0,0,0,0,0],dtype=np.float32), template.shaderProgram)
+        self.set_id(id)
+
+    def set_id(self, id: int):
+        self.id = id
+        GL.glUseProgram(self.shaderProgram.programId())
+        GL.glUniform1i(
+            GL.glGetUniformLocation(self.shaderProgram.programId(),"id"),
+            self.id
+        )
