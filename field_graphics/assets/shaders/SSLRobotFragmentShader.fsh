@@ -5,14 +5,38 @@ in vec3 relativeCoords;
 
 uniform float radius = 8.5;
 uniform float threashold = 5.5;
+uniform int id = 0;
 
-const float TAG_CENTER_RAD_DIST = 6.5;
-const float TAG_RAD = 2.5;
-const mat4 colors = mat4( //TODO isso precisa ser um uniform mas qualquer uniform adicional no shader simplesmente quebra absolutamente tudo
-    1,0.3411,0.2,1, // Rosa Neon, sim eu sou muito esperto
-    0,1,0,1,        // Verde
-    0,0,1,1,        // Azul
-    0,0,0,0
+//FIXME pq eu não consigo adicionar uniforms funcionais ao shader?
+
+const vec4 pink = vec4(1,0.3411,0.2,1); // Rosa Neon, sim eu sou muito esperto
+const vec4 green = vec4(0,1,0,1);
+const vec4 blue = vec4(0,0,1,1);
+
+struct Tag {
+    vec4 topLeft;
+    vec4 topRight;
+    vec4 bottomLeft;
+    vec4 bottomRight;
+};
+
+const Tag[16] tagDict = Tag[16]( //FIXME isso não deveria existir, PQ EU NÃO CONSIGO PASSAR UNIFORMS PRA CÁ????
+    Tag(pink,pink,green,pink), // 0
+    Tag(green,pink,green,pink), // 1
+    Tag(green,green,green,pink), // 2
+    Tag(pink,green,green,pink), // 3
+    Tag(pink,pink,pink,green), // 4
+    Tag(green,pink,pink,green), // 5
+    Tag(green,green,pink,green), // 6 
+    Tag(pink,green,pink,green), // 7
+    Tag(green,green,green,green), // 8
+    Tag(pink,pink,pink,pink), // 9
+    Tag(pink,pink,green,green), // 10
+    Tag(green,green,pink,pink), // 11
+    Tag(green,pink,green,green),// 12
+    Tag(green,pink,pink,pink), // 13
+    Tag(pink,green,green,green), // 14
+    Tag(pink,green,pink,pink) // 15
 );
 
 out vec4 color;
@@ -20,13 +44,17 @@ out vec4 color;
 void main(){
     color = fragColor;
     if(length(relativeCoords.xy) > radius || relativeCoords.y > threashold){
-        color.a = 0 ;
+        color.a = 0;
     }
-    else if(length(relativeCoords.xy) <= TAG_RAD){
-        color = colors[2];
+    else if(length(relativeCoords.xy) <= 2.5){
+        //color = colors[2];
     }
-    else if(length(vec2(TAG_CENTER_RAD_DIST,TAG_CENTER_RAD_DIST)-relativeCoords.xy) <= TAG_RAD){
-        color = colors[0];
+    else if(length(vec2(-5.4772,3.5)-relativeCoords.xy) <= 2.0){
+        //color = colors[0];
     }
+    else if(length(vec2(5.4772,3.5)-relativeCoords.xy) <= 2.0){
+        //color = colors[1];
+    }
+
 
 }
