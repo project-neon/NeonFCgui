@@ -1,4 +1,4 @@
-from main_window.field_graphics.rendering.renderable import Renderable
+from field_graphics.rendering.renderable import Renderable
 
 
 class RenderingContext:

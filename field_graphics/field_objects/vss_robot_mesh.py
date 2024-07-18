@@ -4,12 +4,12 @@ import numpy as np
 from OpenGL import GL
 from PyQt6.QtOpenGL import QOpenGLShaderProgram
 
-from main_window.field_graphics.rendering.render_manager import RenderableMesh, compileShaderProgram, modelFromJSON
+from field_graphics.rendering.render_manager import RenderableMesh, compileShaderProgram, modelFromJSON
 
 
 def shaderProgram() -> QOpenGLShaderProgram:
-    vsh = open("main_window/field_graphics/assets/shaders/VertexShader.vsh").read()
-    fsh = open("main_window/field_graphics/assets/shaders/FragmentShader.fsh").read()
+    vsh = open("field_graphics/assets/shaders/VertexShader.vsh").read()
+    fsh = open("field_graphics/assets/shaders/FragmentShader.fsh").read()
     return compileShaderProgram(vsh, fsh)
 
 
@@ -27,9 +27,9 @@ def gen_color_array(robot_color: list, back_tag_color: list, left_tag_color: lis
     return colors
 
 
-class RobotMesh(RenderableMesh):
+class VSSRobotMesh(RenderableMesh):
     def __init__(self, robot_color: list, back_tag_color: list, left_tag_color: list, right_tag_color: list):
-        template: RenderableMesh = modelFromJSON(open("main_window/field_graphics/assets/models/robot.json").read())[0]
+        template: RenderableMesh = modelFromJSON(open("field_graphics/assets/models/robot_vsss.json").read())[0]
         colors = gen_color_array(robot_color,back_tag_color,left_tag_color,right_tag_color)
         super().__init__(template.vertices, colors, template.shaderProgram)
 
