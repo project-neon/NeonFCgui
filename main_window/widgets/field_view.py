@@ -1,12 +1,9 @@
 """
-Section of the GUI where the field will be displayed.
+Section of the GUI where the field is displayed.
 """
 import math
-import random
 import typing
 
-import numpy
-import numpy as np
 from OpenGL import GL
 from PyQt6 import QtGui
 from PyQt6.QtCore import QTimerEvent
@@ -14,14 +11,12 @@ from PyQt6.QtOpenGLWidgets import QOpenGLWidget
 from PyQt6.QtWidgets import QLabel
 
 from entities import Match
-from field_graphics.field_objects import vss_robot_mesh
 from field_graphics.field_objects.ssl_robot_mesh import SSLRobotMesh
-from field_graphics.field_objects.vss_robot_mesh import VSSRobotMesh
 from field_graphics.field_objects.text import Text
+from field_graphics.field_objects.vss_robot_mesh import VSSRobotMesh
 from field_graphics.rendering.objects.animation_manager import AnimationManager
-from field_graphics.rendering.objects.renderable_line import RenderableLine
-from field_graphics.rendering.render_manager import setupGL, modelFromJSON, RenderableMesh
 from field_graphics.rendering.objects.rendering_context import RenderingContext
+from field_graphics.rendering.render_manager import setupGL, modelFromJSON, RenderableMesh
 
 
 class FieldView(QOpenGLWidget):
@@ -52,6 +47,9 @@ class FieldView(QOpenGLWidget):
         setupGL()
         GL.glClearColor(.2, .5, .2, 1)
 
+        # TODO the models need to be tied up to some other object upper in the class hierarchy
+        # This hard-coded initializing is not ideal, does not handle ID changes or SSL models
+        # Same thing goes for the text objects
         self.r1: VSSRobotMesh = VSSRobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
         self.r2: VSSRobotMesh = VSSRobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
         self.r3: VSSRobotMesh = VSSRobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
@@ -71,26 +69,8 @@ class FieldView(QOpenGLWidget):
         field = modelFromJSON(open("field_graphics/assets/models/field_vsss.json").read())
 
         for obj in field:
-            # obj.x = 75; obj.y = 65
             self.context.objects.append(obj)
 
-        #TODO move isso pra uma função de testes
-        for i in range(0,16):
-            test_SSL_R = SSLRobotMesh(i)
-            test_SSL_R.y = 90
-            test_SSL_R.x = (i * 20) - 160
-            self.context.objects.append(test_SSL_R)
-
-        #TODO move isso pra uma função de testes
-        for i in range(0,20):
-            r: VSSRobotMesh = VSSRobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
-            r.color_accordingly_to_id(i)
-            r.x = i*9 - 85
-            r.y = -72
-            r.rotation = math.pi
-            self.context.objects.append(r)
-
-        #Text("Socorro","field_graphics/assets/bitmaps/Arial Bold_1024.bmp")
         robot_text_1 = Text("#05", "field_graphics/assets/bitmaps/Arial Bold_1024.bmp", size=6, tracking=self.r1, anchor=(10, 0))
         robot_text_2 = Text("#07", "field_graphics/assets/bitmaps/Arial Bold_1024.bmp", size=6, tracking=self.r2, anchor=(10, 0))
         robot_text_3 = Text("#08", "field_graphics/assets/bitmaps/Arial Bold_1024.bmp", size=6, tracking=self.r3, anchor=(10, 0))
@@ -115,7 +95,7 @@ class FieldView(QOpenGLWidget):
         self.context.draw(self.sim_time)
 
     def update_translations(self, time: float):
-        self.scale.dest = math.pow(2, -self.scroll_level)
+        self.scale.goal = math.pow(2, -self.scroll_level)
         self.context.x = self.x_translation.current
         self.context.y = self.y_translation.current
         self.context.scale = self.scale.current
@@ -166,13 +146,13 @@ class FieldView(QOpenGLWidget):
 
     def updateKey(self, key):
         if key == 16777235:
-            self.y_translation.dest -= .2 / self.scale.dest
+            self.y_translation.goal -= .2 / self.scale.goal
         elif key == 16777234:
-            self.x_translation.dest += .2 / self.scale.dest
+            self.x_translation.goal += .2 / self.scale.goal
         elif key == 16777237:
-            self.y_translation.dest += .2 / self.scale.dest
+            self.y_translation.goal += .2 / self.scale.goal
         elif key == 16777236:
-            self.x_translation.dest -= .2 / self.scale.dest
+            self.x_translation.goal -= .2 / self.scale.goal
 
     def mouseMoveEvent(self, event: typing.Optional[QtGui.QMouseEvent]) -> None:
         super().mouseMoveEvent(event)
@@ -182,3 +162,19 @@ class FieldView(QOpenGLWidget):
     def wheelEvent(self, event: typing.Optional[QtGui.QWheelEvent]) -> None:
         super().wheelEvent(event)
         self.scroll_level -= event.angleDelta().y() / (120 * self.scroll_wheel_sensibility)
+
+    def displaySSLModels(self):
+        for i in range(0,16):
+            test_SSL_R = SSLRobotMesh(i)
+            test_SSL_R.y = 90
+            test_SSL_R.x = (i * 20) - 160
+            self.context.objects.append(test_SSL_R)
+
+    def displayVSSSModels(self):
+        for i in range(0,20):
+            r: VSSRobotMesh = VSSRobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
+            r.color_accordingly_to_id(i)
+            r.x = i*9 - 85
+            r.y = -72
+            r.rotation = math.pi
+            self.context.objects.append(r)
