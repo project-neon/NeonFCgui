@@ -8,6 +8,7 @@ import entities
 CATEGORIES = {
     '3v3': 3, '5v5': 5
 }
+# TODO change categories
 
 class Match():
     def __init__(self, team_side = "left", team_color = "blue", coach_name = None, category="3v3"):
@@ -17,6 +18,9 @@ class Match():
         self.coach_list = ['No coach found']
         self.team_side =  team_side
         self.team_color = team_color
+
+        self.new_category = None # "MINI" or "SSL"
+
         self.category = category
         self.n_robots = CATEGORIES.get(self.category)
 
@@ -88,3 +92,6 @@ class Match():
         for robot in self.robots:
             if robot.robot_id == robot_id: return robot
         return None
+    
+    def set_new_category(self, cat):
+        self.new_category = cat

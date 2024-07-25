@@ -5,8 +5,10 @@ from main_window.widgets.log import Log
 import os
 
 class CategorySelect(QWidget):
-    def __init__(self):
+    def __init__(self, parent_stacked_widget):
         super(CategorySelect, self).__init__()
+        self.parent_stacked_widget = parent_stacked_widget
+
         self.setFixedSize(1000,800)
         self.path_to_icon = os.getcwd()+"/main_window/images/futebol.png"
         self.label = QLabel(self)
@@ -27,18 +29,13 @@ class CategorySelect(QWidget):
         self.btn_mini.setFont(QFont('Arial', 25))
         self.btn_mini.clicked.connect(self.select)
 
-
-        self.category = ""
         Layout = QVBoxLayout()
         Layout.addWidget(self.label)
         self.setLayout(Layout)
 
     def select(self):    
         sender = self.sender()
-        self.category = sender.text()
-        # print(self.category)
-        # TODO Send "self.category" to "main_window"
-
+        self.parent_stacked_widget.run_category_widget(sender.text())
 
 
 class GameMode(QWidget):
