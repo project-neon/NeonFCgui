@@ -208,7 +208,7 @@ class GameControls(QWidget):
         
         self.btn_halt = None
         # Only the SSL category has the Halt game status
-        if self.context.new_category == "SSL":
+        if self.context.category == "SSL":
             self.btn_halt = QPushButton(icon=QIcon(self.path_to_icons+"reset.svg"), text=" HALT", parent=self)
             self.btn_halt.setIconSize(QSize(40, 40))
             self.btn_halt.setFont(QFont('Arial', 15))
@@ -293,7 +293,7 @@ class GameControls(QWidget):
         grid.addWidget(self.btn_change_color, 0, 3, alignment=Qt.AlignmentFlag.AlignRight)
         # Start, stop and halt buttons
         h_layout_buttons = QHBoxLayout()
-        if self.context.new_category == "MINI":
+        if self.context.category == "MINI":
             h_layout_buttons.addWidget(self.btn_start, alignment=Qt.AlignmentFlag.AlignLeft)
             h_layout_buttons.addWidget(QLabel("          "))
             h_layout_buttons.addWidget(self.btn_stop, alignment=Qt.AlignmentFlag.AlignLeft)

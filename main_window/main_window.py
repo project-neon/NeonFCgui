@@ -61,7 +61,7 @@ class MainWindow(QMainWindow):
     def run_category_widget(self, category):
         self.category = category
         
-        self.context.set_new_category(self.category)
+        self.context.set_category(self.category)
         
         if category == "MINI":
             self.category_widget = MiniPanel(self.context, self.window_height)

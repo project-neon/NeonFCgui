@@ -74,12 +74,12 @@ class RobotsInfo(QWidget):
         self.robot_frames = []  # stores a RobotFrame instance for each robot in match
 
         # TODO fix match's categories
-        if context.robots != [] and self.context.new_category == "MINI":
+        if context.robots != [] and self.context.category == "MINI":
             self.robot_list = context.robots
         else:
             # show 3 robot frames for Mini and 6 robot frames for SSL
             num_robots = 3
-            if self.context.new_category == "SSL":
+            if self.context.category == "SSL":
                 num_robots = 6
             print(num_robots)
             for i in range(num_robots):
@@ -93,7 +93,7 @@ class RobotsInfo(QWidget):
         grid.addWidget(self.robot_frames[0], 0, 0)
         grid.addWidget(self.robot_frames[1], 1, 0)
         grid.addWidget(self.robot_frames[2], 2, 0)
-        if self.context.new_category == "SSL":
+        if self.context.category == "SSL":
             grid.addWidget(self.robot_frames[3], 0, 1)
             grid.addWidget(self.robot_frames[4], 1, 1)
             grid.addWidget(self.robot_frames[5], 2, 1)

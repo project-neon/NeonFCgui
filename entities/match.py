@@ -6,20 +6,18 @@ from api import Api
 import entities
 
 CATEGORIES = {
-    '3v3': 3, '5v5': 5
+    'MINI': 3, 'SSL': 6
 }
 # TODO change categories
 
 class Match():
-    def __init__(self, team_side = "left", team_color = "blue", coach_name = None, category="3v3"):
+    def __init__(self, team_side = "left", team_color = "blue", coach_name = None, category="MINI"):
         
         self.update_rate = 0
         self.coach_name = coach_name
         self.coach_list = ['No coach found']
         self.team_side =  team_side
         self.team_color = team_color
-
-        self.new_category = None # "MINI" or "SSL"
 
         self.category = category
         self.n_robots = CATEGORIES.get(self.category)
@@ -93,5 +91,5 @@ class Match():
             if robot.robot_id == robot_id: return robot
         return None
     
-    def set_new_category(self, cat):
-        self.new_category = cat
+    def set_category(self, cat):
+        self.category = cat
