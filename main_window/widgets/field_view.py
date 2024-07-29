@@ -14,13 +14,14 @@ from PyQt6.QtOpenGLWidgets import QOpenGLWidget
 from PyQt6.QtWidgets import QLabel
 
 from entities import Match
-from main_window.field_graphics.field_objects import robot_mesh
-from main_window.field_graphics.field_objects.robot_mesh import RobotMesh
-from main_window.field_graphics.field_objects.text import Text
-from main_window.field_graphics.rendering.objects.animation_manager import AnimationManager
-from main_window.field_graphics.rendering.objects.renderable_line import RenderableLine
-from main_window.field_graphics.rendering.render_manager import setupGL, modelFromJSON, RenderableMesh
-from main_window.field_graphics.rendering.objects.rendering_context import RenderingContext
+from field_graphics.field_objects import vss_robot_mesh
+from field_graphics.field_objects.ssl_robot_mesh import SSLRobotMesh
+from field_graphics.field_objects.vss_robot_mesh import VSSRobotMesh
+from field_graphics.field_objects.text import Text
+from field_graphics.rendering.objects.animation_manager import AnimationManager
+from field_graphics.rendering.objects.renderable_line import RenderableLine
+from field_graphics.rendering.render_manager import setupGL, modelFromJSON, RenderableMesh
+from field_graphics.rendering.objects.rendering_context import RenderingContext
 
 
 class FieldView(QOpenGLWidget):
@@ -51,9 +52,9 @@ class FieldView(QOpenGLWidget):
         setupGL()
         GL.glClearColor(.2, .5, .2, 1)
 
-        self.r1: RobotMesh = RobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
-        self.r2: RobotMesh = RobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
-        self.r3: RobotMesh = RobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
+        self.r1: VSSRobotMesh = VSSRobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
+        self.r2: VSSRobotMesh = VSSRobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
+        self.r3: VSSRobotMesh = VSSRobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
 
         self.r1.rotation = math.pi/2
         self.r2.rotation = -math.pi/6
@@ -67,40 +68,38 @@ class FieldView(QOpenGLWidget):
         self.context.objects.append(self.r2)
         self.context.objects.append(self.r3)
 
-        field = modelFromJSON(open("main_window/field_graphics/assets/models/field_vsss.json").read())
+        field = modelFromJSON(open("field_graphics/assets/models/field_vsss.json").read())
 
         for obj in field:
             # obj.x = 75; obj.y = 65
             self.context.objects.append(obj)
 
-        lineverts = [-1,-1,0, 1,-1,0, 0,0,0, 0,1,-1, -1,1,0]
-        linecolors = []
-        rand = random.Random()
-        for i in range(0,128*3):
-            linecolors.append(rand.random())
-        lineverts = np.asarray(lineverts,dtype=np.float32)
-        linecolors = np.asarray(linecolors,dtype=np.float32)
-        self.test_line = RenderableLine(lineverts, linecolors, robot_mesh.shaderProgram())
-        self.context.objects.append(self.test_line)
+        #TODO move isso pra uma função de testes
+        for i in range(0,16):
+            test_SSL_R = SSLRobotMesh(i)
+            test_SSL_R.y = 90
+            test_SSL_R.x = (i * 20) - 160
+            self.context.objects.append(test_SSL_R)
 
+        #TODO move isso pra uma função de testes
         for i in range(0,20):
-            r: RobotMesh = RobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
+            r: VSSRobotMesh = VSSRobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
             r.color_accordingly_to_id(i)
             r.x = i*9 - 85
             r.y = -72
             r.rotation = math.pi
             self.context.objects.append(r)
 
-        #Text("Socorro","main_window/field_graphics/assets/bitmaps/Arial Bold_1024.bmp")
-        robot_text_1 = Text("#05", "main_window/field_graphics/assets/bitmaps/Arial Bold_1024.bmp", size=6, tracking=self.r1, anchor=(10, 0))
-        robot_text_2 = Text("#07", "main_window/field_graphics/assets/bitmaps/Arial Bold_1024.bmp", size=6, tracking=self.r2, anchor=(10, 0))
-        robot_text_3 = Text("#08", "main_window/field_graphics/assets/bitmaps/Arial Bold_1024.bmp", size=6, tracking=self.r3, anchor=(10, 0))
+        #Text("Socorro","field_graphics/assets/bitmaps/Arial Bold_1024.bmp")
+        robot_text_1 = Text("#05", "field_graphics/assets/bitmaps/Arial Bold_1024.bmp", size=6, tracking=self.r1, anchor=(10, 0))
+        robot_text_2 = Text("#07", "field_graphics/assets/bitmaps/Arial Bold_1024.bmp", size=6, tracking=self.r2, anchor=(10, 0))
+        robot_text_3 = Text("#08", "field_graphics/assets/bitmaps/Arial Bold_1024.bmp", size=6, tracking=self.r3, anchor=(10, 0))
 
         self.context.objects.append(robot_text_1)
         self.context.objects.append(robot_text_2)
         self.context.objects.append(robot_text_3)
 
-        self.ball = modelFromJSON(open("main_window/field_graphics/assets/models/ball.json").read())[0]
+        self.ball = modelFromJSON(open("field_graphics/assets/models/ball.json").read())[0]
         self.context.objects.append(self.ball)
 
         self.startTimer(math.ceil(100 / 6))
@@ -132,17 +131,6 @@ class FieldView(QOpenGLWidget):
 
 
     def timerEvent(self, event: typing.Optional['QTimerEvent']) -> None:
-        # TODO: isso é pra testes, remova (eventualmente)
-
-        lineverts = []
-        rand = random.Random()
-        for i in range(0,128):
-            c = math.sin(20 + i*3 + self.sim_time / 200)
-            lineverts.append(60 * c * c - 30)
-            lineverts.append(60*math.cos(i/3 + self.sim_time/300))
-            lineverts.append(-0.5)
-
-        self.test_line.update_line_buffer(numpy.asarray(lineverts,dtype=np.float32))
 
         if self.no_info:
             self.r1.x = math.sin(self.sim_time/100) * 20

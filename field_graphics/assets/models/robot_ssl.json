@@ -1,0 +1,29 @@
+{
+  "objects":[
+    {
+      "shader": {
+        "vertex": "field_graphics/assets/shaders/VertexShader.vsh",
+        "fragment": "field_graphics/assets/shaders/SSLRobotFragmentShader.fsh",
+        "uniforms": [
+          {
+            "type": "float",
+            "name": "radius",
+            "v0": 9.0
+          },{
+            "type": "float",
+            "name": "threashold",
+            "v0": 5.5
+          }
+        ]
+      },
+      "vertices": [
+        {"x": -9.5,"y": -9.5,"z": 0.3,"r": 0,"g": 0,"b": 0},
+        {"x": -9.5,"y":  9.5,"z": 0.3,"r": 0,"g": 0,"b": 0},
+        {"x":  9.5,"y":  9.5,"z": 0.3,"r": 0,"g": 0,"b": 0},
+        {"x": -9.5,"y": -9.5,"z": 0.3,"r": 0,"g": 0,"b": 0},
+        {"x":  9.5,"y":  9.5,"z": 0.3,"r": 0,"g": 0,"b": 0},
+        {"x":  9.5,"y": -9.5,"z": 0.3,"r": 0,"g": 0,"b": 0}
+      ]
+    }
+  ]
+}

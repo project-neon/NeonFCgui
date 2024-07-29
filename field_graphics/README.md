@@ -8,12 +8,12 @@ Para a renderização do campo, é empregada a API do OpenGL, que é contraintui
 Assim, o módulo `field_graphics` têm como principal função abstrair toda a lógica de alocação de memória e comunicação com a GPU pra um formato mais usável. 
 ***
 ## Índice:
-- [Objetos base:](https://github.com/project-neon/NeonSoccerGUI/blob/main/main_window/field_graphics/README.md#objetos-base)
-  - [FieldView](https://github.com/project-neon/NeonSoccerGUI/blob/main/main_window/field_graphics/README.md#fieldview)
-  - [RenderingContext](https://github.com/project-neon/NeonSoccerGUI/blob/main/main_window/field_graphics/README.md#renderingcontext)
-  - [Renderable](https://github.com/project-neon/NeonSoccerGUI/blob/main/main_window/field_graphics/README.md#renderable)
-- [Tecnicalidades do OpenGL](https://github.com/project-neon/NeonSoccerGUI/tree/main/main_window/field_graphics#tecnicalidades-do-opengl)
-- [Criando um mesh renderizável](https://github.com/project-neon/NeonSoccerGUI/blob/main/main_window/field_graphics/README.md#criando-um-mesh-renderiz%C3%A1vel)
+- [Objetos base:](https://github.com/project-neon/NeonSoccerGUI/blob/main/field_graphics/README.md#objetos-base)
+  - [FieldView](https://github.com/project-neon/NeonSoccerGUI/blob/main/field_graphics/README.md#fieldview)
+  - [RenderingContext](https://github.com/project-neon/NeonSoccerGUI/blob/main/field_graphics/README.md#renderingcontext)
+  - [Renderable](https://github.com/project-neon/NeonSoccerGUI/blob/main/field_graphics/README.md#renderable)
+- [Tecnicalidades do OpenGL](https://github.com/project-neon/NeonSoccerGUI/tree/main/field_graphics#tecnicalidades-do-opengl)
+- [Criando um mesh renderizável](https://github.com/project-neon/NeonSoccerGUI/blob/main/field_graphics/README.md#criando-um-mesh-renderiz%C3%A1vel)
 ***
 ## Objetos base:
 
@@ -170,8 +170,8 @@ Um exemplo de como criar um quadrado renderizável:
 
 ```python
 import numpy as np
-from main_window.field_graphics.rendering import render_manager
-from main_window.field_graphics.rendering.render_manager import RenderableMesh
+from field_graphics.rendering import render_manager
+from field_graphics.rendering import RenderableMesh
 
 # Note que esse código só pode rodar DEPOIS da inicialização do OpenGL
 vertices = [-1, -1, 0, 1, -1, 0, -1, 1, 0, 1, 1, 0, -1, 1, 0, 1, -1, 0]  # 6 Vértices -> 2 Triângulos
@@ -180,8 +180,8 @@ colors = [1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0]  # 6 Vértices -
 colors = np.asarray(colors, dtype=np.float32)
 
 # Carrega os shaders:
-vsh = open("main_window/field_graphics/shaders/VertexShader.vsh").read()
-fsh = open("main_window/field_graphics/shaders/FragmentShader.fsh").read()
+vsh = open("field_graphics/shaders/VertexShader.vsh").read()
+fsh = open("field_graphics/shaders/FragmentShader.fsh").read()
 shader_program = render_manager.compileShaderProgram(vsh, fsh)  # <- Compila os shaders
 
 # Inicializa o modelo:
