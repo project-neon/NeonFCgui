@@ -23,6 +23,7 @@ class FieldView(QOpenGLWidget):
     context: RenderingContext = None
     no_info: bool = True
     sim_time: int = 0
+    field_dimentions = None
     rotation = AnimationManager()
     x_translation = AnimationManager(accel_constant=.1, anti_derivative_constant=.2)
     y_translation = AnimationManager(accel_constant=.1, anti_derivative_constant=.2)
@@ -30,6 +31,8 @@ class FieldView(QOpenGLWidget):
 
     scroll_level: float = 0
     scroll_wheel_sensibility = 3
+
+    robots: dict = {}
 
     def __init__(self, context: Match):
         super().__init__()
@@ -47,40 +50,7 @@ class FieldView(QOpenGLWidget):
         setupGL()
         GL.glClearColor(.2, .5, .2, 1)
 
-        # TODO the models need to be tied up to some other object upper in the class hierarchy
-        # This hard-coded initializing is not ideal, does not handle ID changes or SSL models
-        # Same thing goes for the text objects
-        self.r1: VSSRobotMesh = VSSRobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
-        self.r2: VSSRobotMesh = VSSRobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
-        self.r3: VSSRobotMesh = VSSRobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
-
-        self.r1.rotation = math.pi/2
-        self.r2.rotation = -math.pi/6
-        self.r3.rotation = math.pi * (9.5/3)
-
-        self.r1.color_accordingly_to_id(5)
-        self.r2.color_accordingly_to_id(7)
-        self.r3.color_accordingly_to_id(8)
-
-        self.context.objects.append(self.r1)
-        self.context.objects.append(self.r2)
-        self.context.objects.append(self.r3)
-
-        field = modelFromJSON(open("field_graphics/assets/models/field_vsss.json").read())
-
-        for obj in field:
-            self.context.objects.append(obj)
-
-        robot_text_1 = Text("#05", "field_graphics/assets/bitmaps/Arial Bold_1024.bmp", size=6, tracking=self.r1, anchor=(10, 0))
-        robot_text_2 = Text("#07", "field_graphics/assets/bitmaps/Arial Bold_1024.bmp", size=6, tracking=self.r2, anchor=(10, 0))
-        robot_text_3 = Text("#08", "field_graphics/assets/bitmaps/Arial Bold_1024.bmp", size=6, tracking=self.r3, anchor=(10, 0))
-
-        self.context.objects.append(robot_text_1)
-        self.context.objects.append(robot_text_2)
-        self.context.objects.append(robot_text_3)
-
-        self.ball = modelFromJSON(open("field_graphics/assets/models/ball.json").read())[0]
-        self.context.objects.append(self.ball)
+        self.setupVSSS()
 
         self.startTimer(math.ceil(100 / 6))
 
@@ -105,10 +75,9 @@ class FieldView(QOpenGLWidget):
 
     def update_robot_coord(self, robot_id: int, model: RenderableMesh):
         r = self.match.fetch_robot_by_id(robot_id)
-        model.x = r.robot_pos[0] * 100 - 75 # TODO mudar pra dimensões do campo grande
-        model.y = r.robot_pos[1] * 100 - 65
+        model.x = r.robot_pos[0] * 100 - self.field_dimentions[0]*0.5
+        model.y = r.robot_pos[1] * 100 - self.field_dimentions[1]*0.5
         model.rotation = -r.robot_pos[2] + math.pi/2
-
 
     def timerEvent(self, event: typing.Optional['QTimerEvent']) -> None:
 
@@ -130,6 +99,8 @@ class FieldView(QOpenGLWidget):
             self.update_robot_coord(5,self.r1)
             self.update_robot_coord(7,self.r2)
             self.update_robot_coord(8,self.r3)
+            for robot in self.match.robots:
+                self.update_robot_coord(robot.robot_id,)
 
             ball = self.match.ball
             self.ball.x = ball.ball_pos[0] * 100 - 75; self.ball.y = ball.ball_pos[1] * 100 - 65
@@ -177,3 +148,37 @@ class FieldView(QOpenGLWidget):
             r.y = -72
             r.rotation = math.pi
             self.context.objects.append(r)
+
+    def setupVSSS(self):
+        self.r1: VSSRobotMesh = VSSRobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
+        self.r2: VSSRobotMesh = VSSRobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
+        self.r3: VSSRobotMesh = VSSRobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
+
+        self.r1.rotation = math.pi/2
+        self.r2.rotation = -math.pi/6
+        self.r3.rotation = math.pi * (9.5/3)
+
+        self.r1.color_accordingly_to_id(5)
+        self.r2.color_accordingly_to_id(7)
+        self.r3.color_accordingly_to_id(8)
+
+        self.context.objects.append(self.r1)
+        self.context.objects.append(self.r2)
+        self.context.objects.append(self.r3)
+
+        field = modelFromJSON(open("field_graphics/assets/models/field_vsss.json").read())
+
+        for obj in field:
+            self.context.objects.append(obj)
+
+        robot_text_1 = Text("#05", "field_graphics/assets/bitmaps/Arial Bold_1024.bmp", size=6, tracking=self.r1, anchor=(10, 0))
+        robot_text_2 = Text("#07", "field_graphics/assets/bitmaps/Arial Bold_1024.bmp", size=6, tracking=self.r2, anchor=(10, 0))
+        robot_text_3 = Text("#08", "field_graphics/assets/bitmaps/Arial Bold_1024.bmp", size=6, tracking=self.r3, anchor=(10, 0))
+
+        self.context.objects.append(robot_text_1)
+        self.context.objects.append(robot_text_2)
+        self.context.objects.append(robot_text_3)
+
+        self.ball = modelFromJSON(open("field_graphics/assets/models/ball.json").read())[0]
+        self.context.objects.append(self.ball)
+        self.field_dimentions = [150.0,130.0]
