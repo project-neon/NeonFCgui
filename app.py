@@ -20,7 +20,7 @@ class App(threading.Thread):
         screen_width = screen_size.width()
         screen_height = screen_size.height()
 
-        self.window = MainWindow(gui.match, screen_width, screen_height)
+        self.window = MainWindow(gui.match_api, screen_width, screen_height)
 
     def start(self):
         # Show application's GUI

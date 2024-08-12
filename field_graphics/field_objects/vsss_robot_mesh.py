@@ -27,7 +27,7 @@ def gen_color_array(robot_color: list, back_tag_color: list, left_tag_color: lis
     return colors
 
 
-class VSSRobotMesh(RenderableMesh):
+class VSSSRobotMesh(RenderableMesh):
     def __init__(self, robot_color: list, back_tag_color: list, left_tag_color: list, right_tag_color: list):
         template: RenderableMesh = modelFromJSON(open("field_graphics/assets/models/robot_vsss.json").read())[0]
         colors = gen_color_array(robot_color,back_tag_color,left_tag_color,right_tag_color)

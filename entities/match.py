@@ -4,6 +4,7 @@ import time
 
 from api import Api
 import entities
+from entities import robot
 
 CATEGORIES = {
     '3v3': 3, '5v5': 5
@@ -31,7 +32,7 @@ class Match():
         self.opposites = []
 
         self.robots_ids = [5, 7, 8]
-        self.opposites_ids = [5, 7, 8]
+        self.opposites_ids = [1, 2, 3] # Placeholders so they don't override the robot_id values at the field_view
 
         # Default parameter values
         # TODO option to change default params/save them in a file
@@ -48,7 +49,7 @@ class Match():
             entities.Robot(i, [0,0,0]) for i in self.robots_ids
         ]
 
-    last_update_time: int = 0 #TODO: this solution is held with duct tape
+    last_update_time: int = 0
 
     def update_information(self, info):
         """ Function to update values received in api """
