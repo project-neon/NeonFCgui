@@ -10,15 +10,13 @@ from PyQt6.QtCore import QTimerEvent
 from PyQt6.QtOpenGLWidgets import QOpenGLWidget
 from PyQt6.QtWidgets import QLabel
 
-import field_graphics
 from entities import Match
 from field_graphics.field_objects.match.match import Match as FieldMatch
 from field_graphics.field_objects.ssl_robot_mesh import SSLRobotMesh
-from field_graphics.field_objects.text import Text
 from field_graphics.field_objects.vsss_robot_mesh import VSSSRobotMesh
 from field_graphics.rendering.objects.animation_manager import AnimationManager
 from field_graphics.rendering.objects.rendering_context import RenderingContext
-from field_graphics.rendering.render_manager import setupGL, modelFromJSON, RenderableMesh
+from field_graphics.rendering.render_manager import setupGL
 
 
 class FieldView(QOpenGLWidget):
@@ -38,7 +36,6 @@ class FieldView(QOpenGLWidget):
 
     def __init__(self, context: Match):
         super().__init__()
-        self.objects = None
         self.rendering_context = RenderingContext()
         self.scroll_level = 7
         self.setFocusPolicy(self.focusPolicy().StrongFocus)
@@ -49,7 +46,7 @@ class FieldView(QOpenGLWidget):
         GL.glInitGl42VERSION()
         setupGL()
         GL.glClearColor(.2, .5, .2, 1)
-
+        self.setupVSSS()
         self.startTimer(math.ceil(100 / 6))
 
     def resizeGL(self, w: int, h: int) -> None:
@@ -121,6 +118,10 @@ class FieldView(QOpenGLWidget):
     def setupSSL(self):
         # Pendente pra quinta
         pass
+
+    def setupVSSS(self):
+        from field_graphics.field_objects.match.VSSS_match import VSSSMatch
+        self.match_context = VSSSMatch(self)
 
     def reset(self):
         self.match_context.clear()

@@ -1,9 +1,11 @@
-from main_window.widgets.field_view import FieldView
 
 
 class Match:
 
-    def __init__(self, context: FieldView):
+    def __init__(self, context):
+        # FIXME context DEVE ser um objeto FieldView
+        #  todavia infelizmente a 'língua do mercado' não aguenta
+        #  duas classes usando dependências uma da outra.
         self.context = context
 
     def setup(self):
