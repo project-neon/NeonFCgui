@@ -25,7 +25,10 @@ class ApiRecv(threading.Thread):
 
         print("Starting api_recv...")
 
-        while True:
+        while threading.main_thread().is_alive():
+            # FIXME: the recvfrom function awaits for the application to receive a package,
+            #  If the main thread dies this subthread will stil persist, causing the application
+            #  to stay hanging despite the death of the other 2 threads that are no longer running.
             data, origem = self.obj_socket.recvfrom(self.buffer_size)
             decoded_data = json.loads(data.decode())
             # Feedback commands from socket (e.g. an interface)

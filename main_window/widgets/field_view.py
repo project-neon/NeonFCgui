@@ -157,7 +157,6 @@ class FieldView(QOpenGLWidget):
     def mouseMoveEvent(self, event: typing.Optional[QtGui.QMouseEvent]) -> None:
         super().mouseMoveEvent(event)
         # TODO mover com o mouse
-        # Como faz
 
     def wheelEvent(self, event: typing.Optional[QtGui.QWheelEvent]) -> None:
         super().wheelEvent(event)
