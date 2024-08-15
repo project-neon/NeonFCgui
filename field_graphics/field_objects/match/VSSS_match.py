@@ -1,6 +1,6 @@
 import math
 
-from field_graphics.field_objects.match.match import Match
+from field_graphics.field_objects.match.field_match import Match
 from field_graphics.field_objects.text import Text
 from field_graphics.field_objects.vsss_robot_mesh import VSSSRobotMesh
 from field_graphics.rendering.render_manager import modelFromJSON

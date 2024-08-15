@@ -11,12 +11,11 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt, QTimerEvent
 
 from entities import Match
-from main_window.field_graphics.field_view import FieldView
+from main_window.widgets.field_view import FieldView
 from main_window.widgets import *
 
 class SSLPanel(QWidget):
 
-    #TODO this is a bandaid solution and must be removed ASAP
     context: Match = None
     updatable_components = []
 

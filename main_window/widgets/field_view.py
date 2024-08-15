@@ -11,7 +11,7 @@ from PyQt6.QtOpenGLWidgets import QOpenGLWidget
 from PyQt6.QtWidgets import QLabel
 
 from entities import Match
-from field_graphics.field_objects.match.match import Match as FieldMatch
+from field_graphics.field_objects.match.field_match import Match as FieldMatch
 from field_graphics.field_objects.ssl_robot_mesh import SSLRobotMesh
 from field_graphics.field_objects.vsss_robot_mesh import VSSSRobotMesh
 from field_graphics.rendering.objects.animation_manager import AnimationManager
