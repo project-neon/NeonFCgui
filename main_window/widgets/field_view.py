@@ -24,6 +24,7 @@ class FieldView(QOpenGLWidget):
     match_api: Match = None
     match_context: FieldMatch = None
     no_info: bool = True
+    isOpenGLInit: bool = False
     sim_time: int = 0
     field_dimentions = None
     rotation = AnimationManager()
@@ -43,11 +44,12 @@ class FieldView(QOpenGLWidget):
         QLabel("<h1>Campo!</h1>", parent=self)
 
     def initializeGL(self):
+        print("Initializing OpenGL Version 4.2")
         GL.glInitGl42VERSION()
         setupGL()
         GL.glClearColor(.2, .5, .2, 1)
-        self.setupVSSS()
         self.startTimer(math.ceil(100 / 6))
+        self.isOpenGLInit = True
 
     def resizeGL(self, w: int, h: int) -> None:
         self.makeCurrent()
@@ -116,12 +118,13 @@ class FieldView(QOpenGLWidget):
             self.rendering_context.objects.append(r)
 
     def setupSSL(self):
-        # Pendente pra quinta
-        pass
+        from field_graphics.field_objects.match.SSL_match import SSLMatch
+        self.match_context = SSLMatch(self)
 
     def setupVSSS(self):
         from field_graphics.field_objects.match.VSSS_match import VSSSMatch
         self.match_context = VSSSMatch(self)
+
 
     def reset(self):
         self.match_context.clear()

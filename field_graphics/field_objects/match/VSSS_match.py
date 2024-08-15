@@ -15,14 +15,13 @@ class VSSSMatch(Match):
     def __init__(self, context: FieldView):
         super().__init__(context)
         self.field_dimentions = [150.0,130.0]
-        self.setup()
 
     def setup(self):
-
         field = modelFromJSON(open("field_graphics/assets/models/field_vsss.json").read())
         for obj in field:
             # obj.x = 75; obj.y = 65
             self.context.rendering_context.objects.append(obj)
+        super().setup()
 
 
         self.robots = {}
@@ -51,6 +50,9 @@ class VSSSMatch(Match):
             self.context.rendering_context.objects.append(robot_text)
 
     def update(self, time: float):
+
+        if not super().update(time): return False
+
         if self.context.no_info:
             self.playStartAnimation(time)
         else:

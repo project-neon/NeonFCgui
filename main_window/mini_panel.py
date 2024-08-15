@@ -83,9 +83,12 @@ class MiniPanel(QWidget):
         window_layout.addLayout(bottom_h_layout)
 
         self.setLayout(window_layout)
-        
+
         # Creates the timer that refreshes interface components periodically
         self.startTimer(math.ceil(100 / 3))
+
+        # Initializes the match object for field rendering
+        self.field_vis.setupVSSS()
 
     def timerEvent(self, event: typing.Optional['QTimerEvent']) -> None:
         for component in self.updatable_components:

@@ -90,7 +90,10 @@ class SSLPanel(QWidget):
         window_layout.addLayout(bottom_h_layout)
 
         self.setLayout(window_layout)
-        
+
+        # Initializes the match object for field rendering
+        self.field_vis.setupSSL()
+
         # Creates the timer that refreshes interface components periodically
         self.startTimer(math.ceil(100 / 3))
 
