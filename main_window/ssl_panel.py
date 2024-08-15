@@ -4,10 +4,10 @@
 import math
 import typing
 from PyQt6.QtWidgets import (
-    QWidget,
+    QWidget, QLabel, QComboBox,
     QVBoxLayout, QHBoxLayout, QGridLayout
 )
-# from PyQt6.QtGui import QFont, QPalette, QColor, QIcon
+from PyQt6.QtGui import QPalette, QColor #, QIcon, QFont
 from PyQt6.QtCore import Qt, QTimerEvent
 
 from entities import Match
@@ -65,13 +65,43 @@ class SSLPanel(QWidget):
         # in a grid (10 rows, 6 columns)
         grid = QGridLayout()
 
+        # Widget to select goalkeeper by robot_id
+        self.gk_widget = QWidget()
+        self.gk_widget.setAutoFillBackground(True)
+        gk_palette = self.gk_widget.palette()
+        gk_palette.setColor(QPalette.ColorRole.Window, QColor('#b3a4d3'))
+        self.gk_widget.setPalette(gk_palette)
+        # TODO format this widget
+        gk_layout = QHBoxLayout()
+        lbl_gk = QLabel("Goalkeeper ID: ", parent=self)
+        gk_layout.addWidget(lbl_gk)
+        # TODO update goalkeeper ID
+        self.lbl_current_gk = QLabel("-1", parent=self)
+        gk_layout.addWidget(self.lbl_current_gk)
+        # Goalkeeper ID selection
+        self.btn_gk = QComboBox()
+        self.btn_gk.setFixedHeight(28)
+        self.btn_gk.setFixedWidth(70)
+        # self.btn_gk.setSizePolicy(QSizePolicy.horizontalStretch)
+        self.robots_ids_str = []
+        for r_id in self.context.robots_ids:
+            self.robots_ids_str.append(str(r_id))
+        self.btn_gk.addItems(self.robots_ids_str)
+        # select current gk
+        # self.btn_gk.setCurrentIndex(r_index)
+        self.btn_gk.activated.connect(self.select_gk)
+        gk_layout.addWidget(self.btn_gk) # , alignment=Qt.AlignmentFlag.AlignHCenter)
+        self.gk_widget.setLayout(gk_layout)
+
+        grid.addWidget(self.gk_widget, 0, 3, 1, 3) # starts at row:0, column:3, spans 1 row, spans 3 columns
+
         # Widget to choose game mode
         self.mode_widget = GameMode(self.log_widget)
-        grid.addWidget(self.mode_widget, 0, 3, 1, 3) # starts at row:0, column:3, spans 1 row, spans 3 columns
+        grid.addWidget(self.mode_widget, 1, 3, 1, 3) # starts at row:1, column:3, spans 1 row, spans 3 columns
 
         # NeonFC's informations
         self.game_info_widget = GameInfo()
-        grid.addWidget(self.game_info_widget, 1, 3, 4, 3)
+        grid.addWidget(self.game_info_widget, 2, 3, 3, 3)
         self.updatable_components.append(self.game_info_widget)
 
         # Add log widget to grid
@@ -100,3 +130,7 @@ class SSLPanel(QWidget):
     def timerEvent(self, event: typing.Optional['QTimerEvent']) -> None:
         for component in self.updatable_components:
             component.update_info(self.context)
+
+    def select_gk(self):
+        # TODO
+        pass
