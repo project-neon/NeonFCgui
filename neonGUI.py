@@ -21,6 +21,8 @@ def get_config(config_file=None):
 
 class NeonFCGUI(object):
     def __init__(self, config_file=None):
+        self.main_thread = None
+        self.update_thread = None
         self.match = Match()
         self.app = App(self)
 
@@ -40,13 +42,15 @@ class NeonFCGUI(object):
         self.api_recv.connect_info(self.info_api)
         self.api_recv.start()
 
+        self.main_thread = threading.current_thread()
+
         self.update_thread = threading.Thread(target=self.update)
         self.update_thread.start()
 
         self.app.start()
 
     def update(self):
-        while True:
+        while self.main_thread.is_alive():
             self.api.send_data(self.info_api)
 
 

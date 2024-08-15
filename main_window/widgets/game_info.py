@@ -2,12 +2,11 @@
 NeonFC's general informations
 """
 
-from PyQt6.QtWidgets import QLabel, QWidget, QVBoxLayout
+from PyQt6.QtWidgets import QLabel, QWidget, QGridLayout
 from PyQt6.QtGui import QPalette, QColor
 from PyQt6.QtCore import Qt
 
 from entities import match, Match
-
 
 class GameInfo(QWidget):
     def __init__(self):
@@ -17,25 +16,20 @@ class GameInfo(QWidget):
         palette.setColor(QPalette.ColorRole.Window, QColor('#b3a4d3'))
         self.setPalette(palette)
 
-        # TODO how to get the info
         # TODO create error message when no information is found (after Iron Cup)
         self.game_status = 'None'
         self.update_rate = 0
 
-        layout = QVBoxLayout()
-        layout.addWidget(QLabel("Informações NeonFC", parent=self), alignment=Qt.AlignmentFlag.AlignHCenter)
+        layout = QGridLayout()
+        layout.addWidget(QLabel("Informações NeonFC", parent=self), 0, 0, alignment=Qt.AlignmentFlag.AlignHCenter)
 
         # Label for current status
         self.lbl_status = QLabel("Status atual:<br/>" + str(self.game_status), parent=self)
-        layout.addWidget(self.lbl_status, alignment=Qt.AlignmentFlag.AlignLeft)
-        # TODO atualizar o texto dessa label
-        # Talvez se possa criar um método que faz:
-        # self.lbl_status.setText(novo_status)
+        layout.addWidget(self.lbl_status, 1, 0, 2, 1, alignment=Qt.AlignmentFlag.AlignLeft)
 
         # Label for update rate
         self.lbl_rate = QLabel("Taxa de atualização:<br/>" + str(self.update_rate), parent=self)
-        layout.addWidget(self.lbl_rate, alignment=Qt.AlignmentFlag.AlignLeft)
-        # TODO atualizar o texto dessa label
+        layout.addWidget(self.lbl_rate, 3, 0, 2, 1, alignment=Qt.AlignmentFlag.AlignLeft)
 
         self.setLayout(layout)
 

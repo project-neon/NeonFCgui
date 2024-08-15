@@ -4,19 +4,22 @@ import time
 
 from api import Api
 import entities
+from entities import robot
 
 CATEGORIES = {
-    '3v3': 3, '5v5': 5
+    'MINI': 3, 'SSL': 6
 }
+# TODO change categories
 
 class Match():
-    def __init__(self, team_side = "left", team_color = "blue", coach_name = None, category="3v3"):
+    def __init__(self, team_side = "left", team_color = "blue", coach_name = None, category="MINI"):
         
         self.update_rate = 0
         self.coach_name = coach_name
         self.coach_list = ['No coach found']
         self.team_side =  team_side
         self.team_color = team_color
+
         self.category = category
         self.n_robots = CATEGORIES.get(self.category)
 
@@ -31,7 +34,7 @@ class Match():
         self.opposites = []
 
         self.robots_ids = [5, 7, 8]
-        self.opposites_ids = [5, 7, 8]
+        self.opposites_ids = [1, 2, 3] # Placeholders so they don't override the robot_id values at the field_view
 
         # Default parameter values
         # TODO option to change default params/save them in a file
@@ -48,7 +51,7 @@ class Match():
             entities.Robot(i, [0,0,0]) for i in self.robots_ids
         ]
 
-    last_update_time: int = 0 #TODO: this solution is held with duct tape
+    last_update_time: int = 0
 
     def update_information(self, info):
         """ Function to update values received in api """
@@ -88,3 +91,6 @@ class Match():
         for robot in self.robots:
             if robot.robot_id == robot_id: return robot
         return None
+    
+    def set_category(self, cat):
+        self.category = cat

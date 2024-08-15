@@ -56,8 +56,9 @@ class RenderableMesh (Renderable):
     def draw(self, tx, ty, scale, rotation, aspect_ratio, sim_time):
         """
         Draws the object at the currently bound OpenGL Framebuffer object.
-        Note that all transformations are meant to be GLOBAL transformations,
-        local object transformations may be handled internally.
+        Note that all transformations passed as parameters to this function
+        are meant to be GLOBAL transformations,
+        local object transformations are be handled with internal variables.
         """
         self.shaderProgram.bind()
         GL.glUseProgram(self.shaderProgram.programId())
@@ -69,8 +70,8 @@ class RenderableMesh (Renderable):
         GL.glUniform1f(self.shader_uniform_locations['rotation_float_loc'], self.rotation)
         GL.glUniform3f(self.shader_uniform_locations['coordinate_vector_loc'], self.x, self.y, self.z)
 
-        GL.glEnableVertexAttribArray(0)
-        GL.glEnableVertexAttribArray(1)
+        GL.glEnableVertexAttribArray(0) # Coordinate vertex array
+        GL.glEnableVertexAttribArray(1) # Color vertex array
 
         GL.glBindBuffer(GL.GL_ARRAY_BUFFER, self.colorVBO)
         self.shaderProgram.setAttributeBuffer(1, GL.GL_FLOAT, 0, 3)
