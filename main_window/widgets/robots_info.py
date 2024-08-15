@@ -81,7 +81,7 @@ class RobotsInfo(QWidget):
             num_robots = 3
             if self.context.category == "SSL":
                 num_robots = 6
-            print(num_robots)
+            # print(num_robots)
             for i in range(num_robots):
                 self.robot_list.append(Robot(-1))
 
