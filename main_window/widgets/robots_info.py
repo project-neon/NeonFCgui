@@ -56,12 +56,14 @@ class RobotFrame(QFrame):
         self.title.setText("Robô "+str(self.id))
 
 class RobotsInfo(QWidget):
-    def __init__(self, context):
+    def __init__(self, context: Match):
         super(RobotsInfo, self).__init__()
         self.setAutoFillBackground(True)
         palette = self.palette()
         palette.setColor(QPalette.ColorRole.Window, QColor('#b3a4d3'))
         self.setPalette(palette)
+
+        self.context = context
 
         # Creating table of informations
         grid = QGridLayout()
@@ -71,11 +73,15 @@ class RobotsInfo(QWidget):
         self.robot_list = []    # stores match's robot list
         self.robot_frames = []  # stores a RobotFrame instance for each robot in match
 
-        if context.robots != []:
+        # TODO fix match's categories
+        if context.robots != [] and self.context.category == "MINI":
             self.robot_list = context.robots
         else:
             # show 3 robot frames for Mini and 6 robot frames for SSL
-            num_robots = 3  # 6 if category is SSL
+            num_robots = 3
+            if self.context.category == "SSL":
+                num_robots = 6
+            print(num_robots)
             for i in range(num_robots):
                 self.robot_list.append(Robot(-1))
 
@@ -87,10 +93,10 @@ class RobotsInfo(QWidget):
         grid.addWidget(self.robot_frames[0], 0, 0)
         grid.addWidget(self.robot_frames[1], 1, 0)
         grid.addWidget(self.robot_frames[2], 2, 0)
-        # TODO implement other robots for SSL category
-        # grid.addWidget(RobotFrame(), 0, 1)
-        # grid.addWidget(RobotFrame(), 1, 1)
-        # grid.addWidget(RobotFrame(), 2, 1)
+        if self.context.category == "SSL":
+            grid.addWidget(self.robot_frames[3], 0, 1)
+            grid.addWidget(self.robot_frames[4], 1, 1)
+            grid.addWidget(self.robot_frames[5], 2, 1)
 
         self.setLayout(grid)
 

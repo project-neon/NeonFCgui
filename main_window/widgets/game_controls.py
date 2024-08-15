@@ -189,7 +189,7 @@ class GameControls(QWidget):
         self.context = context
         self.log = log
 
-        # Creating the PLAY, HALT and RESET buttons
+        # Creating the PLAY, HALT and HALT buttons
         # To add icon to the button we will use the QIcon object, which
         # gets the path to an SVG image
         self.path_to_icons = os.getcwd()+"/main_window/images/"
@@ -206,12 +206,14 @@ class GameControls(QWidget):
         self.btn_stop.setFixedSize(170, 60)
         self.btn_stop.clicked.connect(self.gameStatus)
         
-        # TODO Implementar no futuro quando tiver a opção de alternar entre SSL e Mini
-        # self.btn_reset = QPushButton(icon=QIcon(self.path_to_icons+"reset.svg"), text=" RESET", parent=self)
-        # self.btn_reset.setIconSize(QSize(40, 40))
-        # self.btn_reset.setFont(QFont('Arial', 15))
-        # self.btn_reset.setFixedSize(170, 60)
-        # self.btn_reset.clicked.connect(self.gameStatus)
+        self.btn_halt = None
+        # Only the SSL category has the Halt game status
+        if self.context.category == "SSL":
+            self.btn_halt = QPushButton(icon=QIcon(self.path_to_icons+"reset.svg"), text=" HALT", parent=self)
+            self.btn_halt.setIconSize(QSize(40, 40))
+            self.btn_halt.setFont(QFont('Arial', 15))
+            self.btn_halt.setFixedSize(170, 60)
+            self.btn_halt.clicked.connect(self.gameStatus)
 
         # Creating buttons to change color and side
         self.current_color = 'blue'
@@ -289,17 +291,18 @@ class GameControls(QWidget):
         grid.addWidget(coach_section, 0, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignHCenter) # row:0, column:0, spans 1 row, spans 2 columns
         grid.addWidget(self.btn_params, 0, 2, alignment=Qt.AlignmentFlag.AlignHCenter)
         grid.addWidget(self.btn_change_color, 0, 3, alignment=Qt.AlignmentFlag.AlignRight)
-        # Start, stop and reset buttons
+        # Start, stop and halt buttons
         h_layout_buttons = QHBoxLayout()
-        h_layout_buttons.addWidget(self.btn_start, alignment=Qt.AlignmentFlag.AlignLeft)
-        h_layout_buttons.addWidget(QLabel("          "))
-        h_layout_buttons.addWidget(self.btn_stop, alignment=Qt.AlignmentFlag.AlignLeft)
-        # TODO add reset button when there's the SSl/mini options
-        # grid.addWidget(self.btn_start, 1, 0, alignment=Qt.AlignmentFlag.AlignHCenter)
-        # grid.addWidget(self.btn_stop, 1, 1, alignment=Qt.AlignmentFlag.AlignHCenter)
-        # grid.addWidget(self.btn_reset, 1, 2, alignment=Qt.AlignmentFlag.AlignHCenter)
+        if self.context.category == "MINI":
+            h_layout_buttons.addWidget(self.btn_start, alignment=Qt.AlignmentFlag.AlignLeft)
+            h_layout_buttons.addWidget(QLabel("          "))
+            h_layout_buttons.addWidget(self.btn_stop, alignment=Qt.AlignmentFlag.AlignLeft)
+            grid.addLayout(h_layout_buttons, 1, 0, 1, 3, alignment=Qt.AlignmentFlag.AlignHCenter)
+        else:
+            grid.addWidget(self.btn_start, 1, 0, alignment=Qt.AlignmentFlag.AlignHCenter)
+            grid.addWidget(self.btn_stop, 1, 1, alignment=Qt.AlignmentFlag.AlignHCenter)
+            grid.addWidget(self.btn_halt, 1, 2, alignment=Qt.AlignmentFlag.AlignHCenter)
         grid.addWidget(self.btn_change_side, 1, 3, alignment=Qt.AlignmentFlag.AlignRight)
-        grid.addLayout(h_layout_buttons, 1, 0, 1, 3, alignment=Qt.AlignmentFlag.AlignHCenter)
         layout.addLayout(grid)
         
         self.setLayout(layout)
@@ -335,9 +338,8 @@ class GameControls(QWidget):
             self.context.set_game_status("GAME_ON")
         elif sender is self.btn_stop:
             self.context.set_game_status("STOP")
-        # TODO Implementar no futuro
-        # elif sender is self.btn_reset:
-        #     self.context.set_game_status("HALT")
+        elif sender is self.btn_halt:
+            self.context.set_game_status("HALT")
 
     def get_coach_index(self, coach):
         for i in range(len(self.coach_list)):
