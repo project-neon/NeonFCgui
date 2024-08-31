@@ -84,8 +84,8 @@ class GameMode(QWidget):
         if sender.isChecked():
             if sender == self.btn_trainning:
                 self.mode = 'trainning'
-                self.log.add_message('Modo alterado: Treino')
+                self.log.add_message('Modo da GUI selecionado: Treino')
             elif sender == self.btn_competition:
                 self.mode = 'competition'
-                self.log.add_message('Modo alterado: Competicao')
+                self.log.add_message('Modo da GUI selecionado: Competicao')
             print("Mode: "+self.mode)

@@ -4,7 +4,7 @@ Main body of code. Execute to start program.
 
 import json
 import threading
-
+import time
 from api import Api, ApiRecv, InfoApi
 from app import App
 from entities import Match
@@ -23,6 +23,13 @@ class NeonFCGUI(object):
     def __init__(self, config_file=None):
         self.main_thread = None
         self.update_thread = None
+
+        # Log file for the last session shall be emptied
+        log_file = open("files/last_session_log.txt", "w")
+        log_file.write("Last session started at: ")
+        log_file.write(str(time.ctime(time.time())) + "\n")
+        log_file.close()
+
         self.match = Match()
         self.app = App(self)
 

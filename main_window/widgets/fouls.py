@@ -151,6 +151,17 @@ class Fouls(QWidget):
         elif self.btn_penalty:
             self.foul_name = 'PENALTY'
         self.context.set_game_status(self.foul_name)
+
+        # Add foul to log
+        if self.foul_color == 'blue':
+            color = "Azul"
+        else:
+            color = "Amarelo"
+        self.log.add_message(
+            "Falta \'" + str(self.foul_name)
+            + "\' no quadrante " + str(self.quadrant)
+            + " para o time " + str(color) + "."
+        )
     
     def change_quadrant(self):
         self.btn_q1.setChecked(False)
@@ -162,6 +173,8 @@ class Fouls(QWidget):
         sender.setChecked(True)
         self.quadrant = int(sender.text())
         self.context.set_foul_quadrant(self.quadrant)
+
+        self.log.add_message("Quadrante selecionado: " + str(self.quadrant))
     
     def change_color(self):
         sender = self.sender()
@@ -169,8 +182,10 @@ class Fouls(QWidget):
             self.btn_blue.setChecked(True)
             self.btn_yellow.setChecked(False)
             self.foul_color = 'blue'
+            self.log.add_message("Cor da falta selecionada: Azul")
         else:
             self.btn_blue.setChecked(False)
             self.btn_yellow.setChecked(True)
             self.foul_color = 'yellow'
+            self.log.add_message("Cor da falta selecionada: Amarelo")
         self.context.set_foul_color(self.foul_color)

@@ -248,7 +248,7 @@ class GameControls(QWidget):
         coach_index = self.get_coach_index(self.current_coach)
 
         # Display this info on this gui's log section
-        msg = f"Coach atual:\n{self.current_coach}"
+        msg = f"Coach atual: {self.current_coach}"
         print(msg)
         self.log.add_message(msg)
 
@@ -314,21 +314,21 @@ class GameControls(QWidget):
             if self.current_color == 'blue':
                 sender.setIcon(QIcon(self.path_to_icons+"yellow.svg"))
                 self.current_color = 'yellow'
-                self.log.add_message("A cor foi alterada para: Amarelo")
+                self.log.add_message("A cor do time foi alterada para: Amarelo")
             else:
                 sender.setIcon(QIcon(self.path_to_icons+"blue.svg"))
                 self.current_color = 'blue'
-                self.log.add_message("A cor foi alterada para: Azul")
+                self.log.add_message("A cor do time foi alterada para: Azul")
             self.context.set_team_color(self.current_color)
         elif sender is self.btn_change_side:
             if self.current_side == 'left':
                 sender.setIcon(QIcon(self.path_to_icons+"right.svg"))
                 self.current_side = 'right'
-                self.log.add_message("O lado foi alterada para: Direita")
+                self.log.add_message("O lado foi alterado para: Direita")
             else:
                 sender.setIcon(QIcon(self.path_to_icons+"left.svg"))
                 self.current_side = 'left'
-                self.log.add_message("O lado foi alterada para: Esquerda")
+                self.log.add_message("O lado foi alterado para: Esquerda")
             self.context.set_team_side(self.current_side)
     
     def gameStatus(self):
@@ -336,10 +336,13 @@ class GameControls(QWidget):
 
         if sender is self.btn_start:
             self.context.set_game_status("GAME_ON")
+            self.log.add_message("Status atual: GAME_ON")
         elif sender is self.btn_stop:
             self.context.set_game_status("STOP")
+            self.log.add_message("Status atual: STOP")
         elif sender is self.btn_halt:
             self.context.set_game_status("HALT")
+            self.log.add_message("Status atual: HALT")
 
     def get_coach_index(self, coach):
         for i in range(len(self.coach_list)):

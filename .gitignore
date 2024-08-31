@@ -2,3 +2,6 @@
 **/__pycache__/
 *.py[cod]
 *$py.class
+
+# Last session's log file
+files/last_session_log.txt

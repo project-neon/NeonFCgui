@@ -2,6 +2,7 @@
 System's log displaying errors and warnings.
 """
 
+import os
 from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout, QScrollArea
 from PyQt6.QtGui import QPalette, QColor, QFont
 from PyQt6.QtCore import Qt
@@ -13,6 +14,9 @@ class Log(QWidget):
         palette = self.palette()
         palette.setColor(QPalette.ColorRole.Window, QColor('#b3a4d3'))
         self.setPalette(palette)
+
+        # Access to last_session_log.txt file
+        self.log_file_path = os.getcwd() + "/files/last_session_log.txt"
 
         layout = QVBoxLayout()
         layout.addWidget(QLabel("Log", parent=self), alignment=Qt.AlignmentFlag.AlignTop)
@@ -55,8 +59,12 @@ class Log(QWidget):
         msg = QLabel(">> " + str(m), parent=self)
         msg.setFont(QFont('Arial', 14))
         msg.setWordWrap(True)
-
         self.vbox.addWidget(msg, alignment=Qt.AlignmentFlag.AlignTop)
+        
+        # Add message to log file
+        log_file = open(self.log_file_path, "a")
+        log_file.write(">> " + str(m) + "\n")
+        log_file.close()
     
     def storeAtBottomState(self, value):
         self.atbottom = value == self.vscrollbar.maximum()
