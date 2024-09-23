@@ -21,7 +21,7 @@ from main_window.ssl_panel import SSLPanel
 from main_window.mini_panel import MiniPanel
 
 class MainWindow(QMainWindow):
-    def __init__(self, context: Match, s_width = 1200, s_height = 900):
+    def __init__(self, context: Match, s_width = 1000, s_height = 800):
         # Create application's GUI
         super(MainWindow, self).__init__()
         self.setWindowTitle("Neon Soccer")
@@ -33,12 +33,12 @@ class MainWindow(QMainWindow):
         # Puts the given match as context for interface display sync
         self.context = context
 
-        self.screen_width = s_width
-        self.screen_height = s_height
+        # self.screen_width = s_width
+        # self.screen_height = s_height
 
-        self.window_width = 1000
-        self.window_height = 800
-        self.setGeometry(100, 100, self.window_width, self.window_height)
+        self.window_width = s_width
+        self.window_height = s_height
+        self.setGeometry(100, 100, 1000, 800)
         self.setFont(QFont('Arial', 15))
 
         self.category = None # "MINI" or "SSL"
@@ -64,9 +64,9 @@ class MainWindow(QMainWindow):
         self.context.set_category(self.category)
         
         if category == "MINI":
-            self.category_widget = MiniPanel(self.context, self.window_height)
+            self.category_widget = MiniPanel(self.context, self.window_width, self.window_height)
         else:
-            self.category_widget = SSLPanel(self.context, self.window_height)
+            self.category_widget = SSLPanel(self.context, self.window_width, self.window_height)
         
         self.stacked_widget.addWidget(self.category_widget)
         self.stacked_widget.setCurrentWidget(self.category_widget)

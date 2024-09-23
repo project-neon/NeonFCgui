@@ -17,10 +17,13 @@ class MiniPanel(QWidget):
     context: Match = None
     updatable_components = []
 
-    def __init__(self, context: Match, window_height):
+    def __init__(self, context: Match, window_width, window_height):
         super(MiniPanel, self).__init__()
         self.context = context
+        self.window_width = window_width
         self.window_height = window_height
+        self.setMaximumWidth(self.window_width)
+        self.setMaximumHeight(self.window_height)
 
         # Organizing the layout
         # Vertical layout divided into top section
@@ -37,13 +40,13 @@ class MiniPanel(QWidget):
         # Adding game status controls widget
         self.game_controls_widget = GameControls(self.context, self.log_widget)
         h = int(self.window_height/10)
-        self.game_controls_widget.setFixedHeight(int(h*2.5))
+        self.game_controls_widget.setFixedHeight(int(h*2))
         top_h_layout.addWidget(self.game_controls_widget)
         self.updatable_components.append(self.game_controls_widget)
 
         # Adding game fouls section
         self.fouls_widget = Fouls(self.context, self.log_widget)
-        self.fouls_widget.setFixedHeight(int(h*2.5))
+        self.fouls_widget.setFixedHeight(int(h*2))
         top_h_layout.addWidget(self.fouls_widget)
 
         window_layout.addLayout(top_h_layout)
