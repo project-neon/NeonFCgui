@@ -56,7 +56,7 @@ class VSSSMatch(Match):
         if self.context.no_info:
             self.playStartAnimation(time)
         else:
-            if not self.hasInfo:
+            if not self.hasInfo:  # If it is the first time the context has information on the field then
                 self.hasInfo = True
                 self.context.reset()
                 self.setup()  # Redoes the setup to get the IDs in place
