@@ -19,12 +19,12 @@ class SSLMatch(FieldMatch):
         if self.context.no_info:
             pass  # self.playStartAnimation(time)
         else:
-            if not self.hasInfo:
+            if not self.hasInfo:  # First time since recognising field info
                 self.hasInfo = True
                 self.context.reset()
                 self.setup()  # Redoes the setup to get the IDs in place
             for r in self.robots:
-                self.update_robot_coord(r, self.robots[r])
+                self.update_robot_coord(int(r), self.robots[r])
 
     def setup(self):
         field = modelFromJSON(open("field_graphics/assets/models/field_ssl.json").read())

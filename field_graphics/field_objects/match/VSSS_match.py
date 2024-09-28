@@ -61,7 +61,7 @@ class VSSSMatch(Match):
                 self.context.reset()
                 self.setup()  # Redoes the setup to get the IDs in place
             for r in self.robots:
-                self.update_robot_coord(r,self.robots[r])
+                self.update_robot_coord(int(r),self.robots[r])
 
     def playStartAnimation(self, time: float):
         self.robots['5'].x = math.sin(time/100) * 20
