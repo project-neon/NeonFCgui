@@ -4,12 +4,14 @@ from field_graphics.field_objects.match.field_match import Match
 from field_graphics.field_objects.text import Text
 from field_graphics.field_objects.vsss_robot_mesh import VSSSRobotMesh
 from field_graphics.rendering.render_manager import modelFromJSON
+from field_graphics.rendering.objects.renderable_mesh import RenderableMesh
 from main_window.widgets.field_view import FieldView
 
 
 class VSSSMatch(Match):
 
     hasInfo: bool = False
+    ball: RenderableMesh
     robots: dict[str,VSSSRobotMesh] | None = None
 
     def __init__(self, context: FieldView):
@@ -18,6 +20,7 @@ class VSSSMatch(Match):
 
     def setup(self):
         field = modelFromJSON(open("field_graphics/assets/models/field_vsss.json").read())
+        self.ball = modelFromJSON(open("field_graphics/assets/models/ball.json").read())[0]
         for obj in field:
             # obj.x = 75; obj.y = 65
             self.context.rendering_context.objects.append(obj)
@@ -25,7 +28,7 @@ class VSSSMatch(Match):
 
 
         self.robots = {}
-
+        self.context.rendering_context.objects.append(self.ball)
         # Sets the robot models
         for r in self.context.match_api.robots:
             r_m = VSSSRobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
@@ -52,7 +55,6 @@ class VSSSMatch(Match):
     def update(self, time: float):
 
         if not super().update(time): return False
-
         if self.context.no_info:
             self.playStartAnimation(time)
         else:
@@ -60,6 +62,11 @@ class VSSSMatch(Match):
                 self.hasInfo = True
                 self.context.reset()
                 self.setup()  # Redoes the setup to get the IDs in place
+            
+            self.ball.x = self.context.match_api.ball.ball_pos[0] * 100 - self.field_dimentions[0]* 0.5
+            self.ball.y = self.context.match_api.ball.ball_pos[1] * 100 - self.field_dimentions[1] * 0.5
+            # print(self.ball.x)
+            # print(self.ball.shader_uniform_locations['coordinate_vector_loc'])
             for r in self.robots:
                 self.update_robot_coord(int(r),self.robots[r])
 

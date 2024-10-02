@@ -90,6 +90,8 @@ class Match():
         # FIXME: cannot explicitly define Robot as function return type due to circular import
         for robot in self.robots:
             if robot.robot_id == robot_id: return robot
+        for robot in self.opposites:
+            if robot.robot_id == robot_id: return robot
         return None
     
     def set_category(self, cat):

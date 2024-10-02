@@ -9,10 +9,11 @@ from field_graphics.field_objects.match.field_match import Match as FieldMatch
 class SSLMatch(FieldMatch):
     hasInfo: bool = False
     robots: dict[str, SSLRobotMesh] | None = None
+    ball = None
 
     def __init__(self, context):
         super().__init__(context)
-        self.field_dimentions = [150.0, 130.0]  # FIXME
+        self.field_dimentions = [150.0, 130.0]
 
     def update(self, time: float) -> bool:
         if not super().update(time): return False
@@ -25,6 +26,8 @@ class SSLMatch(FieldMatch):
                 self.setup()  # Redoes the setup to get the IDs in place
             for r in self.robots:
                 self.update_robot_coord(int(r), self.robots[r])
+        
+        
 
     def setup(self):
         field = modelFromJSON(open("field_graphics/assets/models/field_ssl.json").read())
