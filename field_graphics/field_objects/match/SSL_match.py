@@ -4,16 +4,17 @@ from field_graphics.field_objects.ssl_robot_mesh import SSLRobotMesh
 from field_graphics.field_objects.text import Text
 from field_graphics.rendering.render_manager import modelFromJSON
 from field_graphics.field_objects.match.field_match import Match as FieldMatch
+from field_graphics.rendering.objects.renderable_mesh import RenderableMesh
 
 
 class SSLMatch(FieldMatch):
     hasInfo: bool = False
     robots: dict[str, SSLRobotMesh] | None = None
-    ball = None
+    ball: RenderableMesh
 
     def __init__(self, context):
         super().__init__(context)
-        self.field_dimentions = [150.0, 130.0]
+        self.field_dimentions = [150.0, 130.0] #FIXME: Dimensões erradas eu acho
 
     def update(self, time: float) -> bool:
         if not super().update(time): return False
