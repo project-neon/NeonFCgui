@@ -16,6 +16,7 @@ class SSLMatch(FieldMatch):
         super().__init__(context)
         self.field_dimentions = [150.0, 130.0] #FIXME: Dimensões erradas eu acho
 
+
     def update(self, time: float) -> bool:
         if not super().update(time): return False
         if self.context.no_info:
@@ -25,16 +26,18 @@ class SSLMatch(FieldMatch):
                 self.hasInfo = True
                 self.context.reset()
                 self.setup()  # Redoes the setup to get the IDs in place
+            self.ball.x = self.context.match_api.ball.ball_pos[0] * 100 - self.field_dimentions[0] * 0.5
+            self.ball.y = self.context.match_api.ball.ball_pos[1] * 100 - self.field_dimentions[1] * 0.5
             for r in self.robots:
                 self.update_robot_coord(int(r), self.robots[r])
-        
-        
+
+
 
     def setup(self):
         field = modelFromJSON(open("field_graphics/assets/models/field_ssl.json").read())
         for obj in field: self.context.rendering_context.objects.append(obj)
         self.robots = {}
-
+        self.context.rendering_context.objects.append(self.ball)
         # Sets the robot models
         for r in self.context.match_api.robots:
             r_id = r.robot_id
