@@ -1,10 +1,10 @@
 {
     "MATCH": {
-        "GAME_STATUS": "STOP",
+        "GAME_STATUS": "GAME_ON",
         "TEAM_SIDE": "left",
         "TEAM_COLOR": "blue",
-        "COACH_NAME": "No coach found",
-        "CATEGORY": "SSL",
+        "COACH_NAME": "TwoPlayers",
+        "CATEGORY": "MINI",
         "ROBOT_IDS": [
             5,
             7,
@@ -17,17 +17,20 @@
         ],
         "UPDATE_RATE": 0,
         "COACH_LIST": [
-            "No coach found"
+            "CoachTeste",
+            "TwoPlayers",
+            "TEST",
+            "RCX_2024"
         ]
     },
     "PARAMETERS": {
-        "PID_KP": 1,
-        "KI": 0,
-        "KD": 0,
+        "PID_KP": 1.0,
+        "KI": 0.0,
+        "KD": 3.0,
         "KW": 3.5,
         "VM": 0.5,
         "RM": 0.44,
-        "UNI_KP": 1
+        "UNI_KP": 1.0
     },
     "FOULS": {
         "FOUL_NAME": "",

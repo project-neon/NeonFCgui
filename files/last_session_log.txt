@@ -1,6 +1,17 @@
-Last session started at: Tue Oct 15 15:00:54 2024
->> Categoria: SSL
+Last session started at: Wed Oct 16 10:45:44 2024
+>> Categoria: MINI
 >> Coach atual: No coach found
 >> Parâmetros padrão:
 PID_KP=1;  KI=0;  KD=0;  KW=3.5;  RM=0.44;  VM=0.5; UNI_KP =1
 >> Modo da GUI selecionado: Treino
+>> Status atual: GAME_ON
+>> Status atual: STOP
+>> Status atual: GAME_ON
+>> Status atual: STOP
+>> Status atual: GAME_ON
+>> Parâmetros atuais:
+PID_KP=1.0;  KI=0.0;  KD=0.0;  KW=3.5;  RM=0.44;  VM=0.5; UNI_KP = 1.0
+>> Parâmetros atuais:
+PID_KP=1.0;  KI=0.0;  KD=3.0;  KW=3.5;  RM=0.44;  VM=0.5; UNI_KP = 1.0
+>> Coach atual:
+TwoPlayers

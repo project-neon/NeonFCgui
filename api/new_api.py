@@ -48,7 +48,8 @@ class Api(metaclass=SingletonMeta):
 
         # Send gui_info
         with open('files/gui_info.json', 'r') as file:
-            msg = json.load(file)
+            read_file = json.load(file)
+        msg = json.dumps(read_file)
         self.obj_socket.sendto(msg.encode(), (self.address, self.port))
         
         self.last_gui_data_sent = msg
