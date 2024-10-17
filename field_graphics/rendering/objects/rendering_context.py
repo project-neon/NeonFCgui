@@ -22,7 +22,7 @@ class RenderingContext:
 
     def draw_obj(self,obj: list | Renderable, sim_time):
         if isinstance(obj, list):
-            for i in obj: self.draw_obj(obj)
+            for i in obj: self.draw_obj(i, sim_time)
         elif isinstance(obj, Renderable):
             obj.draw(self.x, self.y, self.scale,
                      self.rotation, self.aspect_ratio, sim_time)

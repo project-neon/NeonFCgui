@@ -1,5 +1,6 @@
 import math
 
+from field_graphics.assets import Assets
 from field_graphics.field_objects.match.field_match import Match
 from field_graphics.field_objects.text import Text
 from field_graphics.field_objects.vsss_robot_mesh import VSSSRobotMesh
@@ -25,7 +26,10 @@ class VSSSMatch(Match):
             # obj.x = 75; obj.y = 65
             self.context.rendering_context.objects.append(obj)
         super().setup()
-
+        self.context.rendering_context.objects.append(
+            Assets.gen_custom_field(10,10,.1)
+        )
+        print('among us')
 
         self.robots = {}
         self.context.rendering_context.objects.append(self.ball)

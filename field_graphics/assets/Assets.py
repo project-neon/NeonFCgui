@@ -1,5 +1,9 @@
 from field_graphics.rendering.objects.renderable_mesh import RenderableMesh    
+from PyQt6.QtOpenGL import QOpenGLShaderProgram
 
+from field_graphics.rendering.render_manager import compileShaderProgram
+
+import numpy as np
 
 def shaderProgram() -> QOpenGLShaderProgram:
     vsh = open("field_graphics/assets/shaders/VertexShader.vsh").read()
@@ -15,4 +19,4 @@ def gen_custom_field(width, height, line_len) -> list[RenderableMesh]:
     ]
     
     colors = [1] * len(vertices)
-    return [RenderableMesh(vertices, colors, shaderProgram())]
+    return [RenderableMesh(np.asarray(vertices,dtype=np.float32), np.asarray(colors,dtype=np.float32), shaderProgram())]
