@@ -27,9 +27,8 @@ class VSSSMatch(Match):
             self.context.rendering_context.objects.append(obj)
         super().setup()
         self.context.rendering_context.objects.append(
-            Assets.gen_custom_field(80,20,1)
+            Assets.gen_custom_field(100,50,1,5,10,10,20)
         )
-        print('among us')
 
         self.robots = {}
         self.context.rendering_context.objects.append(self.ball)
