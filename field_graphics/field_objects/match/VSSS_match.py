@@ -22,9 +22,7 @@ class VSSSMatch(Match):
     def setup(self):
         field = modelFromJSON(open("field_graphics/assets/models/field_vsss.json").read())
         self.ball = modelFromJSON(open("field_graphics/assets/models/ball.json").read())[0]
-        for obj in field:
-            # obj.x = 75; obj.y = 65
-            self.context.rendering_context.objects.append(obj)
+        # self.context.rendering_context.objects.append(field)
         super().setup()
         self.context.rendering_context.objects.append(
             Assets.gen_custom_field(100,50,1,5,10,10,20)

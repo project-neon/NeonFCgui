@@ -149,6 +149,15 @@ def gen_custom_field(width, height, line_len, goal_depth, goal_height, penalty_a
         origin[0] + width- line_len/2.0 + goal_depth + line_len/2.0, line_len/2.0 + goal_height/2.0, -0.9,
         origin[0] + width - line_len/2.0 + goal_depth - line_len/2.0, -line_len/2.0 - goal_height/2.0, -0.9,
         origin[0] + width - line_len/2.0 + goal_depth + line_len/2.0, -line_len/2.0 - goal_height/2.0, -0.9,
+
+
+        origin[0], line_len/2.0, 0.9, origin[0], -line_len/2.0, 0.9, origin[0]+width, line_len/2.0, 0.9,
+        origin[0], -line_len/2.0, 0.9, origin[0]+width, -line_len/2.0, 0.9, origin[0]+width, line_len/2.0, 0.9, 
+    
+        -line_len/2.0, -origin[1], 0.9, line_len/2.0, -origin[1], 0.9, line_len/2.0, origin[1], 0.9, 
+        -line_len/2.0,  origin[1], 0.9, -line_len/2.0, -origin[1], 0.9, line_len/2.0, origin[1], 0.9 
+
+
     ]
     
     colors = [1] * len(vertices)
