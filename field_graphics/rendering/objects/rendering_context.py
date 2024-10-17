@@ -19,7 +19,6 @@ class RenderingContext:
         self.scale = scale
         self.rotation = rotation
 
-
     def draw_obj(self,obj: list | Renderable, sim_time):
         if isinstance(obj, list):
             for i in obj: self.draw_obj(i, sim_time)
