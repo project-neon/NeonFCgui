@@ -62,7 +62,7 @@ class MiniPanel(QWidget):
         grid = QGridLayout()
 
         # Widget to choose game mode
-        self.mode_widget = GameMode(self.log_widget)
+        self.mode_widget = GameMode(self.context, self.log_widget)
         grid.addWidget(self.mode_widget, 0, 3, 1, 3) # starts at row:0, column:3, spans 1 row, spans 3 columns
 
         # NeonFC's informations

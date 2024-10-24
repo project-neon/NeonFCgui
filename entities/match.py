@@ -45,6 +45,10 @@ class Match():
         # Modo da interface: "Treino" ou "Competição"
         self.gui_mode = "Treino"
 
+        self.gui_data = {}
+
+        self.update_info_json_file()
+
         self.start()
         
     def start(self):
@@ -117,8 +121,12 @@ class Match():
         self.category = cat
         self.update_info_json_file()
     
+    def set_gui_mode(self, m):
+        self.gui_mode = m
+        self.update_info_json_file()
+    
     def update_info_json_file(self):
-        self.gui_data = dict(
+        data_dict = dict(
             {
                 "MATCH": {
                     "GAME_STATUS": self.game_status,
@@ -149,8 +157,11 @@ class Match():
                 "GUI_MODE": self.gui_mode
             }
         )
+
+        self.gui_data = data_dict
+
         # update gui_info.json
         # with open('files/gui_info.json', 'w') as f:
         #     json.dump(self.gui_data, f)
         with open('files/gui_info.json', 'w', encoding='utf-8') as f:
-            json.dump(self.gui_data, f, ensure_ascii=False, indent=4)
+            json.dump(data_dict, f, ensure_ascii=False, indent=4)

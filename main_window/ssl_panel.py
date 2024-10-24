@@ -99,7 +99,7 @@ class SSLPanel(QWidget):
         grid.addWidget(self.gk_widget, 0, 3, 1, 3) # starts at row:0, column:3, spans 1 row, spans 3 columns
 
         # Widget to choose game mode
-        self.mode_widget = GameMode(self.log_widget)
+        self.mode_widget = GameMode(self.context, self.log_widget)
         grid.addWidget(self.mode_widget, 1, 3, 1, 3) # starts at row:1, column:3, spans 1 row, spans 3 columns
 
         # NeonFC's informations

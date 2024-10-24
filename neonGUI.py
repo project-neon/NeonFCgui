@@ -58,8 +58,8 @@ class NeonFCGUI(object):
 
     def update(self):
         while self.main_thread.is_alive():
-            #self.api.send_data(self.info_api)
-            self.api.send_gui_info()
+            self.api.send_data(self.info_api)
+            # self.api.send_gui_info()
 
 gui = NeonFCGUI()
 gui.start()

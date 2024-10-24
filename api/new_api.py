@@ -29,7 +29,7 @@ class Api(metaclass=SingletonMeta):
         self.address = address
         self.port = port
 
-        self.last_gui_data_sent = {}
+        # self.last_data_sent = {}
 
     # Initiate socket connection
     def start(self):
@@ -40,19 +40,6 @@ class Api(metaclass=SingletonMeta):
         data_dict = Info_api.organize_send()
         msg = json.dumps(data_dict)
         self.obj_socket.sendto(msg.encode(), (self.address, self.port))
-
-    def send_gui_info(self):
-        # data_dict = json.load(open("files/gui_info.json"))
-
-        # TODO Check if current gui_info differs from last info sent
-
-        # Send gui_info
-        with open('files/gui_info.json', 'r') as file:
-            read_file = json.load(file)
-        msg = json.dumps(read_file)
-        self.obj_socket.sendto(msg.encode(), (self.address, self.port))
-        
-        self.last_gui_data_sent = msg
     
     def send_custom_data(self, data):
          msg = json.dumps(data)

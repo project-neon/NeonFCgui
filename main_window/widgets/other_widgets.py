@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import QWidget, QRadioButton, QLabel, QVBoxLayout, QPushButton
 from PyQt6.QtGui import QFont, QPalette, QColor
 from PyQt6.QtCore import Qt
+from entities.match import Match
 from main_window.widgets.log import Log
 import os
 
@@ -39,12 +40,13 @@ class CategorySelect(QWidget):
 
 
 class GameMode(QWidget):
-    def __init__(self, log: Log):
+    def __init__(self, context: Match, log: Log):
         super(GameMode, self).__init__()
         self.setAutoFillBackground(True)
         palette = self.palette()
         palette.setColor(QPalette.ColorRole.Window, QColor('#b3a4d3'))
         self.setPalette(palette)
+        self.context = context
         self.log= log
 
         self.mode = 'training'
@@ -88,4 +90,5 @@ class GameMode(QWidget):
             elif sender == self.btn_competition:
                 self.mode = 'competition'
                 self.log.add_message('Modo da GUI selecionado: Competicao')
+            self.context.set_gui_mode(self.mode)
             print("Mode: "+self.mode)

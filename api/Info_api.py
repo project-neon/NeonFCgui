@@ -15,27 +15,7 @@ class InfoApi():
 
 
     def organize_send(self):
-
-        self.parameters = self.match.control_parameters
-
-        data_send = dict(
-        {'MATCH':
-            {'TEAM_COLOR' :  self.match.team_color,
-             'GAME_STATUS' : self.match.game_status,
-             'TEAM_SIDE' : self.match.team_side,
-             'COACH_NAME': self.match.coach_name
-            },
-         'PARAMETERS': 
-            {'PID_KP': self.parameters['pid_kp'],
-             'KI': self.parameters['ki'],
-             'KD': self.parameters['kd'],
-             'KW': self.parameters['kw'],
-             'VM': self.parameters['vm'],
-             'RM': self.parameters['rm'],
-             'UNI_KP': self.parameters['uni_kp']
-            }
-        })
-
+        data_send = self.match.gui_data
         #print(data_send)
 
         self.save_data(data_send)
