@@ -45,7 +45,12 @@ class NeonFCGUI(object):
                                 self.match.control_parameters, self.match.coach_name)
 
     def start(self):
-        self.api.start()
+        # Create a thread targeting the `start` method of the API's instance
+        self.api_thread = threading.Thread(target=self.api.start)
+        # self.api.start()
+        # Start the API's thread
+        self.api_thread.start()
+
         self.api_recv.connect_info(self.info_api)
         self.api_recv.start()
 
