@@ -64,6 +64,7 @@ class NeonFCGUI(object):
     def update(self):
         while self.main_thread.is_alive():
             self.api.send_data(self.info_api)
+            time.sleep(0.001)  # Necessary pause of 1ms to avoid busy waiting (https://superfastpython.com/thread-busy-waiting-in-python/)
             # self.api.send_gui_info()
 
 gui = NeonFCGUI()
