@@ -54,9 +54,9 @@ class Api(metaclass=SingletonMeta):
         data_dict = Info_api.organize_send()
         msg = json.dumps(data_dict)
         if self.client:
-            self.obj_socket.send(msg.encode())
+            self.obj_socket.sendall(msg.encode())
     
     def send_custom_data(self, data):
         msg = json.dumps(data)
         if self.client:
-            self.obj_socket.send(msg.encode())
+            self.obj_socket.sendall(msg.encode())
