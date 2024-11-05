@@ -41,6 +41,8 @@ class Match():
         else:
             self.robots_ids = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
             self.opposites_ids = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15] 
+        
+        self.gk_id = -1 # Goalkeeper's ID
 
         # Default parameter values
         # TODO option to change default params/save them in a file
@@ -131,6 +133,10 @@ class Match():
         self.gui_mode = m
         self.update_info_json_file()
     
+    def set_gk_id(self, id):
+        self.gk_id = id
+        self.update_info_json_file()
+    
     def update_info_json_file(self):
         data_dict = dict(
             {
@@ -143,7 +149,8 @@ class Match():
                     "ROBOT_IDS": self.robots_ids,
                     "OPPOSITE_IDS": self.opposites_ids,
                     "UPDATE_RATE": self.update_rate,
-                    "COACH_LIST": self.coach_list
+                    "COACH_LIST": self.coach_list,
+                    "GOALKEEPER_ID": self.gk_id
                 },
                 'PARAMETERS': {
                     'PID_KP': self.control_parameters['pid_kp'],
