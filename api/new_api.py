@@ -1,6 +1,6 @@
 from socket import *
 import json
-import api.Info_api as Info_api
+import api.info_api as info_api
 import threading
 
 BUFFER_SIZE = 4096

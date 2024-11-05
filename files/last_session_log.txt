@@ -1,17 +1,8 @@
-Last session started at: Wed Oct 16 10:45:44 2024
->> Categoria: MINI
->> Coach atual: No coach found
+Last session started at: Mon Nov  4 21:43:01 2024
+>> Categoria: SSL
+>> Coach atual: Test
 >> Parâmetros padrão:
 PID_KP=1;  KI=0;  KD=0;  KW=3.5;  RM=0.44;  VM=0.5; UNI_KP =1
 >> Modo da GUI selecionado: Treino
->> Status atual: GAME_ON
->> Status atual: STOP
->> Status atual: GAME_ON
->> Status atual: STOP
->> Status atual: GAME_ON
->> Parâmetros atuais:
-PID_KP=1.0;  KI=0.0;  KD=0.0;  KW=3.5;  RM=0.44;  VM=0.5; UNI_KP = 1.0
->> Parâmetros atuais:
-PID_KP=1.0;  KI=0.0;  KD=3.0;  KW=3.5;  RM=0.44;  VM=0.5; UNI_KP = 1.0
->> Coach atual:
-TwoPlayers
+>> Cor da falta selecionada: Amarelo
+>> Cor da falta selecionada: Azul

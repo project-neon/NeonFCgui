@@ -37,4 +37,4 @@ class ApiRecv(threading.Thread):
                 self.Info_api.update_recv(decoded_data)
 
                 self.decod_data = decoded_data
-                print("Data Received: %s", decoded_data)
+                # print("Data Received: %s", decoded_data)

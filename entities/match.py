@@ -35,8 +35,12 @@ class Match():
         self.robots = []
         self.opposites = []
 
-        self.robots_ids = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
-        self.opposites_ids = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15] 
+        if self.category == 'MINI':
+            self.robots_ids = [5,7,8]
+            self.opposites_ids = [1,2,3] #Placeholders for tests
+        else:
+            self.robots_ids = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+            self.opposites_ids = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15] 
 
         # Default parameter values
         # TODO option to change default params/save them in a file
@@ -160,7 +164,6 @@ class Match():
             }
         )
 
-        self.gui_data = data_dict
 
         # update gui_info.json
         # with open('files/gui_info.json', 'w') as f:
