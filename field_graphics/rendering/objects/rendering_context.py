@@ -19,10 +19,19 @@ class RenderingContext:
         self.scale = scale
         self.rotation = rotation
 
+    def draw_obj(self,obj: list | Renderable, sim_time):
+        if isinstance(obj, list):
+            for i in obj: self.draw_obj(i, sim_time)
+        elif isinstance(obj, Renderable):
+            obj.draw(self.x, self.y, self.scale,
+                     self.rotation, self.aspect_ratio, sim_time)
+        else:
+            print("WARNING: INVALID OBJECT QUEUED FOR RENDER: " + str(obj))
+            
+
     def set_aspect_ratio(self, aspect_ratio):
         self.aspect_ratio = aspect_ratio
 
     def draw(self, sim_time: float):
         for obj in self.objects:
-            obj.draw(self.x, self.y, self.scale,
-                     self.rotation, self.aspect_ratio, sim_time)
+            self.draw_obj(obj, sim_time)

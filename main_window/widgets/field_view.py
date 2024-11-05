@@ -77,6 +77,7 @@ class FieldView(QOpenGLWidget):
         self.makeCurrent()
         self.update_translations(1)
         self.update()
+        if self.no_info and self.match_api.last_update_time !=0: self.no_info = False
         self.sim_time += 1
 
     def keyPressEvent(self, event: typing.Optional[QtGui.QKeyEvent]) -> None:
