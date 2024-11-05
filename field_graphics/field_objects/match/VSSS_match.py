@@ -1,5 +1,6 @@
 import math
 
+from field_graphics.assets import Assets
 from field_graphics.field_objects.match.field_match import Match
 from field_graphics.field_objects.text import Text
 from field_graphics.field_objects.vsss_robot_mesh import VSSSRobotMesh
@@ -21,11 +22,11 @@ class VSSSMatch(Match):
     def setup(self):
         field = modelFromJSON(open("field_graphics/assets/models/field_vsss.json").read())
         self.ball = modelFromJSON(open("field_graphics/assets/models/ball.json").read())[0]
-        for obj in field:
-            # obj.x = 75; obj.y = 65
-            self.context.rendering_context.objects.append(obj)
+        # self.context.rendering_context.objects.append(field)
         super().setup()
-
+        self.context.rendering_context.objects.append(
+            Assets.gen_custom_field(100,50,1,5,10,10,20)
+        )
 
         self.robots = {}
         self.context.rendering_context.objects.append(self.ball)

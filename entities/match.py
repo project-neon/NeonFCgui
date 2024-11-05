@@ -33,8 +33,8 @@ class Match():
         self.robots = []
         self.opposites = []
 
-        self.robots_ids = [5, 7, 8]
-        self.opposites_ids = [1, 2, 3] # Placeholders so they don't override the robot_id values at the field_view
+        self.robots_ids = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+        self.opposites_ids = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15] 
 
         # Default parameter values
         # TODO option to change default params/save them in a file
