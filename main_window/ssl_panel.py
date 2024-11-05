@@ -89,6 +89,7 @@ class SSLPanel(QWidget):
         self.robots_ids_str = []
         for r_id in self.context.robots_ids:
             self.robots_ids_str.append(str(r_id))
+        print(self.robots_ids_str)
         self.btn_gk.addItems(self.robots_ids_str)
         # select current gk
         # self.btn_gk.setCurrentIndex(r_index)

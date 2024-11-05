@@ -3,21 +3,47 @@
         "GAME_STATUS": "STOP",
         "TEAM_SIDE": "left",
         "TEAM_COLOR": "blue",
-        "COACH_NAME": "Test",
+        "COACH_NAME": "No coach found",
         "CATEGORY": "SSL",
         "ROBOT_IDS": [
-            5,
-            7,
-            8
-        ],
-        "OPPOSITE_IDS": [
+            0,
             1,
             2,
-            3
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
         ],
-        "UPDATE_RATE": 59,
+        "OPPOSITE_IDS": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+        ],
+        "UPDATE_RATE": 0,
         "COACH_LIST": [
-            "Test"
+            "No coach found"
         ]
     },
     "PARAMETERS": {
