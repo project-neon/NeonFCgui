@@ -37,6 +37,7 @@ class SSLMatch(FieldMatch):
         field = modelFromJSON(open("field_graphics/assets/models/field_ssl.json").read())
         for obj in field: self.context.rendering_context.objects.append(obj)
         self.robots = {}
+        self.ball = modelFromJSON(open("field_graphics/assets/models/ball.json").read())[0]
         self.context.rendering_context.objects.append(self.ball)
         # Sets the robot models
         for r in self.context.match_api.robots:
@@ -57,7 +58,7 @@ class SSLMatch(FieldMatch):
                 "field_graphics/assets/bitmaps/Arial Bold_1024.bmp",
                 size=6,
                 tracking=self.robots[r], anchor=(10, 0))
-            self.context.rendering_context.objects.append(robot_text)
+            # self.context.rendering_context.objects.append(robot_text)
         super().setup()
 
     def update_robot_coord(self, robot_id: int, model: SSLRobotMesh):
