@@ -16,9 +16,11 @@ class Robot():
 
     def update_information(self, info):
         """ Function to update values received in api """
+
         if str(self.robot_id) in info['ROBOT_POS']:
             self.robot_pos = info['ROBOT_POS'][str(self.robot_id)]
             if not self.team:   
                 self.strategy = None
             else:
-                self.strategy = info['STRATEGY'][str(self.robot_id)]
+                if str(self.robot_id) in info['STRATEGY']:
+                    self.strategy = info['STRATEGY'][str(self.robot_id)]

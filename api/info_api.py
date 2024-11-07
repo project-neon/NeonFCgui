@@ -47,13 +47,21 @@ class InfoApi():
 
     def update_recv(self,info_recv):
         
-        self.match.update_information(info_recv['MATCH'])
-        self.ball.update_information(info_recv['BALL'])
-        for robot in self.robots:
-            robot.update_information(info_recv['TEAM_ROBOTS'])
 
-        for opposite in self.opposites:
-            opposite.update_information(info_recv['OPPOSITE_ROBOTS'])
+        if 'MATCH' in info_recv:
+            self.match.update_information(info_recv['MATCH'])
+
+        if 'BALL' in info_recv:
+            self.ball.update_information(info_recv['BALL'])
+
+
+        if 'TEAM_ROBOTS' in info_recv:
+                for robot in self.robots:
+                    robot.update_information(info_recv['TEAM_ROBOTS'])
+
+        if 'OPPOSITE_ROBOTS' in info_recv:
+            for opposite in self.opposites:
+                opposite.update_information(info_recv['OPPOSITE_ROBOTS'])
 
         self.save_data(info_recv)
 

@@ -29,7 +29,7 @@ class SSLMatch(FieldMatch):
             self.ball.x = self.context.match_api.ball.ball_pos[0] * 100 - self.field_dimentions[0] * 0.5
             self.ball.y = self.context.match_api.ball.ball_pos[1] * 100 - self.field_dimentions[1] * 0.5
             for r in self.robots:
-                self.update_robot_coord(int(r), self.robots[r])
+                self.update_robot_coord(True, int(r), self.robots[r])
 
 
 
@@ -61,8 +61,8 @@ class SSLMatch(FieldMatch):
             # self.context.rendering_context.objects.append(robot_text)
         super().setup()
 
-    def update_robot_coord(self, robot_id: int, model: SSLRobotMesh):
-        r = self.context.match_api.fetch_robot_by_id(robot_id)
+    def update_robot_coord(self, team, robot_id: int, model: SSLRobotMesh):
+        r = self.context.match_api.fetch_robot_by_id(team, robot_id)
         model.x = r.robot_pos[0] * 100 - self.field_dimentions[0] * 0.5
         model.y = r.robot_pos[1] * 100 - self.field_dimentions[1] * 0.5
         model.rotation = -r.robot_pos[2] + math.pi / 2
