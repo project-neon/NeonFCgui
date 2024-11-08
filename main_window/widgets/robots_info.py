@@ -47,19 +47,19 @@ class RobotFrame(QFrame):
         self.setLineWidth(1)
 
     def update_info(self):
-        if self.robot.strategy == None:
-                self.strategy = 'None'
-        else:
-            self.strategy = self.robot.strategy
+        if self.robot.playing:
+            if self.robot.strategy == None:
+                    self.strategy = 'None'
+            else:
+                self.strategy = self.robot.strategy
 
-        if self.robot.battery == None:
-             self.battery = '-1'
-        else:
-             self.battery = self.robot.battery
-
-             self.lbl_strategy.setText("Estratégia:<br/>" + str(self.strategy))
-        self.lbl_battery.setText("Bateria:<br/>" + str(self.battery) + "%")
-        self.title.setText("Robô "+str(self.id))
+            if self.robot.battery == None:
+                self.battery = '-1'
+            else:
+                self.battery = self.robot.battery
+            self.lbl_strategy.setText("Estratégia:<br/>" + str(self.strategy))
+            self.lbl_battery.setText("Bateria:<br/>" + str(self.battery) + "%")
+            self.title.setText("Robô "+str(self.id))
 
 class RobotsInfo(QWidget):
     def __init__(self, context: Match):
@@ -72,7 +72,7 @@ class RobotsInfo(QWidget):
         self.context = context
 
         # Creating table of informations
-        grid = QGridLayout()
+        self.grid = QGridLayout()
         # 3 robots in a single column for Mini,
         # 6 robots in 2 columns for SSL
 
@@ -85,25 +85,58 @@ class RobotsInfo(QWidget):
         else:
             self.robot_list = context.robots
 
-
+        print(len(self.robot_list))
         for i in range(len(self.robot_list)):
             r = RobotFrame(self.robot_list[i])
             r.setFixedWidth(180)
             self.robot_frames.append(r)
 
-        grid.addWidget(self.robot_frames[0], 0, 0)
-        grid.addWidget(self.robot_frames[1], 1, 0)
-        grid.addWidget(self.robot_frames[2], 2, 0)
-        if self.context.category == "SSL":
-            grid.addWidget(self.robot_frames[3], 0, 1)
-            grid.addWidget(self.robot_frames[4], 1, 1)
-            grid.addWidget(self.robot_frames[5], 2, 1)
+        self.show_ids = []
+        self.widget_ids = []
 
-        self.setLayout(grid)
+        self.grid.addWidget(self.robot_frames[0], 0, 0)
+        self.show_ids.append(self.robot_frames[0].id)
+        self.widget_ids.append((self.robot_frames[0].id, 0, 0))
+        self.grid.addWidget(self.robot_frames[1], 1, 0)
+        self.show_ids.append(self.robot_frames[1].id)
+        self.widget_ids.append((self.robot_frames[1].id, 0, 1))
+        self.grid.addWidget(self.robot_frames[2], 2, 0)
+        self.show_ids.append(self.robot_frames[2].id)
+        self.widget_ids.append((self.robot_frames[2].id, 0, 2))
+        if self.context.category == "SSL":
+            self.grid.addWidget(self.robot_frames[3], 0, 1)
+            self.show_ids.append(self.robot_frames[3].id)
+            self.widget_ids.append((self.robot_frames[3].id, 1, 0))
+            self.grid.addWidget(self.robot_frames[4], 1, 1)
+            self.show_ids.append(self.robot_frames[4].id)
+            self.widget_ids.append((self.robot_frames[4].id, 1, 1))
+            self.grid.addWidget(self.robot_frames[5], 2, 1)
+            self.show_ids.append(self.robot_frames[5].id)
+            self.widget_ids.append((self.robot_frames[5].id, 1, 2))
+
+        
+
+        self.setLayout(self.grid)
 
     def update_info(self, status: Match):
+        for robot in status.robots:
+            if robot.playing == True and robot.robot_id not in self.show_ids:
+                self.show_ids.pop(0)
+                self.show_ids.append(robot.robot_id)
         for robot in self.robot_frames:
+
+            if robot.id in self.show_ids:
+                i = 0
+                while i < len(self.widget_ids):
+                    if self.widget_ids[i][0] not in self.show_ids and robot.id != self.widget_ids[i][0]:
+                        self.grid.addWidget(robot, self.widget_ids[i][1], self.widget_ids[i][2])
+                        self.widget_ids.append((robot.id, self.widget_ids[i][1], self.widget_ids[i][2]))
+                        self.widget_ids.pop(i)
+                        i += len(self.widget_ids)
+                    i += 1
+
+            if robot.id not in self.show_ids:
+                robot.setParent(None)
             robot_info = status.fetch_robot_by_id(robot.team, robot.id)
-            # print(robot_info)
             if robot_info is not None:
                 robot.update_info()

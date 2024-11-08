@@ -41,7 +41,7 @@ class Match():
         else:
             self.robots_ids = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
             self.opposites_ids = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15] 
-        
+
         self.gk_id = -1 # Goalkeeper's ID
 
         # Default parameter values
@@ -59,11 +59,11 @@ class Match():
         
     def start(self):
         self.opposites = [
-            entities.Robot(i, [0,0,0], False) for i in self.opposites_ids
+            entities.Robot(i, [-10,-10,0], False) for i in self.opposites_ids
         ]
 
         self.robots = [
-            entities.Robot(i, [0,0,0]) for i in self.robots_ids
+            entities.Robot(i, [-10,-10,0]) for i in self.robots_ids
         ]
 
         self.update_info_json_file()
