@@ -6,6 +6,7 @@ class Robot():
         self.robot_pos = robot_pos
         self.team = team
         self.strategy = None
+        self.battery = None
 
 
     def change_team(self):
@@ -14,13 +15,13 @@ class Robot():
         else:
             self.team = True
 
-    def update_information(self, info):
+    def update_information(self, info, team):
         """ Function to update values received in api """
 
         if str(self.robot_id) in info['ROBOT_POS']:
             self.robot_pos = info['ROBOT_POS'][str(self.robot_id)]
-            if not self.team:   
-                self.strategy = None
-            else:
+            if team:
                 if str(self.robot_id) in info['STRATEGY']:
                     self.strategy = info['STRATEGY'][str(self.robot_id)]
+                if str(self.robot_id) in info['BATTERY']:
+                    self.battery = info['BATTERY'][str(self.robot_id)]

@@ -57,11 +57,11 @@ class InfoApi():
 
         if 'TEAM_ROBOTS' in info_recv:
                 for robot in self.robots:
-                    robot.update_information(info_recv['TEAM_ROBOTS'])
+                    robot.update_information(info_recv['TEAM_ROBOTS'], True)
 
         if 'OPPOSITE_ROBOTS' in info_recv:
             for opposite in self.opposites:
-                opposite.update_information(info_recv['OPPOSITE_ROBOTS'])
+                opposite.update_information(info_recv['OPPOSITE_ROBOTS'], False)
 
         self.save_data(info_recv)
 

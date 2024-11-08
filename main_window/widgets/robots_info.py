@@ -46,13 +46,18 @@ class RobotFrame(QFrame):
         self.setFrameStyle(QFrame.Shape.Box | QFrame.Shadow.Plain)
         self.setLineWidth(1)
 
-    def update_info(self, battery):
+    def update_info(self):
         if self.robot.strategy == None:
                 self.strategy = 'None'
         else:
             self.strategy = self.robot.strategy
-        self.lbl_strategy.setText("Estratégia:<br/>" + str(self.strategy))
-        self.battery = battery
+
+        if self.robot.battery == None:
+             self.battery = '-1'
+        else:
+             self.battery = self.robot.battery
+
+             self.lbl_strategy.setText("Estratégia:<br/>" + str(self.strategy))
         self.lbl_battery.setText("Bateria:<br/>" + str(self.battery) + "%")
         self.title.setText("Robô "+str(self.id))
 
@@ -101,5 +106,4 @@ class RobotsInfo(QWidget):
             robot_info = status.fetch_robot_by_id(robot.team, robot.id)
             # print(robot_info)
             if robot_info is not None:
-                # TODO since there's no battery information in the API side then it cannot be imported
-                robot.update_info(0)
+                robot.update_info()
