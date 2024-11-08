@@ -18,7 +18,6 @@ class Robot():
 
     def update_information(self, info, team):
         """ Function to update values received in api """
-
         if str(self.robot_id) in info['ROBOT_POS'].keys():
             self. playing = True
             if str(self.robot_id) in info['ROBOT_POS']:

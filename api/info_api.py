@@ -22,6 +22,7 @@ class InfoApi():
                     "TEAM_SIDE": self.match.team_side,
                     "TEAM_COLOR": self.match.team_color,
                     "COACH_NAME": self.match.coach_name,
+                    "GOALKEEPER_ID": self.match.gk_id
                 },
                 'PARAMETERS': {
                     'PID_KP': self.parameters['pid_kp'],
@@ -49,7 +50,7 @@ class InfoApi():
         
 
         if 'MATCH' in info_recv:
-            self.match.update_information(info_recv['MATCH'])
+            self.match.update_information(info_recv['MATCH']) #'FIELD_SIZE': [size.x, size.y]
 
         if 'BALL' in info_recv:
             self.ball.update_information(info_recv['BALL'])

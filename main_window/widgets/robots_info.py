@@ -85,7 +85,6 @@ class RobotsInfo(QWidget):
         else:
             self.robot_list = context.robots
 
-        print(len(self.robot_list))
         for i in range(len(self.robot_list)):
             r = RobotFrame(self.robot_list[i])
             r.setFixedWidth(180)
