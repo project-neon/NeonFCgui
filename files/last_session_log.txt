@@ -1,5 +1,5 @@
-Last session started at: Mon Nov  4 23:50:33 2024
->> Categoria: MINI
+Last session started at: Fri Nov  8 01:36:47 2024
+>> Categoria: SSL
 >> Coach atual: No coach found
 >> Parâmetros padrão:
 PID_KP=1;  KI=0;  KD=0;  KW=3.5;  RM=0.44;  VM=0.5; UNI_KP =1

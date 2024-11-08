@@ -14,7 +14,7 @@ class SSLMatch(FieldMatch):
 
     def __init__(self, context):
         super().__init__(context)
-        self.field_dimentions = [150.0, 130.0] #FIXME: Dimensões erradas eu acho
+        self.field_dimentions = [150.0, 130.0] #FIXME: Dimensões erradas possivelmente
 
 
     def update(self, time: float) -> bool:
@@ -49,9 +49,10 @@ class SSLMatch(FieldMatch):
         for r in self.context.match_api.opposites:
             r_id = r.robot_id
             r_m = SSLRobotMesh(r_id)
+            r_m.set_id(r_id,False)
             self.context.rendering_context.objects.append(r_m)
             self.robots.update({str(r_id): r_m})
-
+        self.context.displaySSLModels()
         for r in self.robots:
             robot_text = Text(  # TODO: Config file with standard depths
                 "#{:02d}".format(int(r)),
