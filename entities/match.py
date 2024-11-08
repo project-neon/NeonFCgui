@@ -108,6 +108,7 @@ class Match():
             for opposite in self.opposites:
                 opposite.change_team()
             self.robots, self.opposites = self.opposites, self.robots
+            self.team_color = color
         self.opposite_team_color = 'yellow' if self.team_color == 'blue' else 'blue'
         self.update_info_json_file()
     

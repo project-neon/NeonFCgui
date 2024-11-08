@@ -2,7 +2,7 @@
     "MATCH": {
         "GAME_STATUS": "STOP",
         "TEAM_SIDE": "left",
-        "TEAM_COLOR": "blue",
+        "TEAM_COLOR": "yellow",
         "COACH_NAME": "No coach found",
         "CATEGORY": "SSL",
         "ROBOT_IDS": [
@@ -41,7 +41,7 @@
             14,
             15
         ],
-        "UPDATE_RATE": 177,
+        "UPDATE_RATE": 0,
         "COACH_LIST": [
             "No coach found"
         ],
