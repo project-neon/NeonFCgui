@@ -8,7 +8,7 @@ class Robot():
         self.strategy = None
         self.battery = None
         self.playing = False
-
+        self.signal = None
 
     def change_team(self):
         if self.team:
@@ -27,5 +27,7 @@ class Robot():
                         self.strategy = info['STRATEGY'][str(self.robot_id)]
                     if str(self.robot_id) in info['BATTERY']:
                         self.battery = info['BATTERY'][str(self.robot_id)]
+                    if str(self.robot_id) in info['SIGNAL']:
+                        self.signal = info['SIGNAL'][str(self.robot_id)]
         else:
             self.playing = False

@@ -72,8 +72,6 @@ class SSLMatch(FieldMatch):
         model.x = r.robot_pos[0] * 100 - self.field_dimentions[0] * 0.5
         model.y = r.robot_pos[1] * 100 - self.field_dimentions[1] * 0.5
         model.rotation = -r.robot_pos[2] + math.pi / 2
-        #print('rot = ' + str(model.rotation))
-        print('updating ' + str(robot_id) + ": " + str(r.robot_pos) + '('+str(team)+')')
 
     def get_field_dimention(self) -> tuple[float, float]:
         return self.field_dimentions[0], self.field_dimentions[1]

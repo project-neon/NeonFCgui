@@ -1,4 +1,4 @@
-Last session started at: Fri Nov  8 12:51:12 2024
+Last session started at: Fri Nov  8 13:44:11 2024
 >> Categoria: SSL
 >> Coach atual: Test
 >> Parâmetros padrão:
@@ -7,24 +7,3 @@ PID_KP=1;  KI=0;  KD=0;  KW=3.5;  RM=0.44;  VM=0.5; UNI_KP =1
 >> A cor do time foi alterada para: Amarelo
 >> A cor do time foi alterada para: Azul
 >> A cor do time foi alterada para: Amarelo
->> A cor do time foi alterada para: Azul
->> A cor do time foi alterada para: Amarelo
->> A cor do time foi alterada para: Azul
->> A cor do time foi alterada para: Amarelo
->> A cor do time foi alterada para: Azul
->> A cor do time foi alterada para: Amarelo
->> A cor do time foi alterada para: Azul
->> A cor do time foi alterada para: Amarelo
->> A cor do time foi alterada para: Azul
->> A cor do time foi alterada para: Amarelo
->> A cor do time foi alterada para: Azul
->> A cor do time foi alterada para: Amarelo
->> A cor do time foi alterada para: Azul
->> A cor do time foi alterada para: Amarelo
->> A cor do time foi alterada para: Azul
->> A cor do time foi alterada para: Amarelo
->> A cor do time foi alterada para: Azul
->> A cor do time foi alterada para: Amarelo
->> A cor do time foi alterada para: Azul
->> A cor do time foi alterada para: Amarelo
->> A cor do time foi alterada para: Azul

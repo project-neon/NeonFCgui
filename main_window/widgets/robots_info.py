@@ -36,7 +36,8 @@ class RobotFrame(QFrame):
 
         # Robot's battery
         self.battery = -1
-        self.lbl_battery = QLabel("Bateria:<br/>" + str(self.battery) + "%", parent=self)
+        self.signal = -1
+        self.lbl_battery = QLabel("Bateria:" + str(self.battery) + "%<br/>" + "Sinal:" + str(self.signal), parent=self)
         self.lbl_battery.setWordWrap(True)
         v_layout.addWidget(self.lbl_battery)
 
@@ -57,8 +58,13 @@ class RobotFrame(QFrame):
                 self.battery = '-1'
             else:
                 self.battery = self.robot.battery
+            if self.robot.signal == None:
+                self.signal = '-1'
+            else:
+                self.signal = self.robot.signal
+
             self.lbl_strategy.setText("Estratégia:<br/>" + str(self.strategy))
-            self.lbl_battery.setText("Bateria:<br/>" + str(self.battery) + "%")
+            self.lbl_battery.setText("Bateria:" + str(self.battery) + "%<br/>" + "Sinal:"+ str(self.signal))
             self.title.setText("Robô "+str(self.id))
 
 class RobotsInfo(QWidget):

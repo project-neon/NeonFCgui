@@ -47,7 +47,6 @@ class InfoApi():
         return data_dict
 
     def update_recv(self,info_recv):
-        
 
         if 'MATCH' in info_recv:
             self.match.update_information(info_recv['MATCH']) #'FIELD_SIZE': [size.x, size.y]
