@@ -21,19 +21,20 @@ class ApiRecv(threading.Thread):
     # Receives data
     def run(self):
         self.obj_socket = socket(AF_INET, SOCK_DGRAM)
-        self.obj_socket.bind((self.address, self.port))
-
+        self.obj_socket.setsockopt(SOL_SOCKET, SO_KEEPALIVE, 1)
+        # Bind the socket to the port
+        server_rcv_address = (self.address, self.port)
+        self.obj_socket.bind(server_rcv_address)
         print("Starting api_recv...")
 
-        while threading.main_thread().is_alive():
-            # FIXME: the recvfrom function awaits for the application to receive a package,
-            #  If the main thread dies this subthread will stil persist, causing the application
-            #  to stay hanging despite the death of the other 2 threads that are no longer running.
-            data, origem = self.obj_socket.recvfrom(self.buffer_size)
-            decoded_data = json.loads(data.decode())
-            # Feedback commands from socket (e.g. an interface)
-            #print(decoded_data)
+        while True:
+            data = self.obj_socket.recv(self.buffer_size)
+            if data:
+                decoded_data = json.loads(data.decode())
+                # Feedback commands from socket (e.g. an interface)
+                #print(decoded_data)
 
-            self.Info_api.update_recv(decoded_data)
+                self.Info_api.update_recv(decoded_data)
 
-            self.decod_data = decoded_data
+                self.decod_data = decoded_data
+                # print("Data Received: %s", decoded_data)

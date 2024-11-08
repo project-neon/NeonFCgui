@@ -4,7 +4,7 @@ Main body of code. Execute to start program.
 
 import json
 import threading
-
+import time
 from api import Api, ApiRecv, InfoApi
 from app import App
 from entities import Match
@@ -23,6 +23,13 @@ class NeonFCGUI(object):
     def __init__(self, config_file=None):
         self.main_thread = None
         self.update_thread = None
+
+        # Log file for the last session shall be emptied
+        log_file = open("files/last_session_log.txt", "w")
+        log_file.write("Last session started at: ")
+        log_file.write(str(time.ctime(time.time())) + "\n")
+        log_file.close()
+
         self.match = Match()
         self.app = App(self)
 
@@ -38,7 +45,12 @@ class NeonFCGUI(object):
                                 self.match.control_parameters, self.match.coach_name)
 
     def start(self):
-        self.api.start()
+        # Create a thread targeting the `start` method of the API's instance
+        self.api_thread = threading.Thread(target=self.api.start)
+        # self.api.start()
+        # Start the API's thread
+        self.api_thread.start()
+
         self.api_recv.connect_info(self.info_api)
         self.api_recv.start()
 
@@ -52,7 +64,8 @@ class NeonFCGUI(object):
     def update(self):
         while self.main_thread.is_alive():
             self.api.send_data(self.info_api)
-
+            time.sleep(0.001)  # Necessary pause of 1ms to avoid busy waiting (https://superfastpython.com/thread-busy-waiting-in-python/)
+            # self.api.send_gui_info()
 
 gui = NeonFCGUI()
 gui.start()

@@ -17,10 +17,20 @@ class SSLRobotMesh(RenderableMesh):
         super().__init__(template.vertices, np.asarray([0,0,0,0,0,0,0,0,0,0,0,0],dtype=np.float32), template.shaderProgram)
         self.set_id(id)
 
-    def set_id(self, id: int):
+    def set_id(self, id: int, blue = True):
         self.id = id
         GL.glUseProgram(self.shaderProgram.programId())
         GL.glUniform1i(
             GL.glGetUniformLocation(self.shaderProgram.programId(),"id"),
             self.id
+        )
+        if blue: 
+            GL.glUniform1i(
+            GL.glGetUniformLocation(self.shaderProgram.programId(),"team"),
+            0
+            )
+        else:
+            GL.glUniform1i(
+            GL.glGetUniformLocation(self.shaderProgram.programId(),"team"),
+            1
         )

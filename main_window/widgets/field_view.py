@@ -105,8 +105,14 @@ class FieldView(QOpenGLWidget):
     def displaySSLModels(self):
         for i in range(0,16):
             test_SSL_R = SSLRobotMesh(i)
-            test_SSL_R.y = 90
+            test_SSL_R.y = 340
             test_SSL_R.x = (i * 20) - 160
+            self.rendering_context.objects.append(test_SSL_R)
+        for i in range(0,16):
+            test_SSL_R = SSLRobotMesh(i)
+            test_SSL_R.y = 320
+            test_SSL_R.x = (i * 20) - 160
+            test_SSL_R.set_id(i,False)
             self.rendering_context.objects.append(test_SSL_R)
 
     def displayVSSSModels(self):

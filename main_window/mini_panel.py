@@ -22,6 +22,8 @@ class MiniPanel(QWidget):
         self.context = context
         self.window_height = window_height
 
+        print("Categoria: MINI")
+
         # Organizing the layout
         # Vertical layout divided into top section
         # for controls and a bottom section for the
@@ -33,6 +35,7 @@ class MiniPanel(QWidget):
         
         # Log widget displaying errors and warning messages
         self.log_widget = Log()
+        self.log_widget.add_message("Categoria: MINI")
         
         # Adding game status controls widget
         self.game_controls_widget = GameControls(self.context, self.log_widget)
@@ -59,7 +62,7 @@ class MiniPanel(QWidget):
         grid = QGridLayout()
 
         # Widget to choose game mode
-        self.mode_widget = GameMode(self.log_widget)
+        self.mode_widget = GameMode(self.context, self.log_widget)
         grid.addWidget(self.mode_widget, 0, 3, 1, 3) # starts at row:0, column:3, spans 1 row, spans 3 columns
 
         # NeonFC's informations
