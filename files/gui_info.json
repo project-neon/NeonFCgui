@@ -3,7 +3,6 @@
         "GAME_STATUS": "STOP",
         "TEAM_SIDE": "left",
         "TEAM_COLOR": "blue",
-        "COACH_NAME": "Test",
         "CATEGORY": "SSL",
         "ROBOT_IDS": [
             0,
