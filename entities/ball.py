@@ -6,5 +6,5 @@ class Ball():
 
 
     def update_information(self, info): #Function to update values recieved in api
-        for key, value in info.items():
-            setattr(self, key.lower(), value)        
+        if 'BALL_POS' in info:
+            self.ball_pos = info['BALL_POS']

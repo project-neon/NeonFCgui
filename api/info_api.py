@@ -21,17 +21,7 @@ class InfoApi():
                     "GAME_STATUS": self.match.game_status,
                     "TEAM_SIDE": self.match.team_side,
                     "TEAM_COLOR": self.match.team_color,
-                    "COACH_NAME": self.match.coach_name,
                     "GOALKEEPER_ID": self.match.gk_id
-                },
-                'PARAMETERS': {
-                    'PID_KP': self.parameters['pid_kp'],
-                    'KI': self.parameters['ki'],
-                    'KD': self.parameters['kd'],
-                    'KW': self.parameters['kw'],
-                    'VM': self.parameters['vm'],
-                    'RM': self.parameters['rm'],
-                    'UNI_KP': self.parameters['uni_kp']
                 },
                 "FOULS": {
                     "FOUL_NAME": self.match.current_foul,
@@ -48,8 +38,7 @@ class InfoApi():
 
     def update_recv(self,info_recv):
 
-        if 'MATCH' in info_recv:
-            self.match.update_information(info_recv['MATCH']) #'FIELD_SIZE': [size.x, size.y]
+        self.match.update_information(info_recv) #'FIELD_SIZE': [size.x, size.y]
 
         if 'BALL' in info_recv:
             self.ball.update_information(info_recv['BALL'])

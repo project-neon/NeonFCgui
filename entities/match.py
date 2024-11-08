@@ -72,8 +72,11 @@ class Match():
 
     def update_information(self, info):
         """ Function to update values received in api """
-        for key, value in info.items():
-            setattr(self, key.lower(), value)
+        if 'MATCH' in info:
+            if 'COACH_NAME' in info:
+                self.coach_name = info['COACH_NAME']
+            if 'COACH_LIST' in info:
+                self.coach_list = info['COACH_LIST']
         t_epoch = math.ceil(time.time() * 1000)
         self.update_rate = t_epoch - self.last_update_time
         self.last_update_time = t_epoch
@@ -137,7 +140,11 @@ class Match():
         self.update_info_json_file()
     
     def set_gk_id(self, id):
-        self.gk_id = id
+        if self.robots[id].playing:
+            self.gk_id = id
+        else:
+            print('ESSE JOGADOR NÃO ESTÁ EM CAMPO')
+        print(self.gk_id)
         self.update_info_json_file()
     
     def update_info_json_file(self):

@@ -64,7 +64,7 @@ class RobotFrame(QFrame):
                 self.signal = self.robot.signal
 
             self.lbl_strategy.setText("Estratégia:<br/>" + str(self.strategy))
-            self.lbl_battery.setText("Bateria:" + str(self.battery) + "%<br/>" + "Sinal:"+ str(self.signal))
+            self.lbl_battery.setText("Bateria:" + str(self.battery) + "%<br/>" + "Sinal:"+ str(self.signal) + "dBm")
             self.title.setText("Robô "+str(self.id))
 
 class RobotsInfo(QWidget):
