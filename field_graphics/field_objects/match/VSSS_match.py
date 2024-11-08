@@ -64,7 +64,7 @@ class VSSSMatch(Match):
                 self.context.reset()
                 self.setup()  # Redoes the setup to get the IDs in place
             
-            self.ball.x = self.context.match_api.ball.ball_pos[0] * 100 - self.field_dimentions[0]* 0.5
+            self.ball.x = self.context.match_api.ball.ball_pos[0] * 100 - self.field_dimentions[0] * 0.5
             self.ball.y = self.context.match_api.ball.ball_pos[1] * 100 - self.field_dimentions[1] * 0.5
             # print(self.ball.x)
             # print(self.ball.shader_uniform_locations['coordinate_vector_loc'])
