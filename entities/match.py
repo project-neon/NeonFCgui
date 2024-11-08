@@ -117,12 +117,16 @@ class Match():
         self.control_parameters = parameters
         self.update_info_json_file()
     
-    def fetch_robot_by_id(self, robot_id: int):
+    def fetch_robot_by_id(self, team,  robot_id: int):
         # FIXME: cannot explicitly define Robot as function return type due to circular import
-        for robot in self.robots:
-            if robot.robot_id == robot_id: return robot
-        for robot in self.opposites:
-            if robot.robot_id == robot_id: return robot
+        if team:
+            for robot in self.robots:
+                if robot.robot_id == robot_id: 
+                    return robot
+        else:
+            for robot in self.opposites:
+                if robot.robot_id == robot_id: 
+                    return robot
         return None
     
     def set_category(self, cat):

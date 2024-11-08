@@ -14,6 +14,7 @@ class RobotFrame(QFrame):
         super(RobotFrame, self).__init__()
         self.robot = robot
         self.id = robot.robot_id
+        self.team = robot.team
         v_layout = QVBoxLayout()
 
         # Title of the section with robot id
@@ -77,13 +78,8 @@ class RobotsInfo(QWidget):
         if context.robots != [] and self.context.category == "MINI":
             self.robot_list = context.robots
         else:
-            # show 3 robot frames for Mini and 6 robot frames for SSL
-            num_robots = 3
-            if self.context.category == "SSL":
-                num_robots = 6
-            # print(num_robots)
-            for i in range(num_robots):
-                self.robot_list.append(Robot(-1))
+            self.robot_list = context.robots
+
 
         for i in range(len(self.robot_list)):
             r = RobotFrame(self.robot_list[i])
@@ -102,7 +98,8 @@ class RobotsInfo(QWidget):
 
     def update_info(self, status: Match):
         for robot in self.robot_frames:
-            robot_info = status.fetch_robot_by_id(robot.id)
+            robot_info = status.fetch_robot_by_id(robot.team, robot.id)
+            # print(robot_info)
             if robot_info is not None:
                 # TODO since there's no battery information in the API side then it cannot be imported
                 robot.update_info(0)
