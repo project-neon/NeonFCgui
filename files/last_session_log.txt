@@ -1,0 +1,11 @@
+Last session started at: Fri Nov  8 15:01:47 2024
+>> Categoria: SSL
+>> Coach atual: No coach found
+>> Parâmetros padrão:
+PID_KP=1;  KI=0;  KD=0;  KW=3.5;  RM=0.44;  VM=0.5; UNI_KP =1
+>> Modo da GUI selecionado: Treino
+>> A cor do time foi alterada para: Amarelo
+>> A cor do time foi alterada para: Azul
+>> A cor do time foi alterada para: Amarelo
+>> A cor do time foi alterada para: Azul
+>> A cor do time foi alterada para: Amarelo

@@ -1,5 +1,3 @@
-
-
 class Match:
 
     isInit = False
@@ -14,11 +12,10 @@ class Match:
         self.isInit = True
 
     def update(self, time: float) -> bool:
-        # Checks if it is properly initialized
-        # If not then checks if OpenGL is initialized and tries to init istelf
+        """Checks if this object is properly initialized, if it is not then checks if OpenGL is initialized and tries to init itself.
+        \nReturns false if and only if object fails to properly initialize itself."""
         if (not self.isInit) and self.context.isOpenGLInit:
             self.setup()
-            return True
         return self.isInit
 
 

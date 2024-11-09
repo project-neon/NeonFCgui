@@ -6,12 +6,14 @@ in vec3 relativeCoords;
 uniform float radius = 8.5;
 uniform float threashold = 5.5;
 uniform int id = 0;
+uniform int team = 0;
 
 //FIXME pq eu não consigo adicionar uniforms funcionais ao shader?
 
 const vec4 pink = vec4(1,0.0627,0.9411,1); // Rosa Neon, sim eu sou muito esperto
 const vec4 green = vec4(0,1,0,1);
 const vec4 blue = vec4(0,0,1,1);
+const vec4 yellow = vec4(1,1,0,1);
 
 struct Tag {
     vec4 topLeft;
@@ -47,7 +49,7 @@ void main(){
         color.a = 0;
     }
     else if(length(relativeCoords.xy) <= 2.5){
-        color = blue;
+        color = team == 0 ? blue : yellow;
     }
     else if(length(vec2(-5.4772,3.5)-relativeCoords.xy) <= 2.0){
         color = tagDict[id].topLeft;
