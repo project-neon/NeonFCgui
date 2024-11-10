@@ -72,11 +72,9 @@ class Match():
 
     def update_information(self, info):
         """ Function to update values received in api """
-        if 'MATCH' in info:
-            if 'COACH_NAME' in info:
-                self.coach_name = info['COACH_NAME']
-            if 'COACH_LIST' in info:
-                self.coach_list = info['COACH_LIST']
+        self.coach_name = info.get('MATCH', {}).get('COACH_NAME', self.coach_name)
+        self.coach_list = info.get('MATCH', {}).get('COACH_LIST', self.coach_list)
+
         t_epoch = math.ceil(time.time() * 1000)
         self.update_rate = t_epoch - self.last_update_time
         self.last_update_time = t_epoch

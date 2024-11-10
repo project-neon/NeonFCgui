@@ -20,14 +20,11 @@ class Robot():
         """ Function to update values received in api """
         if str(self.robot_id) in info['ROBOT_POS'].keys():
             self. playing = True
-            if str(self.robot_id) in info['ROBOT_POS']:
-                self.robot_pos = info['ROBOT_POS'][str(self.robot_id)]
-                if team:
-                    if str(self.robot_id) in info['STRATEGY']:
-                        self.strategy = info['STRATEGY'][str(self.robot_id)]
-                    if str(self.robot_id) in info['BATTERY']:
-                        self.battery = info['BATTERY'][str(self.robot_id)]
-                    if str(self.robot_id) in info['SIGNAL']:
-                        self.signal = info['SIGNAL'][str(self.robot_id)]
+            self.robot_pos = info.get('ROBOT_POS', {}).get(str(self.robot_id), self.robot_pos)
+            if team:
+                    self.strategy = info.get('STRATEGY', {}).get(str(self.robot_id), self.strategy)
+                    self.battery = info.get('BATTERY', {}).get(str(self.robot_id), self.battery)
+                    self.signal = info.get('SIGNAL', {}).get(str(self.robot_id), self.signal)
         else:
             self.playing = False
+            self.robot_pos = (-10,10,0)
