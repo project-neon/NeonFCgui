@@ -27,7 +27,7 @@ class VSSSMatch(Match):
         super().setup()
         
         self.context.rendering_context.objects.append(
-            Assets.gen_custom_field(100,50,1,5,10,10,20)
+            Assets.gen_custom_field(150,130,1,10,40,15,70)
         )
 
         self.robots = {}
