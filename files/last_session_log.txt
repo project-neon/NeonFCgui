@@ -1,10 +1,6 @@
-Last session started at: Tue Jan  7 16:21:30 2025
->> Categoria: MINI
->> Coach atual: No coach found
+Last session started at: Tue Jan  7 17:04:13 2025
+>> Categoria: SSL
+>> Coach atual: Test
 >> Parâmetros padrão:
 PID_KP=1;  KI=0;  KD=0;  KW=3.5;  RM=0.44;  VM=0.5; UNI_KP =1
 >> Modo da GUI selecionado: Treino
->> O lado foi alterado para: Direita
->> O lado foi alterado para: Esquerda
->> O lado foi alterado para: Direita
->> O lado foi alterado para: Esquerda

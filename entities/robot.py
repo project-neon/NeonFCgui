@@ -27,4 +27,4 @@ class Robot():
                     self.signal = info.get('SIGNAL', {}).get(str(self.robot_id), self.signal)
         else:
             self.playing = False
-            self.robot_pos = (-10,10,0)
+            self.robot_pos = (-5,-5,0)
