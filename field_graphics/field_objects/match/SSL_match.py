@@ -59,11 +59,11 @@ class SSLMatch(FieldMatch):
         for r in self.robots:
             #print(str(r) + ": " + r)
             robot_text = Text(  # TODO: Config file with standard depths
-                "#{:02d}".format(int(r)),
+                "#{:02d}".format(abs(int(r))),
                 "field_graphics/assets/bitmaps/Arial Bold_1024.bmp",
-                size=6,
+                size=12,
                 tracking=self.robots[r], anchor=(10, 0))
-            # self.context.rendering_context.objects.append(robot_text)
+            self.context.rendering_context.objects.append(robot_text)
         super().setup()
 
     def update_robot_coord(self, team: bool, robot_id: int, model: SSLRobotMesh):
