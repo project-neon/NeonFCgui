@@ -1,4 +1,4 @@
-Last session started at: Wed Jan  8 13:28:21 2025
+Last session started at: Wed Jan  8 13:40:54 2025
 >> Categoria: SSL
 >> Coach atual: No coach found
 >> Parâmetros padrão:
@@ -6,3 +6,43 @@ PID_KP=1;  KI=0;  KD=0;  KW=3.5;  RM=0.44;  VM=0.5; UNI_KP =1
 >> Modo da GUI selecionado: Treino
 >> Coach atual:
 Test
+>> A cor do time foi alterada para: Amarelo
+>> A cor do time foi alterada para: Azul
+>> A cor do time foi alterada para: Amarelo
+>> A cor do time foi alterada para: Azul
+>> A cor do time foi alterada para: Amarelo
+>> A cor do time foi alterada para: Azul
+>> A cor do time foi alterada para: Amarelo
+>> A cor do time foi alterada para: Azul
+>> A cor do time foi alterada para: Amarelo
+>> A cor do time foi alterada para: Azul
+>> A cor do time foi alterada para: Amarelo
+>> A cor do time foi alterada para: Azul
+>> A cor do time foi alterada para: Amarelo
+>> A cor do time foi alterada para: Azul
+>> A cor do time foi alterada para: Amarelo
+>> A cor do time foi alterada para: Azul
+>> A cor do time foi alterada para: Amarelo
+>> A cor do time foi alterada para: Azul
+>> A cor do time foi alterada para: Amarelo
+>> A cor do time foi alterada para: Azul
+>> A cor do time foi alterada para: Amarelo
+>> A cor do time foi alterada para: Azul
+>> A cor do time foi alterada para: Amarelo
+>> A cor do time foi alterada para: Azul
+>> A cor do time foi alterada para: Amarelo
+>> A cor do time foi alterada para: Azul
+>> A cor do time foi alterada para: Amarelo
+>> A cor do time foi alterada para: Azul
+>> A cor do time foi alterada para: Amarelo
+>> A cor do time foi alterada para: Azul
+>> A cor do time foi alterada para: Amarelo
+>> A cor do time foi alterada para: Azul
+>> A cor do time foi alterada para: Amarelo
+>> A cor do time foi alterada para: Azul
+>> A cor do time foi alterada para: Amarelo
+>> A cor do time foi alterada para: Azul
+>> A cor do time foi alterada para: Amarelo
+>> A cor do time foi alterada para: Azul
+>> A cor do time foi alterada para: Amarelo
+>> A cor do time foi alterada para: Azul
