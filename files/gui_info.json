@@ -44,7 +44,8 @@
         "UPDATE_RATE": 0,
         "COACH_LIST": [
             "No coach found"
-        ]
+        ],
+        "GOALKEEPER_ID": -1
     },
     "PARAMETERS": {
         "PID_KP": 1,

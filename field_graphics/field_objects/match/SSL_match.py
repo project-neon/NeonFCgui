@@ -38,7 +38,6 @@ class SSLMatch(FieldMatch):
         for obj in field: self.context.rendering_context.objects.append(obj)
         self.robots = {}
         self.ball = modelFromJSON(open("field_graphics/assets/models/ball.json").read())[0]
-        self.context.rendering_context.objects.append(self.ball)
         # Sets the robot models
         for r in self.context.match_api.robots:
             r_id = r.robot_id
@@ -60,6 +59,7 @@ class SSLMatch(FieldMatch):
                 size=6,
                 tracking=self.robots[r], anchor=(10, 0))
             # self.context.rendering_context.objects.append(robot_text)
+        self.context.rendering_context.objects.append(self.ball)
         super().setup()
 
     def update_robot_coord(self, robot_id: int, model: SSLRobotMesh):
