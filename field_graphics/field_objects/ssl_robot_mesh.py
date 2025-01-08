@@ -12,25 +12,23 @@ def shaderProgram() -> QOpenGLShaderProgram:
     return compileShaderProgram(vsh, fsh)
 
 class SSLRobotMesh(RenderableMesh):
+
+    isYellow: bool = False
+
     def __init__(self, id: int):
         template: RenderableMesh = modelFromJSON(open("field_graphics/assets/models/robot_ssl.json").read())[0]
         super().__init__(template.vertices, np.asarray([0,0,0,0,0,0,0,0,0,0,0,0],dtype=np.float32), template.shaderProgram)
         self.set_id(id)
 
-    def set_id(self, id: int, blue = True):
+    def set_id(self, id: int, yellow = True):
         self.id = id
         GL.glUseProgram(self.shaderProgram.programId())
         GL.glUniform1i(
             GL.glGetUniformLocation(self.shaderProgram.programId(),"id"),
             self.id
         )
-        if blue: 
-            GL.glUniform1i(
-            GL.glGetUniformLocation(self.shaderProgram.programId(),"team"),
-            0
-            )
+        self.isYellow = yellow
+        if not yellow: 
+            GL.glUniform1i(GL.glGetUniformLocation(self.shaderProgram.programId(),"team"), 0)
         else:
-            GL.glUniform1i(
-            GL.glGetUniformLocation(self.shaderProgram.programId(),"team"),
-            1
-        )
+            GL.glUniform1i(GL.glGetUniformLocation(self.shaderProgram.programId(),"team"), 1)

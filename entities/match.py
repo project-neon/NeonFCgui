@@ -41,7 +41,7 @@ class Match():
         else:
             self.robots_ids = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
             self.opposites_ids = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15] 
-        
+
         self.gk_id = -1 # Goalkeeper's ID
 
         # Default parameter values
@@ -59,11 +59,11 @@ class Match():
         
     def start(self):
         self.opposites = [
-            entities.Robot(i, [0,0,0], False) for i in self.opposites_ids
+            entities.Robot(i, [-10,-10,0], False) for i in self.opposites_ids
         ]
 
         self.robots = [
-            entities.Robot(i, [0,0,0]) for i in self.robots_ids
+            entities.Robot(i, [-10,-10,0]) for i in self.robots_ids
         ]
 
         self.update_info_json_file()
@@ -72,8 +72,9 @@ class Match():
 
     def update_information(self, info):
         """ Function to update values received in api """
-        for key, value in info.items():
-            setattr(self, key.lower(), value)
+        self.coach_name = info.get('MATCH', {}).get('COACH_NAME', self.coach_name)
+        self.coach_list = info.get('MATCH', {}).get('COACH_LIST', self.coach_list)
+
         t_epoch = math.ceil(time.time() * 1000)
         self.update_rate = t_epoch - self.last_update_time
         self.last_update_time = t_epoch
@@ -105,7 +106,7 @@ class Match():
             for opposite in self.opposites:
                 opposite.change_team()
             self.robots, self.opposites = self.opposites, self.robots
-        self.team_color = color
+            self.team_color = color
         self.opposite_team_color = 'yellow' if self.team_color == 'blue' else 'blue'
         self.update_info_json_file()
     
@@ -117,12 +118,16 @@ class Match():
         self.control_parameters = parameters
         self.update_info_json_file()
     
-    def fetch_robot_by_id(self, robot_id: int):
+    def fetch_robot_by_id(self, team,  robot_id: int):
         # FIXME: cannot explicitly define Robot as function return type due to circular import
-        for robot in self.robots:
-            if robot.robot_id == robot_id: return robot
-        for robot in self.opposites:
-            if robot.robot_id == robot_id: return robot
+        if team:
+            for robot in self.robots:
+                if robot.robot_id == robot_id: 
+                    return robot
+        else:
+            for robot in self.opposites:
+                if robot.robot_id == robot_id: 
+                    return robot
         return None
     
     def set_category(self, cat):
@@ -134,7 +139,11 @@ class Match():
         self.update_info_json_file()
     
     def set_gk_id(self, id):
-        self.gk_id = id
+        if self.robots[id].playing:
+            self.gk_id = id
+        else:
+            print('ESSE JOGADOR NÃO ESTÁ EM CAMPO')
+        print(self.gk_id)
         self.update_info_json_file()
     
     def update_info_json_file(self):

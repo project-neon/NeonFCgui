@@ -20,12 +20,14 @@ class VSSSMatch(Match):
         self.field_dimentions = [150.0,130.0]
 
     def setup(self):
+        self.context.rendering_context.objects.clear()
         field = modelFromJSON(open("field_graphics/assets/models/field_vsss.json").read())
         self.ball = modelFromJSON(open("field_graphics/assets/models/ball.json").read())[0]
         # self.context.rendering_context.objects.append(field)
         super().setup()
+        
         self.context.rendering_context.objects.append(
-            Assets.gen_custom_field(100,50,1,5,10,10,20)
+            Assets.gen_custom_field(150,130,1,10,40,15,70)
         )
 
         self.robots = {}
@@ -43,11 +45,11 @@ class VSSSMatch(Match):
             r_id = r.robot_id
             r_m.color_accordingly_to_id(r_id, self.context.match_api.team_color != 'yellow')
             self.context.rendering_context.objects.append(r_m)
-            self.robots.update({str(r_id):r_m})
+            self.robots.update({"-" + str(r_id):r_m})
 
         for r in self.robots:
             robot_text = Text(  # TODO: Config file with standard depths
-                "#{:02d}".format(int(r)),
+                "#{:02d}".format(abs(int(r))),
                 "field_graphics/assets/bitmaps/Arial Bold_1024.bmp",
                 size=6,
                 tracking=self.robots[r], anchor=(10, 0))
