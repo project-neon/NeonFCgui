@@ -13,7 +13,6 @@ from PyQt6.QtCore import Qt, QTimerEvent
 from entities import Match
 from main_window.widgets.field_view import FieldView
 from main_window.widgets import *
-from main_window.templates import TemplateWidget
 
 class SSLPanel(QWidget):
 
@@ -98,10 +97,6 @@ class SSLPanel(QWidget):
 
         bottom_h_layout.addWidget(grid_widget, alignment=Qt.AlignmentFlag.AlignRight)
         window_layout.addLayout(bottom_h_layout)
-
-        # Adding template widget to the bottom of the screen
-        template_widget = TemplateWidget()
-        window_layout.addWidget(template_widget)
 
         self.setLayout(window_layout)
 
