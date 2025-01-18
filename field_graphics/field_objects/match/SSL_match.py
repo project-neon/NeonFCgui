@@ -62,10 +62,9 @@ class SSLMatch(FieldMatch):
                 "field_graphics/assets/bitmaps/Arial Bold_1024.bmp",
                 size=12,
                 tracking=self.robots[r], anchor=(10, 0))
+            self.context.rendering_context.objects.append(robot_text)
 
-        self.context.rendering_context.objects.append(robot_text)
         self.context.rendering_context.objects.append(self.ball)
-
         super().setup()
 
     def update_robot_coord(self, team: bool, robot_id: int, model: SSLRobotMesh):
