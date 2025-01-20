@@ -1,6 +1,7 @@
 import json
 
 import numpy as np
+import math
 from OpenGL import GL
 from PyQt6.QtOpenGL import QOpenGLShaderProgram
 
@@ -37,7 +38,16 @@ class VSSSRobotMesh(RenderableMesh):
         # FIXME: bandaid solution
         if team_yellow: robot_id += 10
         # FIXME: hardcoded path, plus the func does not actually take the ID into question
-        dat = json.loads(open("id_dict.json").read())[robot_id]
+        dat = json.loads(open("id_dict.json").read())
+        
+        robot_id = max(min(robot_id,20),1)
+        
+        for robot in dat:
+            #print(robot)
+            if int(robot['id']) == robot_id:
+                dat = robot
+                break
+        
         back_tag = dat["back_tag"]; back_tag = [back_tag["r"],back_tag["g"],back_tag["b"]]
         left_tag = dat["left_tag"]; left_tag = [left_tag["r"],left_tag["g"],left_tag["b"]]
         right_tag = dat["right_tag"]; right_tag = [right_tag["r"],right_tag["g"],right_tag["b"]]
