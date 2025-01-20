@@ -31,7 +31,6 @@ class VSSSMatch(Match):
         )
 
         self.robots = {}
-        self.context.rendering_context.objects.append(self.ball)
         # Sets the robot models
         for r in self.context.match_api.robots:
             r_m = VSSSRobotMesh([.1, .1, .1], [0, 1, 0], [1, 0, 0], [0, 0, 1])
@@ -54,6 +53,10 @@ class VSSSMatch(Match):
                 size=6,
                 tracking=self.robots[r], anchor=(10, 0))
             self.context.rendering_context.objects.append(robot_text)
+        
+        # Appends the ball after the other objects to avoid rendering issues
+        self.context.rendering_context.objects.append(self.ball)
+
 
     def update(self, time: float):
 
