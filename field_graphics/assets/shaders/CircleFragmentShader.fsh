@@ -10,6 +10,6 @@ out vec4 color;
 void main(){
     color = fragColor;
     if(length(relativeCoords) > radius){
-        color.a = 0;
+        color.a = 0.0F;
     }
 }
