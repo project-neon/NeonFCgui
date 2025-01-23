@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import (
     QWidget, QLabel,
-    QPushButton, QRadioButton, QCheckBox, QComboBox,
+    QPushButton, QRadioButton, QCheckBox, QComboBox, QTextEdit,
     QHBoxLayout, QVBoxLayout, QGridLayout
 )
 from PyQt6.QtGui import QPalette, QColor
@@ -60,7 +60,7 @@ class TemplateWindow(QWidget):
         self.setWindowTitle("Template Window")
 
         # Set minimun sizes of the window
-        self.setMinimumSize(QSize(400, 200))
+        self.setMinimumSize(QSize(400, 300))
 
         # Set background color
         self.setAutoFillBackground(True)
@@ -119,7 +119,12 @@ class TemplateWindow(QWidget):
         self.grid_layout.addWidget(self.combobox_lbl, 5, 0) # starts at row:5, column:0
         self.grid_layout.addWidget(self.combobox_btn, 5, 1, 1, 3) # starts at row:5, column:1, spans 1 row, spans 3 columns
         self.grid_layout.addWidget(self.combobox_index_lbl, 6, 0, 1, 2) # starts at row:6, column:0, spans 1 row, spans 2 columns
-        self.grid_layout.addWidget(self.combobox_text_lbl, 6, 2, 1, 2) # starts at row:6, column:2, spans 1 row, spans 2 columns
+        self.grid_layout.addWidget(self.combobox_text_lbl, 6, 2, 1, 2, alignment=Qt.AlignmentFlag.AlignTop) # starts at row:6, column:2, spans 1 row, spans 2 columns, is aligned at the top of the grid cell
+        # QLineEdit for text inputs
+        self.grid_layout.addWidget(self.text_edit_lbl, 7, 0, 1, 4) # starts at row:7, column:0, spans 1 row, spans 4 columns
+        self.grid_layout.addWidget(self.text_edit, 8, 0, 1, 4) # starts at row:8, column:0, spans 1 row, spans 4 columns
+        self.grid_layout.addWidget(self.text_btn, 9, 1, 1, 2) # starts at row:9, column:1, spans 1 row, spans 2 columns
+        self.grid_layout.addWidget(self.text_input_lbl, 10, 0, 1, 4) # starts at row:10, column:0, spans 1 row, spans 4 columns
 
         # Add label and custom widgets to the vertical layout
         self.v_layout.addWidget(self.vertical_section_lbl)
@@ -195,6 +200,21 @@ class TemplateWindow(QWidget):
         # Note: currentIndexChanged() and currentTextChanged() are always emitted regardless
         # if the change was done programmatically or by user interaction, while activated()
         # is only emitted when the change is caused by user interaction.
+
+        # Creating QLineEdits for text inputs
+        # Note: for single line text inputs you can use QLineEdit
+        self.text_edit_lbl = QLabel("Line Edit for text inputs: ")
+        self.text_edit_txt = "Nothing"
+        self.text_input_lbl = QLabel("Line input received: " + self.text_edit_txt)
+        self.text_input_lbl.setWordWrap(True) # Allows "overflowing" text to be shown in the next line
+        # Create the text input field
+        self.text_edit = QTextEdit()
+        self.text_edit.setMaximumHeight(100)
+        # Setting initial text in the QLineEdit space
+        self.text_edit.setPlainText("Input text here")
+        # Creating a button to get text input
+        self.text_btn = QPushButton("Save Text Input")
+        self.text_btn.clicked.connect(self.handle_text_input)
     
     """
     # ██████╗░██╗░░░██╗████████╗████████╗░█████╗░███╗░░██╗██╗░██████╗
@@ -246,6 +266,10 @@ class TemplateWindow(QWidget):
         print(text)
         # Alternatively, the selected combobox option's text can be obtained as follows:
         # print(str(self.combobox_btn.currentText()))
+    
+    def handle_text_input(self):
+        self.text_edit_txt = self.text_edit.toPlainText()
+        self.text_input_lbl.setText("Line input received: " + self.text_edit_txt)
 
     """
     # ░█████╗░██╗░░░██╗░██████╗████████╗░█████╗░███╗░░░███╗
