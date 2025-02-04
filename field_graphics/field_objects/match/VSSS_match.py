@@ -74,7 +74,7 @@ class VSSSMatch(Match):
             # print(self.ball.x)
             # print(self.ball.shader_uniform_locations['coordinate_vector_loc'])
             for r in self.robots:
-                self.update_robot_coord(int(r),self.robots[r])
+                self.update_robot_coord(r[0] != '-',int(r),self.robots[r])
 
     def playStartAnimation(self, time: float):
         self.robots['5'].x = math.sin(time/100) * 20
@@ -90,8 +90,8 @@ class VSSSMatch(Match):
         self.robots['7'].rotation = self.context.sim_time * (1/100) - math.pi/6
         self.robots['8'].rotation = self.context.sim_time * (1/100) + math.pi * (9.5/3)
 
-    def update_robot_coord(self, robot_id: int, model: VSSSRobotMesh):
-        r = self.context.match_api.fetch_robot_by_id(robot_id)
+    def update_robot_coord(self, robot_team ,robot_id: int, model: VSSSRobotMesh):
+        r = self.context.match_api.fetch_robot_by_id(robot_team, abs(robot_id))
         model.x = r.robot_pos[0] * 100 - self.field_dimentions[0]*0.5
         model.y = r.robot_pos[1] * 100 - self.field_dimentions[1]*0.5
         model.rotation = -r.robot_pos[2] + math.pi/2
