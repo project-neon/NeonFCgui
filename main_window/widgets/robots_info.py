@@ -19,7 +19,7 @@ class RobotFrame(QFrame):
 
         # Title of the section with robot id
         title = QLabel("Robô "+str(self.id), parent=self)
-        font = QFont('Arial', 16)
+        font = QFont('Arial', 15)
         if self.id != -1:
             font.setBold(True)
         title.setFont(font)

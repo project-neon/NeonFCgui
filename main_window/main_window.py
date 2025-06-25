@@ -9,7 +9,7 @@ import typing
 import os
 from PyQt6.QtWidgets import (
     QMainWindow, QWidget, QStackedWidget,
-    QVBoxLayout, QHBoxLayout, QGridLayout
+    QVBoxLayout, QHBoxLayout, QGridLayout, QSizePolicy
 )
 from PyQt6.QtGui import QFont, QIcon
 from PyQt6.QtCore import Qt, QTimerEvent
@@ -30,6 +30,8 @@ class MainWindow(QMainWindow):
         icon = QIcon(self.path_to_icons+"neon_green_logo.png")
         self.setWindowIcon(icon)
 
+        self.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding))
+
         # Puts the given match as context for interface display sync
         self.context = context
 
@@ -38,17 +40,19 @@ class MainWindow(QMainWindow):
 
         self.window_width = 1000
         self.window_height = 800
-        self.setGeometry(100, 100, self.window_width, self.window_height)
+        # self.setGeometry(100, 100, self.window_width, self.window_height)
+        self.setGeometry(100, 100, int(self.screen_width/2), int(self.screen_height/2))
         self.setFont(QFont('Arial', 15))
 
         self.category = None # "MINI" or "SSL"
         self.category_widget = None # MINI widget or SSL widget
 
-        # Creating stacked widget to controw which widgets will show onscreen
+        # Creating stacked widget to control which widgets will show onscreen
         self.stacked_widget = QStackedWidget()
+        self.stacked_widget.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding))
 
         # Creating category selection widget which is the first screen of the app
-        self.start_widget = CategorySelect(self)
+        self.start_widget = CategorySelect(self, self.screen_width, self.screen_height)
         # start_layout = QVBoxLayout()
         # start_layout.addWidget(self.start_widget)
         # self.setLayout(start_layout)
@@ -64,9 +68,11 @@ class MainWindow(QMainWindow):
         self.context.set_category(self.category)
         
         if category == "MINI":
-            self.category_widget = MiniPanel(self.context, self.window_height)
+            # self.category_widget = MiniPanel(self.context, self.window_height)
+            self.category_widget = MiniPanel(self.context, self.screen_width, self.screen_height)
         else:
-            self.category_widget = SSLPanel(self.context, self.window_height)
+            # self.category_widget = SSLPanel(self.context, self.window_height)
+            self.category_widget = SSLPanel(self.context, self.screen_width, self.screen_height)
         
         self.stacked_widget.addWidget(self.category_widget)
         self.stacked_widget.setCurrentWidget(self.category_widget)

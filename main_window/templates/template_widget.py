@@ -15,6 +15,7 @@ class TemplateWidget(QWidget):
         super(TemplateWidget, self).__init__()
 
         # Set background color to this widget
+        self.setFixedHeight(60)
         self.setAutoFillBackground(True)
         palette = self.palette()
         palette.setColor(QPalette.ColorRole.Window, QColor('#b3a4d3'))

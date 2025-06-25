@@ -6,11 +6,13 @@ from main_window.widgets.log import Log
 import os
 
 class CategorySelect(QWidget):
-    def __init__(self, parent_stacked_widget):
+    def __init__(self, parent_stacked_widget, s_width, s_height):
         super(CategorySelect, self).__init__()
         self.parent_stacked_widget = parent_stacked_widget
+        self.screen_width = s_width
+        self.screen_height = s_height
 
-        self.setFixedSize(1000,800)
+        self.setFixedSize(parent_stacked_widget.width(),parent_stacked_widget.height())
         self.path_to_icon = os.getcwd()+"/main_window/images/futebol.png"
         self.label = QLabel(self)
         css_text = "background-image: url('"+self.path_to_icon+"');"
@@ -54,7 +56,7 @@ class GameMode(QWidget):
         # Creating game mode 'checkboxes' (radio buttons)
         self.btn_trainning = QRadioButton(text="Modo de treino", parent=self)
         self.btn_trainning.toggled.connect(self.selectMode)
-        self.btn_trainning.setFont(QFont('Arial', 15))
+        self.btn_trainning.setFont(QFont('Arial', 14))
         self.btn_trainning.setStyleSheet("QRadioButton::font {spacing : 20px;}"
             "QRadioButton::indicator"
             "{"
@@ -65,7 +67,7 @@ class GameMode(QWidget):
         
         self.btn_competition = QRadioButton(text="Modo competição", parent=self)
         self.btn_competition.toggled.connect(self.selectMode)
-        self.btn_competition.setFont(QFont('Arial', 15))
+        self.btn_competition.setFont(QFont('Arial', 14))
         self.btn_competition.setStyleSheet("QRadioButton::indicator"
             "{"
             "width : 20px;"

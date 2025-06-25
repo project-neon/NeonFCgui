@@ -179,7 +179,7 @@ class ControlParams(QWidget):
             return False
 
 class GameControls(QWidget):
-    def __init__(self, context: Match, log: Log):
+    def __init__(self, context: Match, log: Log, parent_panel):
         super(GameControls, self).__init__()
         self.setAutoFillBackground(True)
         palette = self.palette()
@@ -188,49 +188,38 @@ class GameControls(QWidget):
 
         self.context = context
         self.log = log
+        self.parent_panel = parent_panel
 
-        # Creating the PLAY, HALT and HALT buttons
+        parent_width = self.parent_panel.width()
+        parent_height = self.parent_panel.height()
+
+        # print(self.size()) # (640, 480)
+
+        # Creating the START, STOP and HALT buttons
         # To add icon to the button we will use the QIcon object, which
         # gets the path to an SVG image
         self.path_to_icons = os.getcwd()+"/main_window/images/"
 
         self.btn_start = QPushButton(icon=QIcon(self.path_to_icons+"start.svg"), text=" START", parent=self)
-        self.btn_start.setIconSize(QSize(40, 40))
-        self.btn_start.setFont(QFont('Arial', 15))
-        self.btn_start.setFixedSize(170, 60)
         self.btn_start.clicked.connect(self.gameStatus)
 
         self.btn_stop = QPushButton(icon=QIcon(self.path_to_icons+"halt.svg"), text=" STOP", parent=self)
-        self.btn_stop.setIconSize(QSize(40, 40))
-        self.btn_stop.setFont(QFont('Arial', 15))
-        self.btn_stop.setFixedSize(170, 60)
         self.btn_stop.clicked.connect(self.gameStatus)
         
         self.btn_halt = None
         # Only the SSL category has the Halt game status
         if self.context.category == "SSL":
             self.btn_halt = QPushButton(icon=QIcon(self.path_to_icons+"reset.svg"), text=" HALT", parent=self)
-            self.btn_halt.setIconSize(QSize(40, 40))
-            self.btn_halt.setFont(QFont('Arial', 15))
-            self.btn_halt.setFixedSize(170, 60)
             self.btn_halt.clicked.connect(self.gameStatus)
 
         # Creating buttons to change color and side
         self.current_color = 'blue'
         self.current_side = 'left'
 
-        self.btn_change_color = QPushButton(
-            icon=QIcon(self.path_to_icons+"blue.svg"), text="  Alternar Cor ", parent=self
-        )
-        self.btn_change_color.setIconSize(QSize(40, 40))
-        self.btn_change_color.setFixedSize(190, 60)
+        self.btn_change_color = QPushButton(icon=QIcon(self.path_to_icons+"blue.svg"), text="Mudar Cor  ", parent=self)
         self.btn_change_color.clicked.connect(self.change)
 
-        self.btn_change_side = QPushButton(
-            icon=QIcon(self.path_to_icons+"left.svg"), text=" Alternar Lado", parent=self
-        )
-        self.btn_change_side.setIconSize(QSize(40, 40))
-        self.btn_change_side.setFixedSize(190, 60)
+        self.btn_change_side = QPushButton(icon=QIcon(self.path_to_icons+"left.svg"), text="Mudar Lado", parent=self)
         self.btn_change_side.clicked.connect(self.change)
 
         # Creating coach drop-down selection
@@ -253,6 +242,7 @@ class GameControls(QWidget):
         self.log.add_message(msg)
 
         coach_section = QWidget()
+        coach_section.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
         coach_layout = QVBoxLayout()
         lbl_coach = QLabel("Coach", parent=self)
         lbl_coach.setFont(QFont('Arial', 14))
@@ -261,13 +251,14 @@ class GameControls(QWidget):
         self.btn_coach = QComboBox()
         # self.btn_coach.setMinimumWidth(320)
         self.btn_coach.setFixedHeight(28)
-        self.btn_coach.setMinimumWidth(340)
-        # self.btn_coach.setSizePolicy(QSizePolicy.horizontalStretch)
+        self.btn_coach.setMinimumWidth(200)
+        self.btn_coach.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))  # (QSizePolicy.horizontalStretch)
         self.btn_coach.addItems(self.coach_list)
         # select current coach
         self.btn_coach.setCurrentIndex(coach_index)
         self.btn_coach.activated.connect(self.select_coach)
-        coach_layout.addWidget(self.btn_coach, alignment=Qt.AlignmentFlag.AlignHCenter)
+        # coach_layout.addWidget(self.btn_coach, alignment=Qt.AlignmentFlag.AlignHCenter)
+        coach_layout.addWidget(self.btn_coach)
         coach_section.setLayout(coach_layout)
 
         """
@@ -279,31 +270,45 @@ class GameControls(QWidget):
 
         # Button to open parameter settings' window
         self.btn_params = QPushButton(text="Parâmetros", parent=self)
-        self.btn_params.setFixedSize(170, 60)
         self.btn_params.clicked.connect(self.toggle_params)
 
         # Adding buttons to layout
         layout = QVBoxLayout()
-        layout.addWidget(QLabel("Controles do jogo:", parent=self), alignment=Qt.AlignmentFlag.AlignHCenter)
+        widget_label = QLabel("Controles do jogo:")
+        # widget_label.setMinimumWidth(int(parent_width/5))
+        # widget_label.setMinimumWidth(700)
+        widget_label.setFixedHeight(int(int(parent_height/8)/1.8))
+        layout.addWidget(widget_label, alignment=Qt.AlignmentFlag.AlignHCenter)
 
         # Buttons displayed in a grid
         grid = QGridLayout()
-        grid.addWidget(coach_section, 0, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignHCenter) # row:0, column:0, spans 1 row, spans 2 columns
-        grid.addWidget(self.btn_params, 0, 2, alignment=Qt.AlignmentFlag.AlignHCenter)
-        grid.addWidget(self.btn_change_color, 0, 3, alignment=Qt.AlignmentFlag.AlignRight)
+        # grid.addWidget(coach_section, 0, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignHCenter) # row:0, column:0, spans 1 row, spans 2 columns
+        grid.addWidget(coach_section, 0, 0, 1, 2) # row:0, column:0, spans 1 row, spans 2 columns
+        grid.addWidget(self.btn_params, 0, 2)
+        # grid.addWidget(self.btn_change_color, 0, 3)
+        grid.addWidget(self.btn_change_color, 0, 3, 1, 2)
         # Start, stop and halt buttons
         h_layout_buttons = QHBoxLayout()
         if self.context.category == "MINI":
-            h_layout_buttons.addWidget(self.btn_start, alignment=Qt.AlignmentFlag.AlignLeft)
-            h_layout_buttons.addWidget(QLabel("          "))
-            h_layout_buttons.addWidget(self.btn_stop, alignment=Qt.AlignmentFlag.AlignLeft)
+            # h_layout_buttons.addWidget(self.btn_start, alignment=Qt.AlignmentFlag.AlignLeft)
+            h_layout_buttons.addWidget(self.btn_start)
+            # h_layout_buttons.addWidget(QLabel("          "))
+            # h_layout_buttons.addWidget(self.btn_stop, alignment=Qt.AlignmentFlag.AlignLeft)
+            h_layout_buttons.addWidget(self.btn_stop)
             grid.addLayout(h_layout_buttons, 1, 0, 1, 3, alignment=Qt.AlignmentFlag.AlignHCenter)
+            # grid.addLayout(h_layout_buttons, 1, 0, 1, 3)
         else:
-            grid.addWidget(self.btn_start, 1, 0, alignment=Qt.AlignmentFlag.AlignHCenter)
-            grid.addWidget(self.btn_stop, 1, 1, alignment=Qt.AlignmentFlag.AlignHCenter)
-            grid.addWidget(self.btn_halt, 1, 2, alignment=Qt.AlignmentFlag.AlignHCenter)
-        grid.addWidget(self.btn_change_side, 1, 3, alignment=Qt.AlignmentFlag.AlignRight)
-        layout.addLayout(grid)
+            # grid.addWidget(self.btn_start, 1, 0, alignment=Qt.AlignmentFlag.AlignHCenter)
+            grid.addWidget(self.btn_start, 1, 0)
+            grid.addWidget(self.btn_stop, 1, 1)
+            grid.addWidget(self.btn_halt, 1, 2)
+        # grid.addWidget(self.btn_change_side, 1, 3, alignment=Qt.AlignmentFlag.AlignRight)
+        grid.addWidget(self.btn_change_side, 1, 3, 1, 2)
+        grid.setColumnStretch(0, 2)
+        grid.setColumnStretch(1, 2)
+        grid.setColumnStretch(2, 2)
+        grid.setColumnStretch(3, 3)
+        layout.addLayout(grid, stretch=1)
         
         self.setLayout(layout)
 
@@ -380,3 +385,32 @@ class GameControls(QWidget):
 
         coach_index = self.get_coach_index(self.current_coach)
         self.btn_coach.setCurrentIndex(coach_index)
+    
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self.update_button_sizes()
+    
+    def update_button_sizes(self):
+        w = self.width()
+        h = self.height()
+        
+        icon_size = QSize(int(h/5.5), int(h/5.5))
+        btn_size = QSize(int(w/(4.5)), int(h/4))
+        btn_size_large = QSize(int(w/(3.8)), int(h/4))
+        font_size = int(h/16)
+
+        for btn in [self.btn_start, self.btn_stop, self.btn_halt, self.btn_params]:
+            if btn:
+                btn.setIconSize(icon_size)
+                btn.setMinimumSize(btn_size)
+                btn.setMaximumHeight(btn_size.height())
+                btn.setFont(QFont('Arial', font_size))
+                btn.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
+        
+        for btn in [self.btn_change_color, self.btn_change_side]:
+            if btn:
+                btn.setIconSize(icon_size)
+                btn.setMinimumSize(btn_size_large)
+                btn.setMaximumHeight(btn_size.height())
+                btn.setFont(QFont('Arial', font_size))
+                btn.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))

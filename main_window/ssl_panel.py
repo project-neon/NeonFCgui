@@ -1,11 +1,8 @@
-# from PyQt6.QtWidgets import (
-#     QWidget, QLabel, QVBoxLayout
-# )
 import math
 import typing
 from PyQt6.QtWidgets import (
     QWidget, QLabel, QComboBox,
-    QVBoxLayout, QHBoxLayout, QGridLayout
+    QVBoxLayout, QHBoxLayout, QGridLayout, QSizePolicy
 )
 from PyQt6.QtGui import QPalette, QColor #, QIcon, QFont
 from PyQt6.QtCore import Qt, QTimerEvent
@@ -20,15 +17,18 @@ class SSLPanel(QWidget):
     context: Match = None
     updatable_components = []
 
-    def __init__(self, context: Match, window_height):
+    def __init__(self, context: Match, s_width, s_height):
         super(SSLPanel, self).__init__()
-        # label = QLabel("SSL screen")
-        # layout = QVBoxLayout()
-        # layout.addWidget(label)
-        # self.setLayout(layout)
 
         self.context = context
-        self.window_height = window_height
+        self.screen_width = s_width
+        self.screen_height = s_height
+
+        # self.setMinimumWidth(int(self.screen_width/4))
+        # self.setMaximumWidth(self.screen_width)
+        # self.setMinimumHeight(int(self.screen_height/4))
+        # self.setMaximumHeight(self.screen_height)
+        # self.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding))
 
         print("Categoria: SSL")
 
@@ -44,18 +44,22 @@ class SSLPanel(QWidget):
         # Log widget displaying errors and warning messages
         self.log_widget = Log()
         self.log_widget.add_message("Categoria: SSL")
+
+        # Height of the top widgets
+        h = int(self.screen_height/10)
         
         # Adding game status controls widget
-        self.game_controls_widget = GameControls(self.context, self.log_widget)
-        h = int(self.window_height/10)
-        self.game_controls_widget.setFixedHeight(int(h*2.5))
-        top_h_layout.addWidget(self.game_controls_widget)
+        self.game_controls_widget = GameControls(self.context, self.log_widget, self)
+        self.game_controls_widget.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed))
+        self.game_controls_widget.setFixedHeight(int(h*1.8))
+        top_h_layout.addWidget(self.game_controls_widget, stretch=2)
         self.updatable_components.append(self.game_controls_widget)
 
         # Adding game fouls section
-        self.fouls_widget = Fouls(self.context, self.log_widget)
-        self.fouls_widget.setFixedHeight(int(h*2.5))
-        top_h_layout.addWidget(self.fouls_widget)
+        self.fouls_widget = Fouls(self.context, self.log_widget, self)
+        self.fouls_widget.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed))
+        self.fouls_widget.setFixedHeight(int(h*1.8))
+        top_h_layout.addWidget(self.fouls_widget, stretch=2)
 
         window_layout.addLayout(top_h_layout)
 
@@ -105,6 +109,9 @@ class SSLPanel(QWidget):
 
         self.setLayout(window_layout)
 
+        # Creates the timer that refreshes interface components periodically
+        self.startTimer(math.ceil(100 / 3))
+        
         # Initializes the match object for field rendering
         self.field_vis.setupSSL()
 

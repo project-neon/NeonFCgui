@@ -40,8 +40,9 @@ class FieldView(QOpenGLWidget):
         self.rendering_context = RenderingContext()
         self.scroll_level = 7
         self.setFocusPolicy(self.focusPolicy().StrongFocus)
+        self.setMinimumWidth(600)
         self.match_api = context
-        QLabel("<h1>Campo!</h1>", parent=self)
+        # QLabel("<h1>Campo!</h1>", parent=self)
 
     def initializeGL(self):
         print("Initializing OpenGL Version 4.2")

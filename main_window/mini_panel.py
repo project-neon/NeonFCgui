@@ -2,7 +2,7 @@ import math
 import typing
 from PyQt6.QtWidgets import (
     QWidget,
-    QVBoxLayout, QHBoxLayout, QGridLayout
+    QVBoxLayout, QHBoxLayout, QGridLayout, QSizePolicy
 )
 # from PyQt6.QtGui import QFont, QPalette, QColor, QIcon
 from PyQt6.QtCore import Qt, QTimerEvent
@@ -17,10 +17,10 @@ class MiniPanel(QWidget):
     context: Match = None
     updatable_components = []
 
-    def __init__(self, context: Match, window_height):
+    def __init__(self, context: Match, s_width, s_height):
         super(MiniPanel, self).__init__()
         self.context = context
-        self.window_height = window_height
+        self.screen_height = s_height
 
         print("Categoria: MINI")
 
@@ -38,15 +38,16 @@ class MiniPanel(QWidget):
         self.log_widget.add_message("Categoria: MINI")
         
         # Adding game status controls widget
-        self.game_controls_widget = GameControls(self.context, self.log_widget)
-        h = int(self.window_height/10)
-        self.game_controls_widget.setFixedHeight(int(h*2.5))
+        self.game_controls_widget = GameControls(self.context, self.log_widget, self)
+        self.game_controls_widget.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed))
+        h = int(self.screen_height/10)
+        self.game_controls_widget.setFixedHeight(int(h*1.8))
         top_h_layout.addWidget(self.game_controls_widget)
         self.updatable_components.append(self.game_controls_widget)
 
         # Adding game fouls section
-        self.fouls_widget = Fouls(self.context, self.log_widget)
-        self.fouls_widget.setFixedHeight(int(h*2.5))
+        self.fouls_widget = Fouls(self.context, self.log_widget, self)
+        self.fouls_widget.setFixedHeight(int(h*1.8))
         top_h_layout.addWidget(self.fouls_widget)
 
         window_layout.addLayout(top_h_layout)
