@@ -13,7 +13,7 @@ class GameInfo(QWidget):
         super(GameInfo, self).__init__()
         self.setAutoFillBackground(True)
         palette = self.palette()
-        palette.setColor(QPalette.ColorRole.Window, QColor('#b3a4d3'))
+        palette.setColor(QPalette.ColorRole.Window, QColor('#D7C3F1'))
         self.setPalette(palette)
 
         # TODO create error message when no information is found (after Iron Cup)

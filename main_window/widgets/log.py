@@ -12,8 +12,9 @@ class Log(QWidget):
         super(Log, self).__init__()
         self.setAutoFillBackground(True)
         palette = self.palette()
-        palette.setColor(QPalette.ColorRole.Window, QColor('#b3a4d3'))
+        palette.setColor(QPalette.ColorRole.Window, QColor('#D7C3F1'))
         self.setPalette(palette)
+        self.setMinimumHeight(160)
 
         # Access to last_session_log.txt file
         self.log_file_path = os.getcwd() + "/files/last_session_log.txt"
@@ -24,20 +25,22 @@ class Log(QWidget):
         # Creating scroll area where the messages shall be displayed
         self.scroll_area = QScrollArea()
         max_w = 250
-        self.scroll_area.setFixedWidth(max_w)
+        # self.scroll_area.setFixedWidth(max_w)
+        self.scroll_area.setMinimumWidth(max_w)
 
         # Creating widget inside scroll area to hold the messages
         self.widget = QWidget()
         self.widget.setAutoFillBackground(True)
         palette = self.widget.palette()
-        palette.setColor(QPalette.ColorRole.Window, QColor('#8E81A9'))
+        palette.setColor(QPalette.ColorRole.Window, QColor('#b3a4d3'))
         self.widget.setPalette(palette)
-        self.widget.setFixedWidth(max_w-16)
+        # self.widget.setFixedWidth(max_w-16)
+        self.widget.setMinimumWidth(max_w-16)
 
         self.vbox = QVBoxLayout()
         self.widget.setLayout(self.vbox)
 
-        #Scroll Area Properties
+        # Scroll Area Properties
         self.scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
         # self.scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.scroll_area.setWidgetResizable(True)

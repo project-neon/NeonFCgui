@@ -13,6 +13,15 @@ from PyQt6.QtCore import QSize, Qt
 from entities.match import Match
 from main_window.widgets.log import Log
 
+"""
+██████╗░░█████╗░██████╗░░█████╗░███╗░░░███╗███████╗████████╗███████╗██████╗░░██████╗
+██╔══██╗██╔══██╗██╔══██╗██╔══██╗████╗░████║██╔════╝╚══██╔══╝██╔════╝██╔══██╗██╔════╝
+██████╔╝███████║██████╔╝███████║██╔████╔██║█████╗░░░░░██║░░░█████╗░░██████╔╝╚█████╗░
+██╔═══╝░██╔══██║██╔══██╗██╔══██║██║╚██╔╝██║██╔══╝░░░░░██║░░░██╔══╝░░██╔══██╗░╚═══██╗
+██║░░░░░██║░░██║██║░░██║██║░░██║██║░╚═╝░██║███████╗░░░██║░░░███████╗██║░░██║██████╔╝
+╚═╝░░░░░╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░░░░╚═╝╚══════╝░░░╚═╝░░░╚══════╝╚═╝░░╚═╝╚═════╝░
+"""
+
 class ControlParams(QWidget):
     """
     Additional window to show the robot's control parameters.
@@ -25,7 +34,7 @@ class ControlParams(QWidget):
         self.setWindowTitle("Control Parameters")
         self.setAutoFillBackground(True)
         palette = self.palette()
-        palette.setColor(QPalette.ColorRole.Window, QColor('#b3a4d3'))
+        palette.setColor(QPalette.ColorRole.Window, QColor('#D7C3F1'))
         self.setPalette(palette)
 
         self.context = context
@@ -178,12 +187,21 @@ class ControlParams(QWidget):
             # Return False if Error
             return False
 
+"""
+░██████╗░░█████╗░███╗░░░███╗███████╗      ░█████╗░░█████╗░███╗░░██╗████████╗██████╗░░█████╗░██╗░░░░░░██████╗
+██╔════╝░██╔══██╗████╗░████║██╔════╝      ██╔══██╗██╔══██╗████╗░██║╚══██╔══╝██╔══██╗██╔══██╗██║░░░░░██╔════╝
+██║░░██╗░███████║██╔████╔██║█████╗░░      ██║░░╚═╝██║░░██║██╔██╗██║░░░██║░░░██████╔╝██║░░██║██║░░░░░╚█████╗░
+██║░░╚██╗██╔══██║██║╚██╔╝██║██╔══╝░░      ██║░░██╗██║░░██║██║╚████║░░░██║░░░██╔══██╗██║░░██║██║░░░░░░╚═══██╗
+╚██████╔╝██║░░██║██║░╚═╝░██║███████╗      ╚█████╔╝╚█████╔╝██║░╚███║░░░██║░░░██║░░██║╚█████╔╝███████╗██████╔╝
+░╚═════╝░╚═╝░░╚═╝╚═╝░░░░░╚═╝╚══════╝      ░╚════╝░░╚════╝░╚═╝░░╚══╝░░░╚═╝░░░╚═╝░░╚═╝░╚════╝░╚══════╝╚═════╝░
+"""
+
 class GameControls(QWidget):
     def __init__(self, context: Match, log: Log, parent_panel):
         super(GameControls, self).__init__()
         self.setAutoFillBackground(True)
         palette = self.palette()
-        palette.setColor(QPalette.ColorRole.Window, QColor('#b3a4d3'))
+        palette.setColor(QPalette.ColorRole.Window, QColor('#D7C3F1'))
         self.setPalette(palette)
 
         self.context = context
@@ -195,26 +213,13 @@ class GameControls(QWidget):
 
         # print(self.size()) # (640, 480)
 
-        # Creating the START, STOP and HALT buttons
-        # To add icon to the button we will use the QIcon object, which
-        # gets the path to an SVG image
-        self.path_to_icons = os.getcwd()+"/main_window/images/"
-
-        self.btn_start = QPushButton(icon=QIcon(self.path_to_icons+"start.svg"), text=" START", parent=self)
-        self.btn_start.clicked.connect(self.gameStatus)
-
-        self.btn_stop = QPushButton(icon=QIcon(self.path_to_icons+"halt.svg"), text=" STOP", parent=self)
-        self.btn_stop.clicked.connect(self.gameStatus)
-        
-        self.btn_halt = None
-        # Only the SSL category has the Halt game status
-        if self.context.category == "SSL":
-            self.btn_halt = QPushButton(icon=QIcon(self.path_to_icons+"reset.svg"), text=" HALT", parent=self)
-            self.btn_halt.clicked.connect(self.gameStatus)
-
         # Creating buttons to change color and side
         self.current_color = 'blue'
         self.current_side = 'left'
+
+        # To add icon to the button we will use the QIcon object, which
+        # gets the path to an SVG image
+        self.path_to_icons = os.getcwd()+"/main_window/images/"
 
         self.btn_change_color = QPushButton(icon=QIcon(self.path_to_icons+"blue.svg"), text="Mudar Cor  ", parent=self)
         self.btn_change_color.clicked.connect(self.change)
@@ -242,17 +247,20 @@ class GameControls(QWidget):
         self.log.add_message(msg)
 
         coach_section = QWidget()
+        coach_section.setFixedHeight(70)
         coach_section.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
         coach_layout = QVBoxLayout()
         lbl_coach = QLabel("Coach", parent=self)
         lbl_coach.setFont(QFont('Arial', 14))
-        coach_layout.addWidget(lbl_coach, alignment=Qt.AlignmentFlag.AlignHCenter)
+        # coach_layout.addWidget(lbl_coach, alignment=Qt.AlignmentFlag.AlignHCenter)
+        coach_layout.addWidget(lbl_coach, alignment=Qt.AlignmentFlag.AlignLeft)
 
         self.btn_coach = QComboBox()
         # self.btn_coach.setMinimumWidth(320)
         self.btn_coach.setFixedHeight(28)
         self.btn_coach.setMinimumWidth(200)
-        self.btn_coach.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))  # (QSizePolicy.horizontalStretch)
+        # self.btn_coach.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
+        # self.btn_coach.setSizePolicy(QSizePolicy.horizontalStretch)
         self.btn_coach.addItems(self.coach_list)
         # select current coach
         self.btn_coach.setCurrentIndex(coach_index)
@@ -272,45 +280,60 @@ class GameControls(QWidget):
         self.btn_params = QPushButton(text="Parâmetros", parent=self)
         self.btn_params.clicked.connect(self.toggle_params)
 
+        # Goalkeeper ID selection section
+        self.gk_id = self.context.gk_id
+        self.lbl_gk = QLabel(("Goalkeeper ID: " + str(self.gk_id)), parent=self)
+        self.lbl_gk.setFont(QFont('Arial', 14))
+        self.btn_gk = QComboBox()
+        self.btn_gk.setFixedHeight(28)
+        self.btn_gk.setFixedWidth(70)
+        # self.btn_gk.setSizePolicy(QSizePolicy.horizontalStretch)
+        self.robots_ids_str = []
+        for r_id in self.context.robots_ids:
+            self.robots_ids_str.append(str(r_id))
+        # print(self.robots_ids_str)
+        self.btn_gk.addItems(self.robots_ids_str)
+        # Select current gk
+        # self.btn_gk.setCurrentIndex(r_index)
+        self.btn_gk.activated.connect(self.select_gk)
+        self.gk_section = QWidget()
+        self.gk_section.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
+        gk_layout = QVBoxLayout()
+        gk_layout.addWidget(self.lbl_gk, alignment=Qt.AlignmentFlag.AlignLeft)
+        gk_layout.addWidget(self.btn_gk)
+        self.gk_section.setLayout(gk_layout)
+
         # Adding buttons to layout
-        layout = QVBoxLayout()
-        widget_label = QLabel("Controles do jogo:")
+        # layout = QVBoxLayout()
+        # widget_label = QLabel("Controles da partida:")
         # widget_label.setMinimumWidth(int(parent_width/5))
         # widget_label.setMinimumWidth(700)
-        widget_label.setFixedHeight(int(int(parent_height/8)/1.8))
-        layout.addWidget(widget_label, alignment=Qt.AlignmentFlag.AlignHCenter)
+        # widget_label.setFixedHeight(int(int(parent_height/8)/1.8))
+        # layout.addWidget(widget_label, alignment=Qt.AlignmentFlag.AlignHCenter)
 
         # Buttons displayed in a grid
         grid = QGridLayout()
         # grid.addWidget(coach_section, 0, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignHCenter) # row:0, column:0, spans 1 row, spans 2 columns
         grid.addWidget(coach_section, 0, 0, 1, 2) # row:0, column:0, spans 1 row, spans 2 columns
-        grid.addWidget(self.btn_params, 0, 2)
+        grid.addWidget(self.gk_section, 1, 0)
+        # grid.addWidget(self.btn_params, 0, 2)
+        grid.addWidget(self.btn_params, 1, 1)
         # grid.addWidget(self.btn_change_color, 0, 3)
-        grid.addWidget(self.btn_change_color, 0, 3, 1, 2)
-        # Start, stop and halt buttons
-        h_layout_buttons = QHBoxLayout()
-        if self.context.category == "MINI":
-            # h_layout_buttons.addWidget(self.btn_start, alignment=Qt.AlignmentFlag.AlignLeft)
-            h_layout_buttons.addWidget(self.btn_start)
-            # h_layout_buttons.addWidget(QLabel("          "))
-            # h_layout_buttons.addWidget(self.btn_stop, alignment=Qt.AlignmentFlag.AlignLeft)
-            h_layout_buttons.addWidget(self.btn_stop)
-            grid.addLayout(h_layout_buttons, 1, 0, 1, 3, alignment=Qt.AlignmentFlag.AlignHCenter)
-            # grid.addLayout(h_layout_buttons, 1, 0, 1, 3)
-        else:
-            # grid.addWidget(self.btn_start, 1, 0, alignment=Qt.AlignmentFlag.AlignHCenter)
-            grid.addWidget(self.btn_start, 1, 0)
-            grid.addWidget(self.btn_stop, 1, 1)
-            grid.addWidget(self.btn_halt, 1, 2)
+        # grid.addWidget(self.btn_change_color, 0, 3, 1, 2)
         # grid.addWidget(self.btn_change_side, 1, 3, alignment=Qt.AlignmentFlag.AlignRight)
-        grid.addWidget(self.btn_change_side, 1, 3, 1, 2)
-        grid.setColumnStretch(0, 2)
-        grid.setColumnStretch(1, 2)
-        grid.setColumnStretch(2, 2)
-        grid.setColumnStretch(3, 3)
-        layout.addLayout(grid, stretch=1)
+        # grid.addWidget(self.btn_change_side, 1, 3, 1, 2)
+        grid.addWidget(self.btn_change_side, 2, 0)
+        grid.addWidget(self.btn_change_color, 2, 1)
+        # grid.setColumnStretch(0, 2)
+        # grid.setColumnStretch(1, 2)
+        # grid.setColumnStretch(2, 2)
+        # grid.setColumnStretch(3, 3)
+        grid.setColumnMinimumWidth(0, 150)
+        grid.setColumnMinimumWidth(1, 150)
+        # layout.addLayout(grid, stretch=1)
         
-        self.setLayout(layout)
+        # self.setLayout(layout)
+        self.setLayout(grid)
 
     def change(self):
         sender = self.sender()
@@ -335,19 +358,6 @@ class GameControls(QWidget):
                 self.current_side = 'left'
                 self.log.add_message("O lado foi alterado para: Esquerda")
             self.context.set_team_side(self.current_side)
-    
-    def gameStatus(self):
-        sender = self.sender()
-
-        if sender is self.btn_start:
-            self.context.set_game_status("GAME_ON")
-            self.log.add_message("Status atual: GAME_ON")
-        elif sender is self.btn_stop:
-            self.context.set_game_status("STOP")
-            self.log.add_message("Status atual: STOP")
-        elif sender is self.btn_halt:
-            self.context.set_game_status("HALT")
-            self.log.add_message("Status atual: HALT")
 
     def get_coach_index(self, coach):
         for i in range(len(self.coach_list)):
@@ -368,6 +378,10 @@ class GameControls(QWidget):
             self.params_window.hide()
         else:
             self.params_window.show()
+    
+    def select_gk(self):
+        id_str = self.btn_gk.currentText()
+        self.context.set_gk_id(int(id_str))
 
     def update_info(self, status: Match):
         coach = status.coach_name
@@ -393,24 +407,15 @@ class GameControls(QWidget):
     def update_button_sizes(self):
         w = self.width()
         h = self.height()
-        
-        icon_size = QSize(int(h/5.5), int(h/5.5))
-        btn_size = QSize(int(w/(4.5)), int(h/4))
-        btn_size_large = QSize(int(w/(3.8)), int(h/4))
-        font_size = int(h/16)
 
-        for btn in [self.btn_start, self.btn_stop, self.btn_halt, self.btn_params]:
+        icon_size = QSize(int(h/6.5), int(h/6.5))
+        btn_size = QSize(int(w/(8)), int(h/5))
+        font_size = int(h/19)
+        
+        for btn in [self.btn_change_color, self.btn_change_side, self.btn_params]:
             if btn:
                 btn.setIconSize(icon_size)
                 btn.setMinimumSize(btn_size)
-                btn.setMaximumHeight(btn_size.height())
-                btn.setFont(QFont('Arial', font_size))
-                btn.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
-        
-        for btn in [self.btn_change_color, self.btn_change_side]:
-            if btn:
-                btn.setIconSize(icon_size)
-                btn.setMinimumSize(btn_size_large)
                 btn.setMaximumHeight(btn_size.height())
                 btn.setFont(QFont('Arial', font_size))
                 btn.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))

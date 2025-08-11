@@ -17,7 +17,7 @@ class Fouls(QWidget):
         super(Fouls, self).__init__()
         self.setAutoFillBackground(True)
         palette = self.palette()
-        palette.setColor(QPalette.ColorRole.Window, QColor('#b3a4d3'))
+        palette.setColor(QPalette.ColorRole.Window, QColor('#D7C3F1'))
         self.setPalette(palette)
 
         self.setStyleSheet("QPushButton:checked{background-color: rgb(140, 140, 140);}")
@@ -37,7 +37,8 @@ class Fouls(QWidget):
         # Horizontal layout with three grids for:
         # fouls, quadrants and foul colors
         layout = QHBoxLayout()
-        layout.setSpacing(24)
+        # layout.setSpacing(24)
+        layout.setSpacing(32)
 
         # button sizing configurations:
         w = int(self.parent_width/(1.2))
