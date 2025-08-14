@@ -1,6 +1,7 @@
-Last session started at: Tue Feb  4 10:13:59 2025
+
+Last session started at: Mon Jan 20 19:01:09 2025
 >> Categoria: MINI
->> Coach atual: TwoPlayers
+>> Coach atual: No coach found
 >> Parâmetros padrão:
 PID_KP=1;  KI=0;  KD=0;  KW=3.5;  RM=0.44;  VM=0.5; UNI_KP =1
 >> Modo da GUI selecionado: Treino

@@ -3,7 +3,7 @@
         "GAME_STATUS": "STOP",
         "TEAM_SIDE": "left",
         "TEAM_COLOR": "blue",
-        "COACH_NAME": "TwoPlayers",
+        "COACH_NAME": "No coach found",
         "CATEGORY": "MINI",
         "ROBOT_IDS": [
             5,
@@ -15,12 +15,9 @@
             2,
             3
         ],
-        "UPDATE_RATE": 6,
+        "UPDATE_RATE": 0,
         "COACH_LIST": [
-            "CoachTeste",
-            "TwoPlayers",
-            "TEST",
-            "RCX_2024"
+            "No coach found"
         ],
         "GOALKEEPER_ID": -1
     },

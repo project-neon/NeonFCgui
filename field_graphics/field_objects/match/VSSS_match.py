@@ -23,12 +23,12 @@ class VSSSMatch(Match):
         self.context.rendering_context.objects.clear()
         field = modelFromJSON(open("field_graphics/assets/models/field_vsss.json").read())
         self.ball = modelFromJSON(open("field_graphics/assets/models/ball.json").read())[0]
-        # self.context.rendering_context.objects.append(field)
+        self.context.rendering_context.objects.append(field)
         super().setup()
         
-        self.context.rendering_context.objects.append(
-            Assets.gen_custom_field(150,130,1,10,40,15,70)
-        )
+        #self.context.rendering_context.objects.append(
+        #    Assets.gen_custom_field(150,130,1,10,40,15,70)
+        #)
 
         self.robots = {}
         # Sets the robot models
