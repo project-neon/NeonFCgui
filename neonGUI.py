@@ -60,11 +60,11 @@ class NeonFCGUI(object):
 
                 self.match.ball.update_information(tracking.ball)
 
-                for r in robots[:5]:
+                for r in robots[:6]:
                     if self.match.robots[r.id]:
                         self.match.robots[r.id].update_information(r)
 
-                for o in opposites[:5]:
+                for o in opposites[:6]:
                     if self.match.opposites[o.id]:
                         self.match.opposites[o.id].update_information(o)
 
