@@ -11,7 +11,7 @@ CATEGORIES = {
 }
 # TODO change categories
 
-class Match():
+class Match:
     def __init__(self, team_side = "left", team_color = "blue", coach_name = 'No coach found', category="SSL"):
         
         self.update_rate = 0

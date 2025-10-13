@@ -5,10 +5,9 @@ Main body of code. Execute to start program.
 import json
 import threading
 import time
-from api import Api, ApiRecv, InfoApi
 from app import App
 from entities import Match
-
+from neonfc_client import NeonFCClient
 
 def get_config(config_file=None):
     if config_file:
@@ -17,7 +16,6 @@ def get_config(config_file=None):
         config = json.loads(open('config.json', 'r').read())
 
     return config
-
 
 class NeonFCGUI(object):
     def __init__(self, config_file=None):
@@ -39,20 +37,10 @@ class NeonFCGUI(object):
         self.api_port = self.config.get("network").get("api_port")
         self.api_recv_port = self.config.get("network").get("api_recv_port")
 
-        self.api = Api(self.api_address, self.api_port)
-        self.api_recv = ApiRecv(self.match, self.api_address, self.api_recv_port)
-        self.info_api = InfoApi(self.match, self.match.robots, self.match.opposites, self.match.ball,
-                                self.match.control_parameters, self.match.coach_name)
+        self.api_client = NeonFCClient("localhost", self.api_recv_port)
 
     def start(self):
-        # Create a thread targeting the `start` method of the API's instance
-        self.api_thread = threading.Thread(target=self.api.start)
-        # self.api.start()
-        # Start the API's thread
-        self.api_thread.start()
-
-        self.api_recv.connect_info(self.info_api)
-        self.api_recv.start()
+        self.api_client.start()
 
         self.main_thread = threading.current_thread()
 
@@ -63,7 +51,26 @@ class NeonFCGUI(object):
 
     def update(self):
         while self.main_thread.is_alive():
-            self.api.send_data(self.info_api)
+            try:
+                tracking = self.api_client.get_tracking().tracking
+                robots = tracking.robots
+                opposites = tracking.opposites
+
+                self.match.team_color = "blue" if opposites[0].color == 1 else "yellow"
+
+                self.match.ball.update_information(tracking.ball)
+
+                for r in robots[:5]:
+                    if self.match.robots[r.id]:
+                        self.match.robots[r.id].update_information(r)
+
+                for o in opposites[:5]:
+                    if self.match.opposites[o.id]:
+                        self.match.opposites[o.id].update_information(o)
+
+            except Exception as e:
+                print(e)
+
             time.sleep(0.001)  # Necessary pause of 1ms to avoid busy waiting (https://superfastpython.com/thread-busy-waiting-in-python/)
             # self.api.send_gui_info()
 
