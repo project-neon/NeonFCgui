@@ -19,20 +19,17 @@ class SSLMatch(FieldMatch):
 
     def update(self, time: float) -> bool:
         if not super().update(time): return False
-        if self.context.no_info:
-            pass  # self.playStartAnimation(time)
-        else:
-            if not self.hasInfo:  # First time since recognising field info
-                self.hasInfo = True
-                self.context.reset()
-                self.setup()  # Redoes the setup to get the IDs in place
-            self.ball.x = self.context.match_api.ball.ball_pos[0] * 100 - self.field_dimentions[0] * 0.5
-            self.ball.y = self.context.match_api.ball.ball_pos[1] * 100 - self.field_dimentions[1] * 0.5
-            for r in self.robots:
-                self.update_robot_coord(r[0] != '-', int(r), self.robots[r])
 
+        if not self.hasInfo:  # First time since recognising field info
+            self.hasInfo = True
+            self.context.reset()
+            self.setup()  # Redoes the setup to get the IDs in place
 
+        self.ball.x = self.context.match_api.ball.ball_pos[0] * 100 - self.field_dimentions[0] * 0.5
+        self.ball.y = self.context.match_api.ball.ball_pos[1] * 100 - self.field_dimentions[1] * 0.5
 
+        for r in self.robots:
+            self.update_robot_coord(r[0] != '-', int(r), self.robots[r])
 
     def setup(self):
         self.context.rendering_context.objects.clear()
