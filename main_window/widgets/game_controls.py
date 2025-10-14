@@ -34,7 +34,7 @@ class ControlParams(QWidget):
         self.setWindowTitle("Control Parameters")
         self.setAutoFillBackground(True)
         palette = self.palette()
-        palette.setColor(QPalette.ColorRole.Window, QColor('#D7C3F1'))
+        palette.setColor(QPalette.ColorRole.Window, QColor('#36313C'))
         self.setPalette(palette)
 
         self.context = context
@@ -201,7 +201,7 @@ class GameControls(QWidget):
         super(GameControls, self).__init__()
         self.setAutoFillBackground(True)
         palette = self.palette()
-        palette.setColor(QPalette.ColorRole.Window, QColor('#D7C3F1'))
+        palette.setColor(QPalette.ColorRole.Window, QColor('#36313C'))
         self.setPalette(palette)
 
         self.context = context

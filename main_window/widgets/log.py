@@ -12,7 +12,7 @@ class Log(QWidget):
         super(Log, self).__init__()
         self.setAutoFillBackground(True)
         palette = self.palette()
-        palette.setColor(QPalette.ColorRole.Window, QColor('#D7C3F1'))
+        palette.setColor(QPalette.ColorRole.Window, QColor('#36313C'))
         self.setPalette(palette)
         self.setMinimumHeight(160)
 
@@ -32,7 +32,7 @@ class Log(QWidget):
         self.widget = QWidget()
         self.widget.setAutoFillBackground(True)
         palette = self.widget.palette()
-        palette.setColor(QPalette.ColorRole.Window, QColor('#b3a4d3'))
+        palette.setColor(QPalette.ColorRole.Window, QColor('#36313C'))
         self.widget.setPalette(palette)
         # self.widget.setFixedWidth(max_w-16)
         self.widget.setMinimumWidth(max_w-16)

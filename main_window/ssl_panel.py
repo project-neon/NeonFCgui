@@ -71,34 +71,34 @@ class SSLPanel(QWidget):
         # top_h_layout.addWidget(self.fouls_widget, stretch=2)
 
         # Top section with buttons
-        top_h_layout = QHBoxLayout()
-        top_v_layout = QVBoxLayout()
-
-        top_v_layout.addWidget(self.fouls_widget)
-        top_v_layout.addWidget(self.game_status_widget)
-
-        top_h_layout.addLayout(top_v_layout, stretch=2)
-        top_h_layout.addWidget(self.game_controls_widget, stretch=1)
-        window_layout.addLayout(top_h_layout)
+        # top_h_layout = QHBoxLayout()
+        # top_v_layout = QVBoxLayout()
+        #
+        # top_v_layout.addWidget(self.fouls_widget)
+        # top_v_layout.addWidget(self.game_status_widget)
+        #
+        # top_h_layout.addLayout(top_v_layout, stretch=2)
+        # top_h_layout.addWidget(self.game_controls_widget, stretch=1)
+        # window_layout.addLayout(top_h_layout)
 
         # Lower section with field visualization,
         # robot informations, game informations and fouls
         bottom_h_layout = QHBoxLayout()
         self.field_vis = FieldView(self.context)
         # bottom_h_layout.addWidget(self.field_vis, stretch=1)
-        bottom_h_layout.addWidget(self.field_vis, stretch=10)
+        bottom_h_layout.addWidget(self.field_vis, stretch=18)
 
         # GUI mode and NeonFC informations displayed
         # in a grid (10 rows, 6 columns)
         # TODO place robots_info section in bottom_h_layout
         grid = QGridLayout()
         grid.setContentsMargins(0,0,0,0)
-        grid.setColumnStretch(0, 10)
-        grid.setColumnStretch(1, 1)
-        grid.setColumnStretch(2, 0)
-        grid.setColumnStretch(3, 8)
-        grid.setColumnStretch(4, 1)
-        grid.setColumnStretch(5, 0)
+        # grid.setColumnStretch(0, 10)
+        # grid.setColumnStretch(1, 1)
+        # grid.setColumnStretch(2, 0)
+        # grid.setColumnStretch(3, 8)
+        # grid.setColumnStretch(4, 1)
+        # grid.setColumnStretch(5, 0)
 
         # Widget to select goalkeeper by robot_id
         # self.gk_widget = GoalkeeperID(self.context, self.log_widget)
@@ -109,17 +109,17 @@ class SSLPanel(QWidget):
         # Widget to choose game mode
         # self.mode_widget = GameMode(self.context, self.log_widget)
         # grid.addWidget(self.mode_widget, 1, 3, 1, 3) # starts at row:1, column:3, spans 1 row, spans 3 columns
-        self.mode_widget = GUIMode(self.context, self.log_widget)
-        grid.addWidget(self.mode_widget, 0, 3, 1, 3) # starts at row:0, column:3, spans 1 row, spans 3 columns
+        # self.mode_widget = GUIMode(self.context, self.log_widget)
+        # grid.addWidget(self.mode_widget, 0, 3, 1, 3) # starts at row:0, column:3, spans 1 row, spans 3 columns
 
         # NeonFC's informations
-        self.game_info_widget = GameInfo()
-        # grid.addWidget(self.game_info_widget, 2, 3, 3, 3)
-        grid.addWidget(self.game_info_widget, 1, 3, 4, 3)
-        self.updatable_components.append(self.game_info_widget)
-
-        # Add log widget to grid
-        grid.addWidget(self.log_widget, 5, 3, 5, 3)
+        # self.game_info_widget = GameInfo()
+        # # grid.addWidget(self.game_info_widget, 2, 3, 3, 3)
+        # grid.addWidget(self.game_info_widget, 1, 3, 4, 3)
+        # self.updatable_components.append(self.game_info_widget)
+        #
+        # # Add log widget to grid
+        # grid.addWidget(self.log_widget, 5, 3, 5, 3)
 
         # Robots' informations section
         self.robots_widget = RobotsInfo(self.context)
@@ -136,8 +136,8 @@ class SSLPanel(QWidget):
         window_layout.addLayout(bottom_h_layout)
 
         # Adding template widget to the bottom of the screen
-        template_widget = TemplateWidget()
-        window_layout.addWidget(template_widget)
+        # template_widget = TemplateWidget()
+        # window_layout.addWidget(template_widget)
 
         self.setLayout(window_layout)
 

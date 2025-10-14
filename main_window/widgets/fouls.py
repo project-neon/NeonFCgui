@@ -17,7 +17,7 @@ class Fouls(QWidget):
         super(Fouls, self).__init__()
         self.setAutoFillBackground(True)
         palette = self.palette()
-        palette.setColor(QPalette.ColorRole.Window, QColor('#D7C3F1'))
+        palette.setColor(QPalette.ColorRole.Window, QColor('#36313C'))
         self.setPalette(palette)
 
         self.setStyleSheet("QPushButton:checked{background-color: rgb(140, 140, 140);}")

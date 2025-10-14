@@ -18,7 +18,7 @@ class TemplateWidget(QWidget):
         self.setFixedHeight(60)
         self.setAutoFillBackground(True)
         palette = self.palette()
-        palette.setColor(QPalette.ColorRole.Window, QColor('#b3a4d3'))
+        palette.setColor(QPalette.ColorRole.Window, QColor('#36313C'))
         self.setPalette(palette)
 
         # Create a label
@@ -66,7 +66,7 @@ class TemplateWindow(QWidget):
         # Set background color
         self.setAutoFillBackground(True)
         palette = self.palette()
-        palette.setColor(QPalette.ColorRole.Window, QColor('#b3a4d3'))
+        palette.setColor(QPalette.ColorRole.Window, QColor('#36313C'))
         self.setPalette(palette)
 
         # Creating the template labels and buttons for the grid_layout:
