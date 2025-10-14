@@ -14,7 +14,7 @@ class SSLMatch(FieldMatch):
 
     def __init__(self, context):
         super().__init__(context)
-        self.field_dimentions = [520.0*2, 300.0*2]
+        self.field_dimentions = [900.0, 600.0]
 
 
     def update(self, time: float) -> bool:
