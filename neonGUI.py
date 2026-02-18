@@ -5,6 +5,7 @@ Main body of code. Execute to start program.
 import json
 import threading
 import time
+import pathlib
 from api import Api, ApiRecv, InfoApi
 from app import App
 from entities import Match
@@ -25,6 +26,8 @@ class NeonFCGUI(object):
         self.update_thread = None
 
         # Log file for the last session shall be emptied
+        if not pathlib.Path("files/last_session_log.txt").is_file():
+            open("files/last_session_log.txt", 'a').close()
         log_file = open("files/last_session_log.txt", "w")
         log_file.write("Last session started at: ")
         log_file.write(str(time.ctime(time.time())) + "\n")
