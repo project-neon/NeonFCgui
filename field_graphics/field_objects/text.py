@@ -91,8 +91,7 @@ class Text(RenderableMesh):
             self.x = self.anchor[0] + self.tracking.x; self.y = self.anchor[1] + self.tracking.y
 
         self.shaderProgram.bind()
-        GL.glEnable(GL.GL_TEXTURE_2D)
-        GL.glEnableVertexAttribArray(2)
+        # GL.glEnable(GL.GL_TEXTURE_2D)
         GL.glBindTexture(GL.GL_TEXTURE_2D, self.texture_id)
         GL.glActiveTexture(GL.GL_TEXTURE0)
         GL.glBindBuffer(GL.GL_ARRAY_BUFFER, self.texture_coordinates_VBO)
@@ -101,7 +100,6 @@ class Text(RenderableMesh):
         super().draw(tx, ty, scale, rotation, aspect_ratio, sim_time)
         GL.glDisableVertexAttribArray(2)
         GL.glBindTexture(GL.GL_TEXTURE_2D, 0)
-        GL.glDisable(GL.GL_TEXTURE_2D)
 
     def update_vertex_attributes(self):
         super().update_vertex_attributes()
